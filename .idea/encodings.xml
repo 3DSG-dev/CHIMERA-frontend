@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="Encoding">
+    <file url="file://$PROJECT_DIR$/fwlib/uploader/processuploadOrtho.php" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/index.php" charset="ISO-8859-15" />
+    <file url="file://$PROJECT_DIR$/js/loader.js" charset="ISO-8859-15" />
+    <file url="file://$PROJECT_DIR$/js/test.js" charset="ISO-8859-15" />
+    <file url="PROJECT" charset="ISO-8859-15" />
+  </component>
+</project>

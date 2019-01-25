@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="WebServers">
+    <option name="servers">
+      <webServer id="aa7a4c8f-d7b7-44c6-b1a6-b0709542c617" name="bim3dsurvey.it/test" url="http://bim3dsurvey.it">
+        <fileTransfer host="bim3dsurvey.it" port="22" rootFolder="/var/www/BIM3DSG-test" accessType="SFTP" password="df9fdfefdffedfe8dfe6df9cdfcddfd0dfc2df93" username="root">
+          <advancedOptions>
+            <advancedOptions controlEncoding="iso-8859-15" dataProtectionLevel="Private" />
+          </advancedOptions>
+          <option name="port" value="22" />
+        </fileTransfer>
+      </webServer>
+    </option>
+  </component>
+</project>
