@@ -72,12 +72,19 @@
         <?php if (!isset($_SESSION['validUser']))
             {
                 echo '
-                    <div id="LoginDialog"></div>
+                    <div id="loginDialog"></div>
                 ';
             }
         ?>
 
         <div class="mainareaContainer">
+            <div class="pageTitleContainer">
+                <div class="pageTitle">QUICK TEXT VIEWER</div>
+                <div class="pageSubtitle">Choose, through the drop-down menus, the object for which you want to enter information and click on the button "SEARCH"</div>
+            </div>
+            <div class="pageContentContainer">
+                <div class="pageContent"></div>
+            </div>
         </div>
 
         <div id="side-toolbar-container">
