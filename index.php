@@ -79,5 +79,21 @@
 
         <div class="mainareaContainer">
         </div>
+
+        <div id="side-toolbar-container">
+            <div id="side-toolbar-list"  class="k-widget k-listview k-selectable">
+                <div class="side-tool-item" >
+                    <span id="openInfoWindowBtn" class="side-tool-btn" title="Infos">
+                        <img src="img/info-icon.png" class="side-tool-btn-image">
+                    </span>
+                </div>
+                <div class="side-tool-item">
+                     <span id="resetViewBtn" class="side-tool-btn" title="Reset view">
+                        <img src="img/refresh-icon.png" class="side-tool-btn-image">
+                     </span>
+                </div>
+            </div>
+        </div>
+
     </body>
 </html>
