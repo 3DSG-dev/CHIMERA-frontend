@@ -1,6 +1,11 @@
+var _toolbarHeight;
+var firstShow = true;
+
 // Events functions
 $(document).ready(function () {
     ResizeHeaderLoghi();
+    SetKendo();
+    Login();
 });
 
 $(window).resize(function () {
@@ -10,8 +15,7 @@ $(window).resize(function () {
 // Resize functions
 function ResizeHeaderLoghi() {
     var widthScreen = $(window).width();
-    //var spazioPerLoghi = widthScreen - $(".user-container").outerWidth() - $(".logout-container").outerWidth();
-    var spazioPerLoghi = widthScreen;
+    var spazioPerLoghi = widthScreen - $(".user-container").outerWidth() - $(".logout-container").outerWidth();
 
     // quando lo spazio per entrambi i loghi small non è abbastanza
     if (spazioPerLoghi <= 200) {
@@ -47,5 +51,66 @@ function ResizeHeaderLoghi() {
         $("#logo3DSurveyLarge").show();
         $("#logoPolimiSmall").hide();
         $("#logoPolimiLarge").show();
+    }
+}
+
+
+// Login functions
+function Login() {
+    if ($("#actualUser").text() == "") {
+        $('#LoginDialog').data("kendoDialog").open();
+    };
+}
+
+
+// Kendo UI functions
+function SetKendo() {
+
+    function SetLoginDialog() {
+        function LoginDialogForms_OnKeyUp() {
+            $("#password").keyup(function (event) {
+                if (event.keyCode == 13) {
+                    $(".loginboard-title .k-primary").click();
+                }
+            });
+
+            $("#username").keyup(function (event) {
+                if (event.keyCode == 13) {
+                    $(".loginboard-title .k-primary").click();
+                }
+            });
+        }
+
+        $('#LoginDialog').kendoDialog({
+            width: "250px",
+            title: "Login board",
+            closable: false,
+            modal: true,
+            content: "<form id=\"loginForm\" method=\"post\" action=\"./\" data-ajax=\"false\">\n" +
+                "              <div class=\"user-wrap\">" +
+                "                 <label for=\"username\" class=\"login-label\" >User:</label><br>\n" +
+                "                 <input type=\"text\" name=\"user\" id=\"username\" class=\"login-input\" value=\"\" placeholder=\"username\">\n" +
+                "              </div>" +
+                "              <div class=\"pwd-wrap\">" +
+                "                   <label for=\"password\" class=\"login-label\">Password:</label><br>\n" +
+                "                   <input type=\"password\" name=\"pwd\" id=\"password\" class=\"login-input\" value=\"\" placeholder=\"password\">\n" +
+                "               </div>" +
+                "           </form>",
+            actions: [
+                {text: 'LOGIN', primary: true, action: OnLoginSubmit}
+            ],
+        });
+
+        $('#LoginDialog').parents(".k-widget").addClass("loginboard-title");
+
+        LoginDialogForms_OnKeyUp();
+    }
+
+    function OnLoginSubmit() {
+        $("#loginForm").submit();
+    }
+
+    if ($("#actualUser").text() == "") {
+        SetLoginDialog();
     }
 }

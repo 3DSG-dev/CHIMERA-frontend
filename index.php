@@ -1,8 +1,12 @@
+<?php
+    include("php/auth.php");
+?>
+
 <!DOCTYPE html>
 <html>
     <head>
+        <title><?php echo $titolo; ?></title>
         <meta name="viewport" content="width=device-width, initial-scale=1">
-        <!--<meta http-equiv="content-type" content="text/html; charset=UTF-8">//-->
         <meta charset="iso-8859-15">
 
         <!-- KENDO UI -->
@@ -19,7 +23,9 @@
         <link rel="stylesheet" type="text/css" href="css/main.css"/>
     </head>
     <body>
-        <div id="header">
+    <div id="pageContainer">
+        <div id="headerContainer">
+            <div id="headerLoghi">
                 <div id="loghi-3dsurvey">
                     <div id="logo3DSurveySmall" class="loghi">
                         <a  id="logo3DSurveyLink" href="http://www.sitech-3dsurvey.polimi.it" target="_blank">
@@ -44,10 +50,34 @@
                             <img src="img/logo-polimi-testo-60.png">
                         </a>
                     </div>
+                </div>
+                <?php
+                    if (isset($_SESSION['validUser'])) {
+                        echo '
+                            <div class="logout-container">
+                                <div class="logout-picture image">
+                                    <a href="php/logout.php" title="Disconnetti ' . $_SESSION['validUserName'] . '" data-ajax="false"><img src="img/lock-icon-grey.png"></a>
+                                </div>
+                            </div>
+                            <div class="user-container">
+                                <div class="user-picture image" style=\'background-image: url("img/user-icon.png")\'></div>
+                                <div id="actualUser" class="user-label">' . $_SESSION['FullName'] . '</div>
+                            </div>
+                        ';
+                    }
+                ?>
             </div>
-         </div>
-        <div id="pageContent">
+        </div>
 
+        <?php if (!isset($_SESSION['validUser']))
+            {
+                echo '
+                    <div id="LoginDialog"></div>
+                ';
+            }
+        ?>
+
+        <div class="mainareaContainer">
         </div>
     </body>
 </html>
