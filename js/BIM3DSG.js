@@ -3,25 +3,7 @@ var _toolbarHeight;
 // Events functions
 $(document).ready(function () {
     ResizeHeaderLoghi();
-    SetKendo();
     Login();
-    SetTooltip();
-
-    function SetTooltip(){
-        var tooltip = $("#side-toolbar-container").kendoTooltip({
-            filter: "span",
-            position: "left",
-            animation: {
-                open: {
-                    effects: "zoom",
-                    duration: 150
-                }
-            }
-        }).data("kendoTooltip");
-
-        tooltip.show($("#openInfoWindowBtn"));
-    }
-
 });
 
 $(window).resize(function () {
@@ -70,20 +52,20 @@ function ResizeHeaderLoghi() {
     }
 }
 
-
 // Login functions
 function Login() {
     if ($("#actualUser").text() == "") {
-        $('#LoginDialog').data("kendoDialog").open();
-    };
+        SetLoginDialog();
+        $('#loginDialog').data("kendoDialog").open();
+    }
 }
 
-
-// Kendo UI functions
-function SetKendo() {
-
     function SetLoginDialog() {
-        function LoginDialogForms_OnKeyUp() {
+        function OnLoginSubmit() {
+            $("#loginForm").submit();
+        }
+
+        function LoginDialog_OnKeyUp() {
             $("#password").keyup(function (event) {
                 if (event.keyCode == 13) {
                     $(".loginboard-title .k-primary").click();
@@ -97,7 +79,7 @@ function SetKendo() {
             });
         }
 
-        $('#LoginDialog').kendoDialog({
+        $('#loginDialog').kendoDialog({
             width: "250px",
             title: "Login board",
             closable: false,
@@ -117,17 +99,10 @@ function SetKendo() {
             ],
         });
 
-        $('#LoginDialog').parents(".k-widget").addClass("loginboard-title");
+        $('#loginDialog').parents(".k-widget").addClass("loginboard-title");
 
-        LoginDialogForms_OnKeyUp();
-    }
-
-    function OnLoginSubmit() {
-        $("#loginForm").submit();
-    }
-
-    if ($("#actualUser").text() == "") {
-        SetLoginDialog();
-    }
+        LoginDialog_OnKeyUp();
 }
+
+
 
