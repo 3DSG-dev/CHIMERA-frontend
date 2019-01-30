@@ -1,11 +1,27 @@
 var _toolbarHeight;
-var firstShow = true;
 
 // Events functions
 $(document).ready(function () {
     ResizeHeaderLoghi();
     SetKendo();
     Login();
+    SetTooltip();
+
+    function SetTooltip(){
+        var tooltip = $("#side-toolbar-container").kendoTooltip({
+            filter: "span",
+            position: "left",
+            animation: {
+                open: {
+                    effects: "zoom",
+                    duration: 150
+                }
+            }
+        }).data("kendoTooltip");
+
+        tooltip.show($("#openInfoWindowBtn"));
+    }
+
 });
 
 $(window).resize(function () {
@@ -114,3 +130,4 @@ function SetKendo() {
         SetLoginDialog();
     }
 }
+
