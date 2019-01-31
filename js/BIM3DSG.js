@@ -60,48 +60,48 @@ function Login() {
     }
 }
 
-    function SetLoginDialog() {
-        function OnLoginSubmit() {
-            $("#loginForm").submit();
-        }
+function SetLoginDialog() {
+    function OnLoginSubmit() {
+        $("#loginForm").submit();
+    }
 
-        function LoginDialog_OnKeyUp() {
-            $("#password").keyup(function (event) {
-                if (event.keyCode == 13) {
-                    $(".loginboard-title .k-primary").click();
-                }
-            });
-
-            $("#username").keyup(function (event) {
-                if (event.keyCode == 13) {
-                    $(".loginboard-title .k-primary").click();
-                }
-            });
-        }
-
-        $('#loginDialog').kendoDialog({
-            width: "250px",
-            title: "Login board",
-            closable: false,
-            modal: true,
-            content: "<form id=\"loginForm\" method=\"post\" action=\"./\" data-ajax=\"false\">\n" +
-                "              <div class=\"user-wrap\">" +
-                "                 <label for=\"username\" class=\"login-label\" >User:</label><br>\n" +
-                "                 <input type=\"text\" name=\"user\" id=\"username\" class=\"login-input\" value=\"\" placeholder=\"username\">\n" +
-                "              </div>" +
-                "              <div class=\"pwd-wrap\">" +
-                "                   <label for=\"password\" class=\"login-label\">Password:</label><br>\n" +
-                "                   <input type=\"password\" name=\"pwd\" id=\"password\" class=\"login-input\" value=\"\" placeholder=\"password\">\n" +
-                "               </div>" +
-                "           </form>",
-            actions: [
-                {text: 'LOGIN', primary: true, action: OnLoginSubmit}
-            ],
+    function LoginDialog_OnKeyUp() {
+        $("#password").keyup(function (event) {
+            if (event.keyCode == 13) {
+                $(".loginboard-title .k-primary").click();
+            }
         });
 
-        $('#loginDialog').parents(".k-widget").addClass("loginboard-title");
+        $("#username").keyup(function (event) {
+            if (event.keyCode == 13) {
+                $(".loginboard-title .k-primary").click();
+            }
+        });
+    }
 
-        LoginDialog_OnKeyUp();
+    $('#loginDialog').kendoDialog({
+        width: "250px",
+        title: "Login board",
+        closable: false,
+        modal: true,
+        content: "<form id=\"loginForm\" method=\"post\" action=\"./\">\n" +
+                 "  <div class=\"user-wrap\">" +
+                 "       <label for=\"username\" class=\"login-label\" >User:</label><br>\n" +
+                 "       <input type=\"text\" name=\"user\" id=\"username\" class=\"login-input\" value=\"\" placeholder=\"username\">\n" +
+                 "  </div>" +
+                 "  <div class=\"pwd-wrap\">" +
+                 "       <label for=\"password\" class=\"login-label\">Password:</label><br>\n" +
+                 "       <input type=\"password\" name=\"pwd\" id=\"password\" class=\"login-input\" value=\"\" placeholder=\"password\">\n" +
+                 "  </div>" +
+                 "</form>",
+        actions: [
+            {text: 'LOGIN', primary: true, action: OnLoginSubmit}
+        ]
+    });
+
+    $('#loginDialog').parents(".k-widget").addClass("loginboard-title");
+
+    LoginDialog_OnKeyUp();
 }
 
 
