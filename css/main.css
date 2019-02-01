@@ -87,25 +87,28 @@ html, body {
     color:#333;
 }
 
-html, body, div#pageContainer {
-    height: 100%;
-    width: 100%;
+html, body, div#page-container {
     height: 100vh;
     width: 100vw;
     margin: 0;
 }
 
-#headerContainer {
+#header-container {
     height: 68px;
     min-height: 68px;
 }
 
-.mainareaContainer {
+#mainarea-container {
     height: calc(100vh - 68px);
     background-color: #ebeff5;
 }
 
-#headerLoghi {
+#page-container {}
+#page-section {}
+#page-row {}
+#page-column {}
+
+#header-loghi {
     text-align: center;
     height: 68px;
     min-height: 68px;
@@ -120,17 +123,17 @@ html, body, div#pageContainer {
 }
 
 .loghi {
-    margin: 0px;
+    margin: 0;
     display: none;
 }
 
-#logo3DSurveySmall, #logo3DSurveyLarge {
+#logo-3dsurvey-small, #logo-3dsurvey-large {
     float:left;
     margin-top: 4px;
     margin-left: 8px;
 }
 
-#logoPolimiSmall, #logoPolimiLarge {
+#logo-polimi-small, #logo-polimi-large {
     float:right;
     margin-right: 8px;
     margin-top: 4px;
@@ -138,7 +141,7 @@ html, body, div#pageContainer {
 
 
 /* LOGIN & USER PROFILE LINK in header style */
-.user-container{
+#user-container{
     margin-right: 20px;
     float:right;
     height:68px;
@@ -166,7 +169,7 @@ html, body, div#pageContainer {
     margin-top:18px;
 }
 
-.logout-container{
+#logout-container{
     margin-right: 25px;
     float:right;
     height:68px;
@@ -182,21 +185,17 @@ html, body, div#pageContainer {
 
 #logout-label {
     float: left;
-    margin-left: 0rem;
+    margin-left: 0;
     line-height: 2.5rem;
     margin-top: 18px;
 }
 
 
 /*  TOOLBAR LATERALE - PULSANTI BLU a destra*/
-.scrollBtn-toolbar {
-    background-color: transparent;
-}
-
 #side-toolbar-container {
-    padding:0px;
+    padding:0;
     position: fixed;
-    right: 0px;
+    right: 0;
     top: 85px;
     overflow: hidden;
 }
@@ -206,10 +205,9 @@ html, body, div#pageContainer {
     border: none;
 }
 
-
 .side-tool-item {
-    margin: 2px 0px 2px 0px;
-    padding: 2px 0px 3px 0px;
+    margin: 2px 0 2px 0;
+    padding: 2px 0 3px 0;
 }
 
 .side-tool-item.k-state-selected {
@@ -219,7 +217,7 @@ html, body, div#pageContainer {
 .side-tool-btn {
     margin: auto;
     text-align: center;
-    padding: 0px 2px;
+    padding: 0 2px;
     border: none;
     background-color: var(--main-color);
     border-radius: 10px;
@@ -243,19 +241,7 @@ html, body, div#pageContainer {
     width: 40px;
 }
 
-
-/* TOOLTIP infos Styles */
-.k-tooltip{
-    background: #ffffff !important;
-    right:7px;
-}
-
-
 /* FINESTRE di DIALOGO - stilizzazione titolo*/
-#WindowsContainer{
-    height: 0px;
-}
-
 .k-header .k-link{
     color: var(--main-color);
 }
@@ -287,22 +273,22 @@ html, body, div#pageContainer {
 }
 
 .k-window {
-    box-shadow: 0px 0px 3px 3px #dbdbdb;
+    box-shadow: 0 0 3px 3px #dbdbdb;
     background-color:#ffffff;
 }
 
 k-dialog {
-    box-shadow: 0px 0px 0px 0px;
+    box-shadow: 0 0 0 0;
 }
 
 .k-window-content form div {
-    padding: 0px 20px 20px 20px;
+    padding: 0 20px 20px 20px;
 }
 
 .k-window-content { padding: 0 16px 16px 16px;}
 
 .k-window-content h3 {
-    margin-top:0px;
+    margin-top:0;
 }
 
 
@@ -361,9 +347,9 @@ k-dialog {
 }
 
 @media screen and (max-width:1000px) {
-    .logout-container { margin-right:0px;}
+    #logout-container { margin-right:0px;}
     .user-label{ margin-left: 0.3rem;}
-    .user-container {margin-right:3px;}
+    #user-container {margin-right:3px;}
 }
 
 @media screen and (max-width: 1096px) {

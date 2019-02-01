@@ -1,5 +1,3 @@
-var _toolbarHeight;
-
 // Events functions
 $(document).ready(function () {
     ResizeHeaderLoghi();
@@ -12,96 +10,95 @@ $(window).resize(function () {
 
 // Resize functions
 function ResizeHeaderLoghi() {
-    var widthScreen = $(window).width();
-    var spazioPerLoghi = widthScreen - $(".user-container").outerWidth() - $(".logout-container").outerWidth();
+    var spazioPerLoghi = $(window).width() - $("#user-container").outerWidth() - $("#logout-container").outerWidth();
 
     // quando lo spazio per entrambi i loghi small non è abbastanza
     if (spazioPerLoghi <= 200) {
-        $("#logo3DSurveySmall").hide();
-        $("#logo3DSurveyLarge").hide();
-        $("#logoPolimiSmall").hide();
-        $("#logoPolimiLarge").hide();
+        $("#logo-3dsurvey-small").hide();
+        $("#logo-3dsurvey-large").hide();
+        $("#logo-polimi-small").hide();
+        $("#logo-polimi-large").hide();
     }
-    // quando basta lo spazio solo per il logo 3dsurvey SMALL (138px) <206
+    // quando basta lo spazio solo per il logo 3dsurvey SMALL (138px) <226
     else if (spazioPerLoghi <= 226) {
-        $("#logo3DSurveySmall").show();
-        $("#logo3DSurveyLarge").hide();
-        $("#logoPolimiSmall").hide();
-        $("#logoPolimiLarge").hide();
+        $("#logo-3dsurvey-small").show();
+        $("#logo-3dsurvey-large").hide();
+        $("#logo-polimi-small").hide();
+        $("#logo-polimi-large").hide();
 
-        // quando basta lo spazio solo per il logo 3dsurvey SMALL e Poli SMALL 138+68 < 531
+        // quando basta lo spazio solo per il logo 3dsurvey SMALL e Poli SMALL 138+68 < 551
     } else if (spazioPerLoghi <= 551) {
-        $("#logo3DSurveySmall").show();
-        $("#logo3DSurveyLarge").hide();
-        $("#logoPolimiSmall").show();
-        $("#logoPolimiLarge").hide();
+        $("#logo-3dsurvey-small").show();
+        $("#logo-3dsurvey-large").hide();
+        $("#logo-polimi-small").show();
+        $("#logo-polimi-large").hide();
 
-        // quando basta lo spazio solo per il logo 3dsurvey BIG e Poli SMALL < 671
+        // quando basta lo spazio solo per il logo 3dsurvey BIG e Poli SMALL < 691
     } else if (spazioPerLoghi <= 691) {
-        $("#logo3DSurveySmall").hide();
-        $("#logo3DSurveyLarge").show();
-        $("#logoPolimiSmall").show();
-        $("#logoPolimiLarge").hide();
+        $("#logo-3dsurvey-small").hide();
+        $("#logo-3dsurvey-large").show();
+        $("#logo-polimi-small").show();
+        $("#logo-polimi-large").hide();
 
-        // quando basta lo spazio per entrambi i loghi BIG < 671
+        // quando basta lo spazio per entrambi i loghi BIG < 691
     } else if (spazioPerLoghi > 691) {
-        $("#logo3DSurveySmall").hide();
-        $("#logo3DSurveyLarge").show();
-        $("#logoPolimiSmall").hide();
-        $("#logoPolimiLarge").show();
+        $("#logo-3dsurvey-small").hide();
+        $("#logo-3dsurvey-large").show();
+        $("#logo-polimi-small").hide();
+        $("#logo-polimi-large").show();
     }
 }
 
 // Login functions
 function Login() {
-    if ($("#actualUser").text() == "") {
+    if ($("#actual-user").text() == "") {
         SetLoginDialog();
-        $('#loginDialog').data("kendoDialog").open();
-    }
-}
+        $('#login-dialog').data("kendoDialog").open();
 
-function SetLoginDialog() {
-    function OnLoginSubmit() {
-        $("#loginForm").submit();
-    }
-
-    function LoginDialog_OnKeyUp() {
-        $("#password").keyup(function (event) {
-            if (event.keyCode == 13) {
-                $(".loginboard-title .k-primary").click();
+        function SetLoginDialog() {
+            function OnLoginSubmit() {
+                $("#login-form").submit();
             }
-        });
 
-        $("#username").keyup(function (event) {
-            if (event.keyCode == 13) {
-                $(".loginboard-title .k-primary").click();
+            function LoginDialog_OnKeyUp() {
+                $("#password").keyup(function (event) {
+                    if (event.keyCode == 13) {
+                        $(".loginboard-title .k-primary").click();
+                    }
+                });
+
+                $("#username").keyup(function (event) {
+                    if (event.keyCode == 13) {
+                        $(".loginboard-title .k-primary").click();
+                    }
+                });
             }
-        });
+
+            $('#login-dialog').kendoDialog({
+                width: "250px",
+                title: "Login board",
+                closable: false,
+                modal: true,
+                content: '<form id="login-form" method="post" action="./">' +
+                         '  <div class="user-wrap">' +
+                         '    <label for="username" class="login-label" >User:</label><br>' +
+                         '    <input type="text" name="user" id="username" class="login-input" value="" placeholder="username">' +
+                         '  </div>' +
+                         ' <div class="pwd-wrap">' +
+                         '    <label for="password" class="login-label">Password:</label><br>' +
+                         '    <input type="password" name="pwd" id="password" class="login-input" value="" placeholder="password">' +
+                         '  </div>' +
+                         '</form>',
+                actions: [
+                    {text: 'LOGIN', primary: true, action: OnLoginSubmit}
+                ]
+            });
+
+            $('#login-dialog').parents(".k-widget").addClass("loginboard-title");
+
+            LoginDialog_OnKeyUp();
+        }
     }
-
-    $('#loginDialog').kendoDialog({
-        width: "250px",
-        title: "Login board",
-        closable: false,
-        modal: true,
-        content: "<form id=\"loginForm\" method=\"post\" action=\"./\">\n" +
-                 "  <div class=\"user-wrap\">" +
-                 "       <label for=\"username\" class=\"login-label\" >User:</label><br>\n" +
-                 "       <input type=\"text\" name=\"user\" id=\"username\" class=\"login-input\" value=\"\" placeholder=\"username\">\n" +
-                 "  </div>" +
-                 "  <div class=\"pwd-wrap\">" +
-                 "       <label for=\"password\" class=\"login-label\">Password:</label><br>\n" +
-                 "       <input type=\"password\" name=\"pwd\" id=\"password\" class=\"login-input\" value=\"\" placeholder=\"password\">\n" +
-                 "  </div>" +
-                 "</form>",
-        actions: [
-            {text: 'LOGIN', primary: true, action: OnLoginSubmit}
-        ]
-    });
-
-    $('#loginDialog').parents(".k-widget").addClass("loginboard-title");
-
-    LoginDialog_OnKeyUp();
 }
 
 
