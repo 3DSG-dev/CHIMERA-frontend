@@ -6,7 +6,19 @@ var MiaNomeList = [];
 
 // Events functions
 $(document).ready(function () {
+    function SetEventHandler_OnReady() {
+        function SetToolbarEvents() {
+            $("#openInformationWindowBtn").unbind('click').bind('click', function (e) {
+                $("#informationWindow").data("kendoWindow").open();
+            });
+        }
+
+        SetToolbarEvents();
+    }
+
     ResizeHeaderLoghi();
+    SetInformationBoard();
+    SetEventHandler_OnReady();
     Login();
 });
 
@@ -402,6 +414,19 @@ function SetComboboxes () {
     TapHandlerLayer2();
     TapHandlerLayer3();
     TapHandlerNome();
+}
+
+function SetInformationBoard() {
+
+    $("#informationWindow").kendoWindow({
+        title: "Information board",
+        width: 700,
+        minWidth: 280,
+        visible: false,
+        resizable: true
+    }).data("kendoWindow").center();
+
+    $('#informationWindow').prev(".k-window-titlebar").addClass("information-window-titlebar");
 }
 
 // Login functions
