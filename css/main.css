@@ -645,6 +645,22 @@ k-dialog {
     position: relative;
 }
 
+
+/* INFORMATION BOARD: finestra di info */
+.information-window-titlebar {
+    width: 250px;
+}
+
+#informationWindow_wnd_title::before {
+    content: "";
+    display: inline-block;
+    vertical-align: middle;
+    background: url("../../img/information-icon.png") no-repeat;
+    width: 40px;
+    height: 40px;
+}
+
+
 /* MEDIA QUERIES*/
 
 @media screen and (max-width: 1200px){

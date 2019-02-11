@@ -19,6 +19,7 @@ function checkUser(){
         $user = isset($_POST['user']) ? $_POST['user'] : null;
         $pwd = isset($_POST['pwd']) ? $_POST['pwd'] : null;
 
+
         if ((isset($user)) && (isset($pwd))) {
             $dbconn = pg_connect($_SESSION['dbConnectionString']) or die ('Error connecting to db');
 

@@ -144,6 +144,10 @@
             </div>
         </div>
 
+        <div id="informationWindow">
+
+        </div>
+
         <div id="sideToolbarContainer">
             <div id="sideToolbarList" class="k-widget k-listview k-selectable">
 
@@ -158,7 +162,7 @@
                      </span>
                 </div>
                 <div class="side-tool-item" >
-                    <span id="openUploadWindowBtn" class="side-tool-btn" title="Information board">
+                    <span id="openInformationWindowBtn" class="side-tool-btn" title="Information board">
                         <img src="img/info-icon.png" class="side-tool-btn-image">
                     </span>
                 </div>
