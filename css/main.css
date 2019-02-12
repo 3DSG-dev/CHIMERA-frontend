@@ -739,6 +739,83 @@ k-dialog {
 }
 
 
+/* READ ONLY SWITCH*/
+/* The switch - the box around the slider */
+#ctr-select-rw.readwrite-checkbox {
+    position: absolute;
+    z-index: 1000;
+    top: 0px;
+    right: 20px;
+}
+
+
+.switch {
+    position: relative;
+    vertical-align: middle;
+    display: inline-block;
+    width: 50px;
+    height: 25px;
+}
+
+/* Hide default HTML checkbox */
+.switch input {display:none;}
+
+/* The slider */
+.slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: var(--grigiomedio);
+    -webkit-transition: .4s;
+    transition: .4s;
+}
+
+.slider:before {
+    position: absolute;
+    content: "";
+    height: 21px;
+    width: 21px;
+    left: 4px;
+    bottom: 2px;
+    background-color: white;
+    -webkit-transition: .4s;
+    transition: .4s;
+}
+
+input:checked + .slider {
+    background-color: var(--main-color);
+}
+
+input:focus + .slider {
+    box-shadow: 0 0 1px var(--main-color);
+}
+
+input:checked + .slider:before {
+    -webkit-transform: translateX(21px);
+    -ms-transform: translateX(21px);
+    transform: translateX(21px);
+}
+
+/* Rounded sliders */
+.slider.round {
+    border-radius: 34px;
+}
+
+.slider.round:before {
+    border-radius: 50%;
+}
+
+.label_rw {
+    color: var(--main-color);
+    line-height: 25px;
+    display: inline-block;
+    vertical-align: middle;
+}
+
+
 
 
 /* MEDIA QUERIES*/

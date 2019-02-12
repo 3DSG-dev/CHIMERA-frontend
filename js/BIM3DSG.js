@@ -3,6 +3,7 @@ var MiaLayer1List = [];
 var MiaLayer2List = [];
 var MiaLayer3List = [];
 var MiaNomeList = [];
+var MiaGroupList = [];
 
 // Events functions
 $(document).ready(function () {
@@ -458,6 +459,7 @@ function SetInfoWindow() {
 function OpenInfoWindow() {
     $("#infoWindow").data("kendoWindow").open();
 }
+
 
 // Login functions
 function Login() {
