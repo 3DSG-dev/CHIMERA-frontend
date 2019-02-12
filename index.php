@@ -145,6 +145,16 @@
         </div>
 
         <div id="infoWindow">
+
+            <div id="ctr-select-rw" class="readwrite-checkbox">
+                <span class="label_rw">Read</span>
+                <label for="select-rw" class="switch">
+                    <input type="checkbox" name="select-rw" id="select-rw" checked="false" value="">
+                    <span class="slider round"></span>
+                </label>
+                <span class="label_rw">Write</span>
+            </div>
+
             <div id="infoWindowTabstrip">
                 <ul>
                     <li class="k-state-active">Object information</li>
