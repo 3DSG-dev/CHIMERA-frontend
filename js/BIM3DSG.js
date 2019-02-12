@@ -24,6 +24,7 @@ $(document).ready(function () {
 
 $(window).resize(function () {
     ResizeHeaderLoghi();
+    ResizeInfoWindow();
 });
 
 
@@ -65,6 +66,18 @@ function ResizeHeaderLoghi() {
         $("#logo3DSurveyLarge").show();
         $("#logoPolimiSmall").hide();
         $("#logoPolimiLarge").show();
+    }
+}
+function ResizeInfoWindow() {
+
+    var widthScreen = $(window).width();
+    $("#infoWindow").data("kendoWindow").center();
+
+    if (widthScreen < 500) {
+        $("#infoWindow").data("kendoWindow").wrapper.css({width: (widthScreen)});
+    }
+    else {
+        $("#infoWindow").data("kendoWindow").wrapper.css({width: (widthScreen <= 700 ? 500 : 700)});
     }
 }
 
@@ -419,7 +432,7 @@ function SetComboboxes () {
 function SetInfoWindow() {
 
     function SetInfoWindowTabstrip () {
-        $("#informationWindowTabstrip").kendoTabStrip({
+        $("#infoWindowTabstrip").kendoTabStrip({
             animation:  {
                 open: {
                     effects: "fadeIn"
@@ -428,7 +441,7 @@ function SetInfoWindow() {
         });
     }
 
-    $("#informationWindow").kendoWindow({
+    $("#infoWindow").kendoWindow({
         title: "Information board",
         width: 700,
         minWidth: 280,
@@ -436,14 +449,14 @@ function SetInfoWindow() {
         resizable: true
     }).data("kendoWindow").center();
 
-    $('#informationWindow').prev(".k-window-titlebar").addClass("information-window-titlebar");
+    $('#infoWindow').prev(".k-window-titlebar").addClass("information-window-titlebar");
 
     SetInfoWindowTabstrip ();
 }
 
 
 function OpenInfoWindow() {
-    $("#informationWindow").data("kendoWindow").open();
+    $("#infoWindow").data("kendoWindow").open();
 }
 
 // Login functions
