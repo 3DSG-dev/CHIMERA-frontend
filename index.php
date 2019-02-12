@@ -144,19 +144,15 @@
             </div>
         </div>
 
-        <div id="informationWindow">
-            <div id="informationWindowTabstrip">
+        <div id="infoWindow">
+            <div id="infoWindowTabstrip">
                 <ul>
                     <li class="k-state-active">Object information</li>
                     <li>Version information</li>
                     <li>Subversion information</li>
                 </ul>
-                <div id="objectInfoTab" class="infownd-tabitem">
-                    <div class="div-border-grey">
-                    <div>
-                    <div class="div-border-grey">
-                    <div>
 
+                <div id="objectInfoTab" class="infownd-tabitem">
                 </div>
                 <div id="versionInfoTab" class="infownd-tabitem">
                 </div>
