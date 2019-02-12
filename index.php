@@ -145,7 +145,24 @@
         </div>
 
         <div id="informationWindow">
+            <div id="informationWindowTabstrip">
+                <ul>
+                    <li class="k-state-active">Object information</li>
+                    <li>Version information</li>
+                    <li>Subversion information</li>
+                </ul>
+                <div id="objectInfoTab" class="infownd-tabitem">
+                    <div class="div-border-grey">
+                    <div>
+                    <div class="div-border-grey">
+                    <div>
 
+                </div>
+                <div id="versionInfoTab" class="infownd-tabitem">
+                </div>
+                <div id="subversionInfoTab" class="infownd-tabitem">
+                </div>
+            </div>
         </div>
 
         <div id="sideToolbarContainer">
