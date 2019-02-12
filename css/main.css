@@ -87,6 +87,10 @@ h5,.h5{font-size:14px}
 h6,.h6{font-size:12px}
 p{margin:0 0 10px}.lead{margin-bottom:20px;font-size:16px;font-weight:200;line-height:1.4}
 
+.div-border-grey {
+    border: 1px solid var(--grigiomedio);
+}
+
 html, body {
     font-family: 'Roboto', sans-serif;
     font-size: 14px;
@@ -659,6 +663,82 @@ k-dialog {
     width: 40px;
     height: 40px;
 }
+
+
+/* INFO BOARD : TABSTRIP */
+/* TABstrip "search & view oggetti" o "usa la tua lista"*/
+
+#informationWindowTabstrip.k-header {
+    background-image: none;
+    background-color: transparent;
+}
+
+#informationWindowTabstrip.k-tabstrip {
+    background: none transparent;
+    border-width: 0;
+}
+
+#informationWindowTabstrip.k-tabstrip .k-tabstrip-items {
+    padding: 0;
+}
+
+#informationWindowTabstrip.k-tabstrip .k-content {
+    margin: 0;
+}
+
+#informationWindowTabstrip.k-tabstrip .k-content.k-state-active {
+    background-color: transparent;
+}
+
+#informationWindowTabstrip.k-tabstrip > .k-content {
+    padding: 14px 8px;
+}
+
+#informationWindowTabstrip.k-tabstrip-top > .k-content {
+    border: 0;
+}
+
+#informationWindowTabstrip.k-tabstrip-top > .k-tabstrip-items {
+    border-bottom-width: 0;
+}
+
+#informationWindowTabstrip.k-tabstrip .k-item.k-state-active {
+    background-color: transparent;
+    border-color: rgba(0, 0, 0, 0.00);
+    color: var(--main-color-over);
+}
+
+#informationWindowTabstrip.k-tabstrip:focus {
+    -webkit-box-shadow: 0 0 0 0 rgba(0,0,0,0.00);
+    box-shadow: 0 0 0 0 rgba(0,0,0,0.00);
+}
+
+#informationWindowTabstrip .k-state-active .k-link {
+    border-bottom: 2px solid var(--main-color-over);;
+}
+
+#informationWindowTabstrip.k-widget {
+    border-width: 0;
+    font-size: 14px;
+}
+
+#informationWindowTabstrip.k-tabstrip .k-item {
+    color: #333;
+}
+
+#informationWindowTabstrip ul.k-tabstrip-items li.k-item {
+    background-image:none, linear-gradient(to bottom,rgba(255,255,255,0) 0,rgba(255,255,255,0) 0%);
+}
+
+.infownd-tabitem.k-content {
+    background-color: transparent;
+}
+
+.infownd-tabitem.k-content.k-state-active {
+    background-color: transparent;
+}
+
+
 
 
 /* MEDIA QUERIES*/

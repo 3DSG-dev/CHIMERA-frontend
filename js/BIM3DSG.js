@@ -9,7 +9,7 @@ $(document).ready(function () {
     function SetEventHandler_OnReady() {
         function SetToolbarEvents() {
             $("#openInformationWindowBtn").unbind('click').bind('click', function (e) {
-                $("#informationWindow").data("kendoWindow").open();
+                OpenInfoWindow();
             });
         }
 
@@ -17,7 +17,7 @@ $(document).ready(function () {
     }
 
     ResizeHeaderLoghi();
-    SetInformationBoard();
+    SetInfoWindow();
     SetEventHandler_OnReady();
     Login();
 });
@@ -416,7 +416,17 @@ function SetComboboxes () {
     TapHandlerNome();
 }
 
-function SetInformationBoard() {
+function SetInfoWindow() {
+
+    function SetInfoWindowTabstrip () {
+        $("#informationWindowTabstrip").kendoTabStrip({
+            animation:  {
+                open: {
+                    effects: "fadeIn"
+                }
+            }
+        });
+    }
 
     $("#informationWindow").kendoWindow({
         title: "Information board",
@@ -427,6 +437,13 @@ function SetInformationBoard() {
     }).data("kendoWindow").center();
 
     $('#informationWindow').prev(".k-window-titlebar").addClass("information-window-titlebar");
+
+    SetInfoWindowTabstrip ();
+}
+
+
+function OpenInfoWindow() {
+    $("#informationWindow").data("kendoWindow").open();
 }
 
 // Login functions
