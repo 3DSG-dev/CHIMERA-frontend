@@ -5,7 +5,7 @@
 <!DOCTYPE html>
 <html>
     <head>
-        <title><?php echo $_SESSION['titolo']; ?></title>
+        <title><?php echo $titolo; ?></title>
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <meta charset="iso-8859-15">
 
@@ -144,33 +144,6 @@
             </div>
         </div>
 
-        <div id="infoWindow">
-
-            <div id="ctr-select-rw" class="readwrite-checkbox">
-                <span class="label_rw">Read</span>
-                <label for="select-rw" class="switch">
-                    <input type="checkbox" name="select-rw" id="select-rw" checked="false" value="">
-                    <span class="slider round"></span>
-                </label>
-                <span class="label_rw">Write</span>
-            </div>
-
-            <div id="infoWindowTabstrip">
-                <ul>
-                    <li class="k-state-active">Object information</li>
-                    <li>Version information</li>
-                    <li>Subversion information</li>
-                </ul>
-
-                <div id="objectInfoTab" class="infownd-tabitem">
-                </div>
-                <div id="versionInfoTab" class="infownd-tabitem">
-                </div>
-                <div id="subversionInfoTab" class="infownd-tabitem">
-                </div>
-            </div>
-        </div>
-
         <div id="sideToolbarContainer">
             <div id="sideToolbarList" class="k-widget k-listview k-selectable">
 
@@ -185,7 +158,7 @@
                      </span>
                 </div>
                 <div class="side-tool-item" >
-                    <span id="openInformationWindowBtn" class="side-tool-btn" title="Information board">
+                    <span id="openUploadWindowBtn" class="side-tool-btn" title="Information board">
                         <img src="img/info-icon.png" class="side-tool-btn-image">
                     </span>
                 </div>
