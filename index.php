@@ -5,7 +5,7 @@
 <!DOCTYPE html>
 <html>
     <head>
-        <title><?php echo $titolo; ?></title>
+        <title><?php echo $_SESSION['titolo']; ?></title>
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <meta charset="iso-8859-15">
 
