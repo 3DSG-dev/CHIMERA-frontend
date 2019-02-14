@@ -35,7 +35,7 @@ html, body, div#pageContainer {
     margin-right: 3px;
 }
 
-.user-info {
+.userInfo {
     margin-top: 20px;
     float: left;
 }
@@ -61,7 +61,7 @@ html, body, div#pageContainer {
     height: 68px;
 }
 
-.logout-icon {
+.logoutIcon {
     height: 2.5rem;
     width: 2.5rem;
 }
@@ -80,16 +80,16 @@ html, body, div#pageContainer {
     border: none;
 }
 
-.toolbar-item {
+.sideToolbarItem {
     margin: 2px 0 2px 0;
     padding: 2px 0 3px 0;
 }
 
-.toolbar-item.k-state-selected {
+.sideToolbarItem.k-state-selected {
     background-color: #6abd2d;
 }
 
-.toolbar-btn {
+.sideToolbarBtn {
     margin: auto;
     text-align: center;
     padding: 0 2px;
@@ -102,34 +102,62 @@ html, body, div#pageContainer {
     display: block;
 }
 
-.toolbar-btn:hover {
+.sideToolbarBtn:hover {
     background-color: #7590c6;
 }
 
-.toolbar-btn:focus {
+.sideToolbarBtn:focus {
     background-color: #7590c6;
 }
 
-.toolbar-btn img {
+.sideToolbarBtn img {
     display: inline-block;
     vertical-align: middle;
     width: 40px;
 }
 
-.toolbar-btn.mode-3d-btn {
+.sideToolbarBtn.mode3dBtn {
     background-color: #f79e45;
 }
 
-.toolbar-btn.mode-3d-btn:hover {
+.sideToolbarBtn.mode3dBtn:hover {
     background-color: #fcac5d;
 }
 
-.toolbar-btn.mode-3d-btn:focus {
+.sideToolbarBtn.mode3dBtn:focus {
     background-color: #fcac5d;
 }
 
-.toolbar-sep {
+.sideToolbarSeparator {
     margin-bottom: 20px;
+}
+
+/* Login Window */
+.loginField {
+    width: 80%;
+    position: relative;
+}
+
+.loginDialogIcon .k-window-title::before {
+    background: url("../img/lock_icon.png") no-repeat;
+}
+
+.loginDialogTitle .k-window-titlebar {
+    width: 145px;
+}
+
+/* Kendo UI WIndows */
+.k-widget.windowTitle {
+    font-size: 14px;
+    line-height: 1.72857;
+}
+
+.windowIcon .k-window-title::before {
+    content: "";
+    display: inline-block;
+    vertical-align: middle;
+    width: 35px;
+    height: 35px;
 }
 
 /* Media Query */
@@ -138,7 +166,7 @@ html, body, div#pageContainer {
         margin-right: 0;
     }
 
-    .user-label {
+    .userLabel {
         margin-left: 0.3rem;
     }
 }

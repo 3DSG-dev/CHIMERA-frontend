@@ -11,8 +11,8 @@
             $_SESSION['titolo'] = "BIM3DSG - TEST";
             $_SESSION['dbConnectionString'] = "host=localhost port=5432 dbname=" . $_SESSION['dbName'] . " user=postgres password=5ETBL6gzh9";
 
-            $user = isset($_POST['user']) ? $_POST['user'] : null;
-            $pwd = isset($_POST['pwd']) ? $_POST['pwd'] : null;
+            $user = isset($_POST['username']) ? $_POST['username'] : null;
+            $pwd = isset($_POST['password']) ? $_POST['password'] : null;
 
             if ((isset($user)) && (isset($pwd))) {
                 $pwd = md5($pwd);

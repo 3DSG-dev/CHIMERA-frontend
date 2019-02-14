@@ -31,35 +31,35 @@
         <div id="pageContainer">
             <div id="headerContainer">
                 <div id="logo3DSurveySmall" class="loghi">
-                    <a class="logo-3dsurvey-link" href="http://www.sitech-3dsurvey.polimi.it" target="_blank">
-                        <img src="img/logo-3dsurvey-60.png">
+                    <a href="http://www.sitech-3dsurvey.polimi.it" target="_blank">
+                        <img src="img/logo_3dsurvey_60.png">
                     </a>
                 </div>
                 <div id="logo3DSurveyLarge" class="loghi">
-                    <a class="logo-3dsurvey-link" href="http://www.sitech-3dsurvey.polimi.it" target="_blank">
-                        <img src="img/logo-3dsurvey-full-60.png">
+                    <a href="http://www.sitech-3dsurvey.polimi.it" target="_blank">
+                        <img src="img/logo_3dsurvey_full_60.png">
                     </a>
                 </div>
                 <div id="logoPolimiSmall" class="loghi">
-                    <a class="logo-polimi-link" href="http://www.polimi.it" target="_blank">
-                        <img src="img/logo-polimi-60.png">
+                    <a href="http://www.polimi.it" target="_blank">
+                        <img src="img/logo_polimi_60.png">
                     </a>
                 </div>
                 <div id="logoPolimiLarge" class="loghi">
-                    <a class="logo-polimi-link" href="http://www.polimi.it" target="_blank">
-                        <img src="img/logo-polimi-full-60.png">
+                    <a href="http://www.polimi.it" target="_blank">
+                        <img src="img/logo_polimi_full_60.png">
                     </a>
                 </div>
 
                 <?php
                     if (isset($_SESSION['validUser'])) {
                         echo '
-                            <div id="logoutButton" class="logout-icon user-info">
-                                <a href="php/logout.php" title="Logout ' . $_SESSION['validUserName'] . '"><img src="img/lock-icon-grey.png"></a>
+                            <div id="logoutButton" class="logoutIcon userInfo">
+                                <a href="php/logout.php" title="Logout ' . $_SESSION['validUserName'] . '"><img src="img/lock_icon_grey.png"></a>
                             </div>
                             <div id="userContainer">
-                                <div id="userPicture" class="user-info" style=\'background-image: url("img/user-icon.png")\'></div>
-                                <div id="userName" class="user-info">' . $_SESSION['FullName'] . '</div>
+                                <div id="userPicture" class="userInfo" style=\'background-image: url("img/user_icon.png")\'></div>
+                                <div id="userName" class="userInfo">' . $_SESSION['FullName'] . '</div>
                             </div>
                         ';
                     }
@@ -132,20 +132,20 @@
 
             <div id="sideToolbarContainer">
                 <div id="sideToolbarList" class="k-widget k-listview k-selectable">
-                    <div class="toolbar-item">
-                        <span class="toolbar-btn mode-3d-btn" title="Go to 3D mode">
-                            <img src="img/3d-mode-icon.png">
+                    <div class="sideToolbarItem">
+                        <span class="sideToolbarBtn mode3dBtn" title="Go to 3D mode">
+                            <img src="img/3d_mode_icon.png">
                         </span>
                     </div>
-                    <div class="toolbar-sep" />
-                    <div class="toolbar-item">
-                        <span class="toolbar-btn" title="Delete list">
-                            <img src="img/delete-list-icon.png">
+                    <div class="sideToolbarSeparator" />
+                    <div class="sideToolbarItem">
+                        <span class="sideToolbarBtn" title="Delete list">
+                            <img src="img/delete_list_icon.png">
                         </span>
                     </div>
-                    <div class="toolbar-item">
-                        <span class="toolbar-btn" title="Information board">
-                            <img src="img/info-icon.png">
+                    <div class="sideToolbarItem">
+                        <span class="sideToolbarBtn" title="Information board">
+                            <img src="img/info_icon.png">
                         </span>
                     </div>
                 </div>

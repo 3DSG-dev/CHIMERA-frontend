@@ -63,38 +63,41 @@ function Login() {
         function LoginDialog_OnKeyUp() {
             $("#password").keyup(function (event) {
                 if (event.keyCode == 13) {
-                    $(".loginboard-title .k-primary").click();
+                    $(".loginDialogTitle .k-primary").click();
                 }
             });
 
             $("#username").keyup(function (event) {
                 if (event.keyCode == 13) {
-                    $(".loginboard-title .k-primary").click();
+                    $(".loginDialogTitle .k-primary").click();
                 }
             });
         }
+
+        var html;
+        html = '<form id="loginForm" method="post" action="./">';
+        html += '   <div class="loginField">';
+        html += '       <label for="username">User:</label><br/>'
+        html += '       <input id="username" type="text" name="username" value="" placeholder="username">';
+        html += '   </div>';
+        html += '   <div class="loginField">';
+        html += '       <label for="password">Password:</label><br/>';
+        html += '       <input id="password" type="password" name="password" value="" placeholder="password">';
+        html += '   </div>';
+        html += '</form>';
 
         $('#loginDialog').kendoDialog({
             width: "250px",
             title: "Login board",
             closable: false,
             modal: true,
-            content: '<form id="loginForm" method="post" action="./">' +
-                '  <div class="user-wrap">' +
-                '    <label for="username" class="login-label" >User:</label><br>' +
-                '    <input type="text" name="user" id="username" class="login-input" value="" placeholder="username">' +
-                '  </div>' +
-                ' <div class="pwd-wrap">' +
-                '    <label for="password" class="login-label">Password:</label><br>' +
-                '    <input type="password" name="pwd" id="password" class="login-input" value="" placeholder="password">' +
-                '  </div>' +
-                '</form>',
+            content: html,
             actions: [
                 {text: 'LOGIN', primary: true, action: OnLoginSubmit}
             ]
         });
 
-        $('#loginDialog').parents(".k-widget").addClass("loginboard-title");
+        $('#loginDialog').parents(".k-widget").addClass("windowTitle windowIcon loginDialogTitle loginDialogIcon");
 
         LoginDialog_OnKeyUp();
     }
@@ -108,7 +111,7 @@ function Login() {
     return true;
 }
 
-//KendoUI
+// KendoUI
 function SetKendo() {
     function SetSearchResultGrid() {
 
