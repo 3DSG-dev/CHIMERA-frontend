@@ -8,8 +8,7 @@ var MiaNomeList = [];
 $(document).ready(function () {
     ResizeHeaderLoghi();
 
-    if (Login())
-    {
+    if (Login()) {
         SetKendo();
     }
 });
@@ -111,7 +110,7 @@ function Login() {
 
 //KendoUI
 function SetKendo() {
-    function SetSearchResultGrid () {
+    function SetSearchResultGrid() {
 
         function SetGridColumnTitles() {
             $.ajax({
@@ -121,8 +120,8 @@ function SetKendo() {
                 success: function (gridHeaderTitles) {
                     $("#gridResult").data("kendoGrid").setOptions({
                         columns: [
-                            {field: "CodiceOggetto", title: "Object id", width:50},
-                            {field: "CodiceVersione", title: "Version id", width:50},
+                            {field: "CodiceOggetto", title: "Object id", width: 50},
+                            {field: "CodiceVersione", title: "Version id", width: 50},
                             {field: "Layer0", title: gridHeaderTitles[0], width: 50},
                             {field: "Layer1", title: gridHeaderTitles[1], width: 50},
                             {field: "Layer2", title: gridHeaderTitles[2], width: 50},
@@ -154,6 +153,7 @@ function SetKendo() {
                 }
             });
         }
+
         function LoadUserListGrid() {
             $.ajax({
                 type: 'GET',
@@ -172,6 +172,7 @@ function SetKendo() {
                 }
             });
         }
+
         function RemoveImportObject(codice) {
             $.ajax({
                 type: 'POST',
@@ -189,6 +190,7 @@ function SetKendo() {
             });
 
         }
+
         /*function toggleScrollbar(e) {
             var gridWrapper = e.sender.wrapper;
             var gridDataTable = e.sender.table;
@@ -233,7 +235,7 @@ function SetKendo() {
             scrollable: true,
             height: 300,
             resizable: true,
-            dataBound:  function(e) {
+            dataBound: function (e) {
                 //toggleScrollbar(e);
             },
             mobile: false,
@@ -241,7 +243,7 @@ function SetKendo() {
                 mode: "inline",
                 confirmation: false
             },
-            remove: function(e) {
+            remove: function (e) {
                 RemoveImportObject(e.model.CodiceVersione);
             }
         });
@@ -249,7 +251,7 @@ function SetKendo() {
         LoadUserListGrid();
     }
 
-    function SetComboboxes () {
+    function SetComboboxes() {
 
         $("#ctrSelectLayer0").bind("tap", TapHandlerLayer0);
         $("#ctrSelectLayer1").bind("tap", TapHandlerLayer1); // dovrebbe attivarsi solo scrivendo nel combobox
@@ -450,7 +452,6 @@ function SetKendo() {
             dataValueField: "Name",
             change: onChangeLayer_refreshComboboxes
         }).data("kendoComboBox");
-
 
         TapHandlerLayer0();
         TapHandlerLayer1();
