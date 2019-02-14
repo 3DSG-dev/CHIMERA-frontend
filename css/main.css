@@ -96,22 +96,6 @@ html, body {
     color:#333;
 }
 
-html, body, div#pageContainer {
-    height: 100vh;
-    margin: 0;
-}
-
-#headerContainer {
-    height: 68px;
-    min-height: 68px;
-}
-
-#mainareaContainer {
-    height: calc(100vh - 68px);
-    background-color: #ebeff5;
-}
-
-#pageContainer {}
 
 .page-section {
     padding: 10px 10px 10px 10px;
@@ -295,80 +279,10 @@ input.k-textbox.inputLayer {
     padding-bottom: 0px;
 }
 
-#headerLoghi {
-    text-align: center;
-    height: 68px;
-    min-height: 68px;
-}
-
-#loghi3Dsurvey {
-    float:left;
-}
-
-#loghiPolimi {
-    float:right;
-}
-
-.loghi {
-    margin: 0;
-    display: none;
-}
-
-#logo3DSurveySmall, #logo3DSurveyLarge {
-    float:left;
-    margin-top: 4px;
-    margin-left: 8px;
-}
-
-#logoPolimiSmall, #logoPolimiLarge {
-    float:right;
-    margin-right: 8px;
-    margin-top: 4px;
-}
-
 
 /* LOGIN & USER PROFILE LINK in header style */
-#userContainer{
-    margin-right: 20px;
-    float:right;
-    height:68px;
-}
 
-.user-picture {
-    float:left;
-    border-radius: 50%;
-    margin-top:18px;
-    height: 2rem;
-    width: 2rem;
-    background: #ffffff;
-    border: 2px solid var(--grigiochiaro);
-}
 
-.user-picture.image{
-    background-size: cover;
-    background-repeat: no-repeat;
-}
-
-.user-label{
-    float:left;
-    margin-left: 1rem;
-    line-height:2.5rem;
-    margin-top:18px;
-}
-
-#logoutContainer{
-    margin-right: 25px;
-    float:right;
-    height:68px;
-}
-
-.logout-picture {
-    float:left;
-    margin-top:18px;
-    /*flex-shrink: 0;*/
-    height: 2.5rem;
-    width: 2.5rem;
-}
 
 #logoutLabel {
     float: left;
@@ -377,70 +291,6 @@ input.k-textbox.inputLayer {
     margin-top: 18px;
 }
 
-
-/*  TOOLBAR LATERALE - PULSANTI BLU a destra*/
-#sideToolbarContainer {
-    padding:0;
-    position: fixed;
-    right: 0;
-    top: 85px;
-    overflow: hidden;
-}
-
-
-#sideToolbarList.k-widget{
-    background-color: transparent;
-    border: none;
-}
-
-.side-tool-item {
-    margin: 2px 0 2px 0;
-    padding: 2px 0 3px 0;
-}
-
-.side-tool-item.k-state-selected {
-    background-color: #6abd2d;
-}
-
-.side-tool-btn {
-    margin: auto;
-    text-align: center;
-    padding: 0 2px;
-    border: none;
-    background-color: var(--main-color);
-    border-radius: 10px;
-    -moz-border-radius: 10px;
-    -webkit-border-radius: 10px;
-    height: 40px;
-    display: block;
-}
-
-.side-tool-btn:hover {
-    background-color: #7590c6;
-}
-
-.side-tool-btn:focus {
-    background-color: #7590c6;
-}
-
-.side-tool-btn-image {
-    display: inline-block;
-    vertical-align: middle;
-    width: 40px;
-}
-
-.side-tool-btn.btn-tredmode {
-    background-color: #f79e45;
-    margin-bottom:20px;
-}
-
-.side-tool-btn.btn-tredmode:hover {
-    background-color: #fcac5d;
-}
-
-.side-tool-btn.btn-tredmode:focus {
-    background-color: #fcac5d;
-}
 
 /* Stilizzazione GRID - TABLES -stilizzazione BASE - DI TUTTE LE TABLES */
 .table-hover thead tr:hover th, .table-hover tbody tr:hover td {
@@ -651,9 +501,6 @@ k-dialog {
 }
 
 @media screen and (max-width:1000px) {
-    #logoutContainer { margin-right:0;}
-    .user-label{ margin-left: 0.3rem;}
-    #userContainer { margin-right:3px;}
 }
 
 @media screen and (max-width: 1096px) {
@@ -687,7 +534,6 @@ k-dialog {
     .input-searchfield {
         width: 206px;
     }
-
 }
 
 @media screen and (max-width: 992px) {
@@ -761,7 +607,7 @@ k-dialog {
         display: inline-block;
     }
 
-    .side-tool-item {
+    .toolbar-item {
         margin: auto;
         text-align: center;
     }
