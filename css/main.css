@@ -467,33 +467,6 @@ k-dialog {
 }
 
 /* LOGIN BOARD-- finestra di dialogo per la LOGIN */
-.loginboard-title .k-window-title::before {
-    content: "";
-    display: inline-block;
-    vertical-align: middle;
-    background: url("../../img/lock-icon.png") no-repeat;
-    width: 35px;
-    height: 35px;
-}
-
-.loginboard-title .k-window-titlebar {
-    width: 145px;
-}
-
-.k-widget.loginboard-title  {
-    font-size: 14px;
-    line-height: 1.72857;
-}
-
-.user-wrap {
-    width:80%;
-    position: relative;
-}
-
-.pwd-wrap {
-    width:80%;
-    position: relative;
-}
 
 /* MEDIA QUERIES*/
 
@@ -607,7 +580,7 @@ k-dialog {
         display: inline-block;
     }
 
-    .toolbar-item {
+    .sideToolbarItem {
         margin: auto;
         text-align: center;
     }
