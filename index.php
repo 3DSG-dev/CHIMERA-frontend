@@ -137,7 +137,7 @@
                             <img src="img/3d_mode_icon.png">
                         </span>
                     </div>
-                    <div class="sideToolbarSeparator" />
+                    <div class="sideToolbarSeparator"></div>
                     <div class="sideToolbarItem">
                         <span class="sideToolbarBtn" title="Delete list">
                             <img src="img/delete_list_icon.png">
