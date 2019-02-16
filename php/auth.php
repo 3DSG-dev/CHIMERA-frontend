@@ -1,5 +1,5 @@
 <?php
-    function checkUser()
+    function CheckUser()
     {
         session_start();
 
@@ -7,9 +7,7 @@
             return $_SESSION['validUserName'];
         }
         else {
-            $_SESSION['dbName'] = "BIM3DSG_BIM-test-v2";
-            $_SESSION['titolo'] = "BIM3DSG - TEST";
-            $_SESSION['dbConnectionString'] = "host=localhost port=5432 dbname=" . $_SESSION['dbName'] . " user=postgres password=5ETBL6gzh9";
+            LoadDefaultSettings();
 
             $user = isset($_POST['username']) ? $_POST['username'] : null;
             $pwd = isset($_POST['password']) ? $_POST['password'] : null;
@@ -25,6 +23,8 @@
                     $_SESSION['validUserName'] = $user;
                     $_SESSION['FullName'] = $row['FullName'];
 
+                    LoadSettings($dbConnection);
+
                     pg_close($dbConnection);
 
                     return $_SESSION['validUserName'];
@@ -33,11 +33,52 @@
             }
         }
 
-        session_unset();
-        session_destroy();
-
         return null;
     }
 
-    checkUser();
+    function LoadDefaultSettings()
+    {
+        $_SESSION['dbName'] = "BIM3DSG_BIM-test-v2";
+        $_SESSION['titolo'] = "BIM3DSG - TEST";
+
+        $_SESSION['dbConnectionString'] = "host=localhost port=5432 dbname=" . $_SESSION['dbName'] . " user=postgres password=5ETBL6gzh9";
+        $_SESSION["layer0Label"] = 'Layer0';
+        $_SESSION["layer1Label"] = 'Layer1';
+        $_SESSION["layer2Label"] = 'Layer2';
+        $_SESSION["layer3Label"] = 'Layer3';
+        $_SESSION["nomeLabel"] = 'Nome';
+        $_SESSION["versionLabel"] = 'Version';
+    }
+
+    function LoadSettings($dbConnection)
+    {
+        $SQL = 'SELECT * FROM "Settings"';
+        $result = pg_query($dbConnection, $SQL) or die ("Error: $SQL");
+        while ($row = pg_fetch_array($result, null, PGSQL_ASSOC)) {
+            switch ($row["Key"]) {
+                case "Layer0" :
+                    $_SESSION["Layer0Label"] = $row["TextValue"];
+                    break;
+                case "Layer1" :
+                    $_SESSION["Layer1Label"] = $row["TextValue"];
+                    break;
+                case "Layer2" :
+                    $_SESSION["Layer2Label"] = $row["TextValue"];
+                    break;
+                case "Layer3" :
+                    $_SESSION["Layer3Label"] = $row["TextValue"];
+                    break;
+                case "Nome" :
+                    $_SESSION["NomeLabel"] = $row["TextValue"];
+                    break;
+                case "Version" :
+                    $_SESSION["VersionLabel"] = $row["TextValue"];
+                    break;
+                default :
+                    break;
+            }
+        }
+    }
+
+    CheckUser();
 ?>

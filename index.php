@@ -22,6 +22,15 @@
         <script src="libs/KendoUI/kendo.all.min.js"></script>
         <link rel="stylesheet" type="text/css" href="css/KendoUI.css" />
 
+        <script>
+            var _layer0Label = "<?php echo $_SESSION["layer0Label"]; ?>";
+            var _layer1Label = "<?php echo $_SESSION["layer1Label"]; ?>";
+            var _layer2Label = "<?php echo $_SESSION["layer2Label"]; ?>";
+            var _layer3Label = "<?php echo $_SESSION["layer3Label"]; ?>";
+            var _nomeLabel = "<?php echo $_SESSION["nomeLabel"]; ?>";
+            var _versionLabel = "<?php echo $_SESSION["versionLabel"]; ?>";
+        </script>
+
         <script type="text/javascript" src="js/BIM3DSG.js" charset="iso-8859-15"></script>
 
         <link rel="stylesheet" type="text/css" href="css/main.css" />
@@ -72,36 +81,32 @@
                     <div class="page-row search-form-row">
                         <div class="page-column search-title-column">
                             <h2 class="search-title">Select object to edit</h2>
-                            <p class="search-subtitle">Select all the items you want to work on by filtering them with the
-                                <b>Search fields</b> or by clicking the button <b>Use your list</b>.</p>
-
                         </div>
                         <div class="page-column search-form-column">
-
                             <div class="search-form-searchfields">
-                                <div id="ctrSelectLayer0" class="input-searchfield">
-                                    <label class="inputLayerLabel">Layer0</label>
+                                <div class="input-searchfield">
+                                    <label class="inputLayerLabel"><?php echo $_SESSION["layer0Label"]; ?></label>
                                     <input id="selectLayer0" type="text" class="inputLayer" />
                                 </div>
-                                <div id="ctrSelectLayer1" class="input-searchfield">
-                                    <label class="inputLayerLabel">Layer1</label>
+                                <div class="input-searchfield">
+                                    <label class="inputLayerLabel"><?php echo $_SESSION["layer1Label"]; ?></label>
                                     <input id="selectLayer1" type="text" class="inputLayer">
                                 </div>
-                                <div id="ctrSelectLayer2" class="input-searchfield">
-                                    <label class="inputLayerLabel">Layer2</label>
+                                <div class="input-searchfield">
+                                    <label class="inputLayerLabel"><?php echo $_SESSION["layer2Label"]; ?></label>
                                     <input id="selectLayer2" type="text" class="inputLayer">
                                 </div>
-                                <div id="ctrSelectLayer3" class="input-searchfield">
-                                    <label class="inputLayerLabel">Layer3</label>
+                                <div class="input-searchfield">
+                                    <label class="inputLayerLabel"><?php echo $_SESSION["layer3Label"]; ?></label>
                                     <input id="selectLayer3" type="text" class="inputLayer">
                                 </div>
-                                <div id="ctrSelectNome" class="input-searchfield">
-                                    <label class="inputLayerLabel">Name</label>
-                                    <input id="selectNome" type="text" class="inputLayer">
+                                <div class="input-searchfield">
+                                    <label class="inputLayerLabel"><?php echo $_SESSION["nomeLabel"]; ?></label>
+                                    <input id="selectName" type="text" class="inputLayer">
                                 </div>
-                                <div id="ctrSelectVersion" class="input-searchfield">
-                                    <label class="inputLayerLabel">Version</label>
-                                    <input id="selectVersion" type="text" class="inputLayer">
+                                <div class="input-searchfield">
+                                    <label class="inputLayerLabel"><?php echo $_SESSION["versionLabel"]; ?></label>
+                                    <input id="selectVersione" type="text" class="inputLayer">
                                 </div>
                                 <div style="clear:both;"></div>
                                 <div class="btn-wrap">

@@ -1,9 +1,3 @@
-var MiaLayer0List = [];
-var MiaLayer1List = [];
-var MiaLayer2List = [];
-var MiaLayer3List = [];
-var MiaNomeList = [];
-
 // Events functions
 $(document).ready(function () {
     ResizeHeaderLoghi();
@@ -77,7 +71,7 @@ function Login() {
         var html;
         html = '<form id="loginForm" method="post" action="./">';
         html += '   <div class="loginField">';
-        html += '       <label for="username">User:</label><br/>'
+        html += '       <label for="username">User:</label><br/>';
         html += '       <input id="username" type="text" name="username" value="" placeholder="username">';
         html += '   </div>';
         html += '   <div class="loginField">';
@@ -113,6 +107,65 @@ function Login() {
 
 // KendoUI
 function SetKendo() {
+    function SetSearchForm() {
+        function CreateSearchFormCombobox() {
+            function CreateCombobox(field, label) {
+                function SearchFormCombobox_OnChange(event) {
+                    UpdateSearchFormCombobox(event.sender.input.context.id.substr(6));
+                }
+
+                $("#select" + field).kendoComboBox({
+                    filter: "contains",
+                    suggest: true,
+                    placeholder: "Select " + label + "...",
+                    dataTextField: field,
+                    dataValueField: field,
+                    change: SearchFormCombobox_OnChange
+                }).data("kendoComboBox");
+            }
+
+            CreateCombobox("Layer0", _layer0Label);
+            CreateCombobox("Layer1", _layer1Label);
+            CreateCombobox("Layer2", _layer2Label);
+            CreateCombobox("Layer3", _layer3Label);
+            CreateCombobox("Name", _nomeLabel);
+            CreateCombobox("Versione", _versionLabel);
+        }
+
+        function UpdateSearchFormCombobox(senderId) {
+            $.ajax({
+                type: 'GET',
+                url: 'php/getListLayersAndName.php',
+                dataType: "json",
+                data: {
+                    senderId: senderId,
+                    layer0: $("#selectLayer0").data("kendoComboBox").value(),
+                    layer1: $("#selectLayer1").data("kendoComboBox").value(),
+                    layer2: $("#selectLayer2").data("kendoComboBox").value(),
+                    layer3: $("#selectLayer3").data("kendoComboBox").value(),
+                    nome: $("#selectName").data("kendoComboBox").value(),
+                    version: $("#selectVersione").data("kendoComboBox").value()
+                },
+                success: function (resultData) {
+                    for (var field in resultData) {
+                        var combo = $("#select" + field).data("kendoComboBox");
+                        combo.setDataSource();
+                        $(resultData[field]).each(function (key, item) {
+                            combo.dataSource.add(item);
+                        });
+                    }
+                },
+                error: function (jqXHR, textStatus, errorThrown) {
+                    alert("Unexpected error during the update of the search fields.");
+                }
+            });
+        }
+
+        CreateSearchFormCombobox();
+
+        UpdateSearchFormCombobox();
+    }
+
     function SetSearchResultGrid() {
 
         function SetGridColumnTitles() {
@@ -164,7 +217,7 @@ function SetKendo() {
                 dataType: "json",
                 success: function (objectList) {
                     var data = eval(objectList);
-                    yourObjectList = data.objectList;
+                    var yourObjectList = data.objectList;
 
                     $(yourObjectList).each(function (key, item) {
                         $("#gridResult").data("kendoGrid").dataSource.add(item);
@@ -254,215 +307,7 @@ function SetKendo() {
         LoadUserListGrid();
     }
 
-    function SetComboboxes() {
-
-        $("#ctrSelectLayer0").bind("tap", TapHandlerLayer0);
-        $("#ctrSelectLayer1").bind("tap", TapHandlerLayer1); // dovrebbe attivarsi solo scrivendo nel combobox
-
-        function onChangeLayer_refreshComboboxes() {
-            $("#selectLayer0").data("kendoComboBox").setDataSource();
-            $("#selectLayer0").data("kendoComboBox").refresh();
-            TapHandlerLayer0();
-
-            $("#selectLayer1").data("kendoComboBox").setDataSource();
-            $("#selectLayer1").data("kendoComboBox").refresh();
-            TapHandlerLayer1();
-
-            $("#selectLayer2").data("kendoComboBox").setDataSource();
-            $("#selectLayer2").data("kendoComboBox").refresh();
-            TapHandlerLayer2();
-
-            $("#selectLayer3").data("kendoComboBox").setDataSource();
-            $("#selectLayer3").data("kendoComboBox").refresh();
-            TapHandlerLayer3();
-
-            $("#selectNome").data("kendoComboBox").setDataSource();
-            $("#selectNome").data("kendoComboBox").refresh();
-            TapHandlerNome();
-        }
-
-        function TapHandlerLayer0(event) {
-            $.ajax({
-                type: 'GET',
-                url: 'php/getElementiModelloPerCombo.php',
-                dataType: "json",
-                data: {
-                    campo: "Layer0",
-                    layer1: $("#selectLayer1").data("kendoComboBox").value(),
-                    layer2: $("#selectLayer2").data("kendoComboBox").value(),
-                    layer3: $("#selectLayer3").data("kendoComboBox").value(),
-                    nome: $("#selectNome").data("kendoComboBox").value(),
-                },
-                success: function (layerlist) {
-                    var data = eval(layerlist);
-                    MiaLayer0List = data.layerlist;
-                    $(MiaLayer0List).each(function (key, item) {
-                        $("#selectLayer0").data("kendoComboBox").dataSource.add(item);
-                    });
-                },
-                error: function (jqXHR, textStatus, errorThrown) {
-                    alert("Si è verificato un errore.");
-                }
-            });
-        }
-
-        // create DropDownList from input HTML element
-        $("#selectLayer0").kendoComboBox({
-            filter: "contains",
-            suggest: true,
-            placeholder: "Select layer...",
-            dataTextField: "Layer0",
-            dataValueField: "Layer0",
-            change: onChangeLayer_refreshComboboxes
-        }).data("kendoComboBox");
-
-        function TapHandlerLayer1(event) {
-            $.ajax({
-                type: 'GET',
-                url: 'php/getElementiModelloPerCombo.php',
-                dataType: "json",
-                data: {
-                    campo: "Layer1",
-                    layer0: $("#selectLayer0").data("kendoComboBox").value(),
-                    layer2: $("#selectLayer2").data("kendoComboBox").value(),
-                    layer3: $("#selectLayer3").data("kendoComboBox").value(),
-                    nome: $("#selectNome").data("kendoComboBox").value(),
-                },
-                success: function (layerlist) {
-                    var data = eval(layerlist);
-                    MiaLayer1List = data.layerlist;
-                    $(MiaLayer1List).each(function (key, item) {
-                        $("#selectLayer1").data("kendoComboBox").dataSource.add(item);
-                    });
-                },
-                error: function (jqXHR, textStatus, errorThrown) {
-                    alert("Si è verificato un errore.");
-                }
-            });
-        }
-
-        // create DropDownList from input HTML element
-        $("#selectLayer1").kendoComboBox({
-            filter: "contains",
-            suggest: true,
-            placeholder: "Select layer...",
-            dataTextField: "Layer1",
-            dataValueField: "Layer1",
-            change: onChangeLayer_refreshComboboxes
-        }).data("kendoComboBox");
-
-        function TapHandlerLayer2(event) {
-            $.ajax({
-                type: 'GET',
-                url: 'php/getElementiModelloPerCombo.php',
-                dataType: "json",
-                data: {
-                    campo: "Layer2",
-                    layer0: $("#selectLayer0").data("kendoComboBox").value(),
-                    layer1: $("#selectLayer1").data("kendoComboBox").value(),
-                    layer3: $("#selectLayer3").data("kendoComboBox").value(),
-                    nome: $("#selectNome").data("kendoComboBox").value(),
-                },
-                success: function (layerlist) {
-                    var data = eval(layerlist);
-                    MiaLayer2List = data.layerlist;
-                    $(MiaLayer2List).each(function (key, item) {
-                        $("#selectLayer2").data("kendoComboBox").dataSource.add(item);
-                    });
-                },
-                error: function (jqXHR, textStatus, errorThrown) {
-                    alert("Si è verificato un errore.");
-                }
-            });
-        }
-
-        // create DropDownList from input HTML element
-        $("#selectLayer2").kendoComboBox({
-            filter: "contains",
-            suggest: true,
-            placeholder: "Select layer...",
-            dataTextField: "Layer2",
-            dataValueField: "Layer2",
-            change: onChangeLayer_refreshComboboxes
-        }).data("kendoComboBox");
-
-        function TapHandlerLayer3(event) {
-            $.ajax({
-                type: 'GET',
-                url: 'php/getElementiModelloPerCombo.php',
-                dataType: "json",
-                data: {
-                    campo: "Layer3",
-                    layer0: $("#selectLayer0").data("kendoComboBox").value(),
-                    layer1: $("#selectLayer1").data("kendoComboBox").value(),
-                    layer2: $("#selectLayer2").data("kendoComboBox").value(),
-                    nome: $("#selectNome").data("kendoComboBox").value(),
-                },
-                success: function (layerlist) {
-                    var data = eval(layerlist);
-                    MiaLayer3List = data.layerlist;
-                    $(MiaLayer3List).each(function (key, item) {
-                        $("#selectLayer3").data("kendoComboBox").dataSource.add(item);
-                    });
-                },
-                error: function (jqXHR, textStatus, errorThrown) {
-                    alert("Si è verificato un errore.");
-                }
-            });
-        }
-
-        // create DropDownList from input HTML element
-        $("#selectLayer3").kendoComboBox({
-            filter: "contains",
-            suggest: true,
-            placeholder: "Select layer...",
-            dataTextField: "Layer3",
-            dataValueField: "Layer3",
-            change: onChangeLayer_refreshComboboxes
-        }).data("kendoComboBox");
-
-        function TapHandlerNome(event) {
-            $.ajax({
-                type: 'GET',
-                url: 'php/getElementiModelloPerCombo.php',
-                dataType: "json",
-                data: {
-                    campo: "Name",
-                    layer0: $("#selectLayer0").data("kendoComboBox").value(),
-                    layer1: $("#selectLayer1").data("kendoComboBox").value(),
-                    layer2: $("#selectLayer2").data("kendoComboBox").value(),
-                    layer3: $("#selectLayer3").data("kendoComboBox").value(),
-                },
-                success: function (layerlist) {
-                    var data = eval(layerlist);
-                    MiaNomeList = data.layerlist;
-                    $(MiaNomeList).each(function (key, item) {
-                        $("#selectNome").data("kendoComboBox").dataSource.add(item);
-                    });
-                },
-                error: function (jqXHR, textStatus, errorThrown) {
-                    alert("Si è verificato un errore.");
-                }
-            });
-        }
-
-        // create DropDownList from input HTML element
-        $("#selectNome").kendoComboBox({
-            filter: "contains",
-            suggest: true,
-            placeholder: "Select layer...",
-            dataTextField: "Name",
-            dataValueField: "Name",
-            change: onChangeLayer_refreshComboboxes
-        }).data("kendoComboBox");
-
-        TapHandlerLayer0();
-        TapHandlerLayer1();
-        TapHandlerLayer2();
-        TapHandlerLayer3();
-        TapHandlerNome();
-    }
+    SetSearchForm();
 
     SetSearchResultGrid();
-    SetComboboxes();
 }
