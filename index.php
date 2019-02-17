@@ -30,6 +30,7 @@
             var _layer3Label = "<?php echo $_SESSION["layer3Label"]; ?>";
             var _nomeLabel = "<?php echo $_SESSION["nomeLabel"]; ?>";
             var _versionLabel = "<?php echo $_SESSION["versionLabel"]; ?>";
+            var _validUser = "<?php echo isset($_SESSION['validUser']); ?>";
         </script>
 
         <script type="text/javascript" src="js/BIM3DSG.js" charset="iso-8859-15"></script>
@@ -65,7 +66,7 @@
                     if (isset($_SESSION['validUser'])) {
                         echo '
                             <div id="logoutButton" class="logoutIcon userInfo">
-                                <a href="php/logout.php" title="Logout ' . $_SESSION['validUserName'] . '"><img src="img/lock_icon_grey.png"></a>
+                                <a href="php/logout.php" title="Logout ' . $_SESSION['validUserName'] . '"><img src="img/lock_icon_grey.png" alt="logout"></a>
                             </div>
                             <div id="userContainer">
                                 <div id="userPicture" class="userInfo" style=\'background-image: url("img/user_icon.png")\'></div>

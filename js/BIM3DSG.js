@@ -13,7 +13,10 @@ $(window).on("resize", function () {
 
 // Resize functions
 function ResizeHeaderLoghi() {
-    var spazioPerLoghi = $(window).width() - $("#userContainer").outerWidth() - $("#logoutButton").outerWidth();
+    var spazioPerLoghi = $(window).width();
+    if (_validUser) {
+        spazioPerLoghi -= $("#userContainer").outerWidth() + $("#logoutButton").outerWidth();
+    }
 
     if (spazioPerLoghi <= 160) {
         $("#logo3DSurveySmall").hide();
@@ -100,7 +103,7 @@ function Login() {
         LoginDialog_SetOnKeyUp();
     }
 
-    if ($("#userName").text() === "") {
+    if (!_validUser) {
         SetLoginDialog();
         $('#loginDialog').data("kendoDialog").open();
 
