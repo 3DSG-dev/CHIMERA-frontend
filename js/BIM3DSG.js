@@ -118,7 +118,7 @@ function InitializeComponents() {
         function CreateSearchFormCombobox() {
             function CreateCombobox(field, label) {
                 function SearchFormCombobox_OnChange(event) {
-                    UpdateSearchFormCombobox(event.sender.input.context.id.substr(6));
+                    UpdateSearchFormCombobox(event.sender.element[0].id.substr(6));
                 }
 
                 $("#select" + field).kendoComboBox({
