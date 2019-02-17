@@ -50,8 +50,7 @@ html, body, div#pageContainer {
     height: 2rem;
     border: 2px solid var(--grigiochiaro);
     border-radius: 50%;
-    background: #fff;
-    background-repeat: no-repeat;
+    background: #fff no-repeat;
     background-size: cover;
 }
 
