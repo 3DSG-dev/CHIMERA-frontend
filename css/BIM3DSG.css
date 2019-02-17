@@ -11,9 +11,9 @@ html, body, div#pageContainer {
 
 /* Header */
 #headerContainer {
-    text-align: center;
     height: 68px;
     min-height: 68px;
+    text-align: center;
 }
 
 .loghi {
@@ -36,48 +36,48 @@ html, body, div#pageContainer {
 }
 
 .userInfo {
-    margin-top: 20px;
     float: left;
+    margin-top: 20px;
 }
 
 #userName {
-    margin-left: 1rem;
     line-height: 2.5rem;
+    margin-left: 1rem;
 }
 
 #userPicture {
-    height: 2rem;
     width: 2rem;
-    background: #fff;
+    height: 2rem;
     border: 2px solid var(--grigiochiaro);
     border-radius: 50%;
-    background-size: cover;
+    background: #fff;
     background-repeat: no-repeat;
+    background-size: cover;
 }
 
 #logoutButton {
-    margin-right: 25px;
     float: right;
     height: 68px;
+    margin-right: 25px;
 }
 
 .logoutIcon {
-    height: 2.5rem;
     width: 2.5rem;
+    height: 2.5rem;
 }
 
 /* Sidebar */
 #sideToolbarContainer {
-    padding: 0;
     position: fixed;
-    right: 0;
     top: 85px;
+    right: 0;
     overflow: hidden;
+    padding: 0;
 }
 
 #sideToolbarList.k-widget {
-    background-color: transparent;
     border: none;
+    background-color: transparent;
 }
 
 .sideToolbarItem {
@@ -90,16 +90,16 @@ html, body, div#pageContainer {
 }
 
 .sideToolbarBtn {
+    display: block;
+    height: 40px;
     margin: auto;
-    text-align: center;
     padding: 0 2px;
+    text-align: center;
     border: none;
-    background-color: var(--main-color);
-    border-radius: 10px;
     -moz-border-radius: 10px;
     -webkit-border-radius: 10px;
-    height: 40px;
-    display: block;
+    border-radius: 10px;
+    background-color: var(--main-color);
 }
 
 .sideToolbarBtn:hover {
@@ -112,8 +112,8 @@ html, body, div#pageContainer {
 
 .sideToolbarBtn img {
     display: inline-block;
-    vertical-align: middle;
     width: 40px;
+    vertical-align: middle;
 }
 
 .sideToolbarBtn.mode3dBtn {
@@ -134,8 +134,8 @@ html, body, div#pageContainer {
 
 /* Login Window */
 .loginField {
-    width: 80%;
     position: relative;
+    width: 80%;
 }
 
 .loginDialogIcon .k-window-title::before {
@@ -146,27 +146,23 @@ html, body, div#pageContainer {
     width: 145px;
 }
 
-/* Kendo UI WIndows */
+/* Kendo UI Windows */
 .k-widget.windowTitle {
     font-size: 14px;
     line-height: 1.72857;
 }
 
 .windowIcon .k-window-title::before {
-    content: "";
     display: inline-block;
-    vertical-align: middle;
     width: 35px;
     height: 35px;
+    content: "";
+    vertical-align: middle;
 }
 
 /* Media Query */
 @media screen and (max-width: 1000px) {
     #logoutButton {
         margin-right: 0;
-    }
-
-    .userLabel {
-        margin-left: 0.3rem;
     }
 }

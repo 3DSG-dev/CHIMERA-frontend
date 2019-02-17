@@ -10,6 +10,8 @@
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <meta charset="iso-8859-15">
 
+        <script src="libs/jquery-3.3.1.min.js"></script>
+
         <!-- Common Kendo UI CSS for web widgets and widgets for data visualization. -->
         <!--<link href="libs/KendoUI/styles/kendo.common.min.css" rel="stylesheet" /> -->
         <!-- (Optional) RTL CSS for Kendo UI widgets for the web. Include only in right-to-left applications. -->
@@ -18,7 +20,6 @@
         <link href="libs/KendoUI/styles/kendo.default.min.css" rel="stylesheet" type="text/css" />
         <!-- (Optional) Kendo UI Hybrid CSS. Include only if you will use the mobile devices features. -->
         <link href="libs/KendoUI/styles/kendo.default.mobile.min.css" rel="stylesheet" type="text/css" />
-        <script src="libs/KendoUI/jquery.min.js"></script>
         <script src="libs/KendoUI/kendo.all.min.js"></script>
         <link rel="stylesheet" type="text/css" href="css/KendoUI.css" />
 
@@ -41,22 +42,22 @@
             <div id="headerContainer">
                 <div id="logo3DSurveySmall" class="loghi">
                     <a href="http://www.sitech-3dsurvey.polimi.it" target="_blank">
-                        <img src="img/logo_3dsurvey_60.png">
+                        <img src="img/logo_3dsurvey_60.png" alt="Logo 3D Survey">
                     </a>
                 </div>
                 <div id="logo3DSurveyLarge" class="loghi">
                     <a href="http://www.sitech-3dsurvey.polimi.it" target="_blank">
-                        <img src="img/logo_3dsurvey_full_60.png">
+                        <img src="img/logo_3dsurvey_full_60.png" alt="Logo 3D Survey">
                     </a>
                 </div>
                 <div id="logoPolimiSmall" class="loghi">
                     <a href="http://www.polimi.it" target="_blank">
-                        <img src="img/logo_polimi_60.png">
+                        <img src="img/logo_polimi_60.png" alt="Logo Polimi">
                     </a>
                 </div>
                 <div id="logoPolimiLarge" class="loghi">
                     <a href="http://www.polimi.it" target="_blank">
-                        <img src="img/logo_polimi_full_60.png">
+                        <img src="img/logo_polimi_full_60.png" alt="Logo Polimi">
                     </a>
                 </div>
 
@@ -85,27 +86,27 @@
                         <div class="page-column search-form-column">
                             <div class="search-form-searchfields">
                                 <div class="input-searchfield">
-                                    <label class="inputLayerLabel"><?php echo $_SESSION["layer0Label"]; ?></label>
+                                    <label for="selectLayer0" class="inputLayerLabel"><?php echo $_SESSION["layer0Label"]; ?></label>
                                     <input id="selectLayer0" type="text" class="inputLayer" />
                                 </div>
                                 <div class="input-searchfield">
-                                    <label class="inputLayerLabel"><?php echo $_SESSION["layer1Label"]; ?></label>
+                                    <label for="selectLayer1" class="inputLayerLabel"><?php echo $_SESSION["layer1Label"]; ?></label>
                                     <input id="selectLayer1" type="text" class="inputLayer">
                                 </div>
                                 <div class="input-searchfield">
-                                    <label class="inputLayerLabel"><?php echo $_SESSION["layer2Label"]; ?></label>
+                                    <label for="selectLayer2" class="inputLayerLabel"><?php echo $_SESSION["layer2Label"]; ?></label>
                                     <input id="selectLayer2" type="text" class="inputLayer">
                                 </div>
                                 <div class="input-searchfield">
-                                    <label class="inputLayerLabel"><?php echo $_SESSION["layer3Label"]; ?></label>
+                                    <label for="selectLayer3" class="inputLayerLabel"><?php echo $_SESSION["layer3Label"]; ?></label>
                                     <input id="selectLayer3" type="text" class="inputLayer">
                                 </div>
                                 <div class="input-searchfield">
-                                    <label class="inputLayerLabel"><?php echo $_SESSION["nomeLabel"]; ?></label>
+                                    <label for="selectName" class="inputLayerLabel"><?php echo $_SESSION["nomeLabel"]; ?></label>
                                     <input id="selectName" type="text" class="inputLayer">
                                 </div>
                                 <div class="input-searchfield">
-                                    <label class="inputLayerLabel"><?php echo $_SESSION["versionLabel"]; ?></label>
+                                    <label for="selectVersione" class="inputLayerLabel"><?php echo $_SESSION["versionLabel"]; ?></label>
                                     <input id="selectVersione" type="text" class="inputLayer">
                                 </div>
                                 <div style="clear:both;"></div>
@@ -139,18 +140,18 @@
                 <div id="sideToolbarList" class="k-widget k-listview k-selectable">
                     <div class="sideToolbarItem">
                         <span class="sideToolbarBtn mode3dBtn" title="Go to 3D mode">
-                            <img src="img/3d_mode_icon.png">
+                            <img src="img/3d_mode_icon.png" alt="3D Mode">
                         </span>
                     </div>
                     <div class="sideToolbarSeparator"></div>
                     <div class="sideToolbarItem">
                         <span class="sideToolbarBtn" title="Delete list">
-                            <img src="img/delete_list_icon.png">
+                            <img src="img/delete_list_icon.png" alt="Delete list">
                         </span>
                     </div>
                     <div class="sideToolbarItem">
                         <span class="sideToolbarBtn" title="Information board">
-                            <img src="img/info_icon.png">
+                            <img src="img/info_icon.png" alt="Information board">
                         </span>
                     </div>
                 </div>
