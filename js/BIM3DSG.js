@@ -1,13 +1,13 @@
 // Events functions
-$(document).ready(function () {
+$(function () {
     ResizeHeaderLoghi();
 
     if (Login()) {
-        SetKendo();
+        InitializeComponents();
     }
 });
 
-$(window).resize(function () {
+$(window).on("resize", function () {
     ResizeHeaderLoghi();
 });
 
@@ -48,22 +48,25 @@ function ResizeHeaderLoghi() {
 }
 
 // Login functions
+/**
+ * @return {boolean}
+ */
 function Login() {
     function SetLoginDialog() {
         function OnLoginSubmit() {
-            $("#loginForm").submit();
+            $("#loginForm").trigger("submit");
         }
 
-        function LoginDialog_OnKeyUp() {
-            $("#password").keyup(function (event) {
-                if (event.keyCode == 13) {
-                    $(".loginDialogTitle .k-primary").click();
+        function LoginDialog_SetOnKeyUp() {
+            $("#password").on("keyup", function (event) {
+                if (event.key === "Enter") {
+                    OnLoginSubmit();
                 }
             });
 
-            $("#username").keyup(function (event) {
-                if (event.keyCode == 13) {
-                    $(".loginDialogTitle .k-primary").click();
+            $("#username").on("keyup", function (event) {
+                if (event.key === "Enter") {
+                    OnLoginSubmit();
                 }
             });
         }
@@ -80,7 +83,8 @@ function Login() {
         html += '   </div>';
         html += '</form>';
 
-        $('#loginDialog').kendoDialog({
+        var loginDialog = $('#loginDialog');
+        loginDialog.kendoDialog({
             width: "250px",
             title: "Login board",
             closable: false,
@@ -91,12 +95,12 @@ function Login() {
             ]
         });
 
-        $('#loginDialog').parents(".k-widget").addClass("windowTitle windowIcon loginDialogTitle loginDialogIcon");
+        loginDialog.parents(".k-widget").addClass("windowTitle windowIcon loginDialogTitle loginDialogIcon");
 
-        LoginDialog_OnKeyUp();
+        LoginDialog_SetOnKeyUp();
     }
 
-    if ($("#userName").text() == "") {
+    if ($("#userName").text() === "") {
         SetLoginDialog();
         $('#loginDialog').data("kendoDialog").open();
 
@@ -105,8 +109,8 @@ function Login() {
     return true;
 }
 
-// KendoUI
-function SetKendo() {
+// Components
+function InitializeComponents() {
     function SetSearchForm() {
         function CreateSearchFormCombobox() {
             function CreateCombobox(field, label) {
@@ -156,6 +160,7 @@ function SetKendo() {
                     }
                 },
                 error: function (jqXHR, textStatus, errorThrown) {
+                    console.log(textStatus, errorThrown);
                     alert("Unexpected error during the update of the search fields.");
                 }
             });
