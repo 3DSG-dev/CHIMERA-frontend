@@ -101,11 +101,13 @@ function Login() {
         loginDialog.parents(".k-widget").addClass("windowTitle windowIcon loginDialogTitle loginDialogIcon");
 
         LoginDialog_SetOnKeyUp();
+
+        return loginDialog;
     }
 
     if (!_validUser) {
-        SetLoginDialog();
-        $('#loginDialog').data("kendoDialog").open();
+        var loginDialog = SetLoginDialog();
+        loginDialog.data("kendoDialog").open();
 
         return false;
     }
