@@ -157,11 +157,7 @@ function InitializeComponents() {
                 },
                 success: function (resultData) {
                     for (var field in resultData) {
-                        var combo = $("#select" + field).data("kendoComboBox");
-                        combo.setDataSource();
-                        $(resultData[field]).each(function (key, item) {
-                            combo.dataSource.add(item);
-                        });
+                        $("#select" + field).data("kendoComboBox").setDataSource(resultData[field]);
                     }
                 },
                 error: function (jqXHR, textStatus, errorThrown) {
