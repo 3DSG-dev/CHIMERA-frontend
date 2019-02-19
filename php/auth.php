@@ -21,7 +21,7 @@
                 if ($row = pg_fetch_array($result, null, PGSQL_ASSOC)) {
                     $_SESSION['validUser'] = 1;
                     $_SESSION['validUserName'] = $user;
-                    $_SESSION['FullName'] = $row['FullName'];
+                    $_SESSION['fullName'] = $row['FullName'];
 
                     LoadSettings($dbConnection);
 
@@ -57,27 +57,28 @@
         while ($row = pg_fetch_array($result, null, PGSQL_ASSOC)) {
             switch ($row["Key"]) {
                 case "Layer0" :
-                    $_SESSION["Layer0Label"] = $row["TextValue"];
+                    $_SESSION["layer0Label"] = $row["TextValue"];
                     break;
                 case "Layer1" :
-                    $_SESSION["Layer1Label"] = $row["TextValue"];
+                    $_SESSION["layer1Label"] = $row["TextValue"];
                     break;
                 case "Layer2" :
-                    $_SESSION["Layer2Label"] = $row["TextValue"];
+                    $_SESSION["layer2Label"] = $row["TextValue"];
                     break;
                 case "Layer3" :
-                    $_SESSION["Layer3Label"] = $row["TextValue"];
+                    $_SESSION["layer3Label"] = $row["TextValue"];
                     break;
                 case "Nome" :
-                    $_SESSION["NomeLabel"] = $row["TextValue"];
+                    $_SESSION["nomeLabel"] = $row["TextValue"];
                     break;
                 case "Version" :
-                    $_SESSION["VersionLabel"] = $row["TextValue"];
+                    $_SESSION["versionLabel"] = $row["TextValue"];
                     break;
                 default :
                     break;
             }
         }
+        die ($_SESSION["VersionLabel"]);
     }
 
     CheckUser();

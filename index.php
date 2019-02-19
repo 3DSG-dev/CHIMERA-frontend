@@ -23,12 +23,13 @@
         <script src="libs/KendoUI/kendo.all.min.js"></script>
         <link rel="stylesheet" type="text/css" href="css/KendoUI.css" />
 
+        <!--suppress JSUnusedLocalSymbols -->
         <script>
-            var _layer0Label = "<?php echo $_SESSION["layer0Label"]; ?>";
+            var _layer0Label = "<?php  echo $_SESSION["layer0Label"]; ?>";
             var _layer1Label = "<?php echo $_SESSION["layer1Label"]; ?>";
             var _layer2Label = "<?php echo $_SESSION["layer2Label"]; ?>";
             var _layer3Label = "<?php echo $_SESSION["layer3Label"]; ?>";
-            var _nomeLabel = "<?php echo $_SESSION["nomeLabel"]; ?>";
+            var _nameLabel = "<?php echo $_SESSION["nomeLabel"]; ?>";
             var _versionLabel = "<?php echo $_SESSION["versionLabel"]; ?>";
             var _validUser = "<?php echo isset($_SESSION['validUser']); ?>";
         </script>
@@ -70,7 +71,7 @@
                             </div>
                             <div id="userContainer">
                                 <div id="userPicture" class="userInfo" style=\'background-image: url("img/user_icon.png")\'></div>
-                                <div id="userName" class="userInfo">' . $_SESSION['FullName'] . '</div>
+                                <div id="userName" class="userInfo">' . $_SESSION['fullName'] . '</div>
                             </div>
                         ';
                     }
@@ -119,7 +120,7 @@
                             <div class="search-form-uselist">
                                 <div class="btn-wrap">
                                     or
-                                    <button class="k-button k-primary btn-md">Use your list</button>&nbsp;
+                                    <button onclick="LoadUserListObjectGrid()" class="k-button k-primary btn-md">Use your list</button>&nbsp;
                                 </div>
                             </div>
                             <div style="clear:both;"></div>
@@ -128,10 +129,9 @@
                 </div>
 
                 <div class="page-section grid-result-section">
-                    <div class="page-row grid-result-row">
+                    <div class="page-row grid-result-row" style="height: calc(100vh - 382px);">
                         <div class="page-column grid-result-column">
-                            <div id="gridResult"></div>
-
+                            <div id="objectsGrid" style="text-align: center; height: calc(100vh - 382px);"></div>
                         </div>
                     </div>
                 </div>
