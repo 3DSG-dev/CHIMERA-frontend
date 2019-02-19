@@ -34,13 +34,13 @@
         if ($senderId != $campo) {
             $SQL = SearchSQL($campo);
 
-            $result1 = pg_query($dbConnection, $SQL) or die ("Error: $SQL");
-            $myArray = array();
-            while ($tmp = pg_fetch_array($result1, null, PGSQL_ASSOC)) {
-                $myArray[] = $tmp;
+            $result = pg_query($dbConnection, $SQL) or die ("Error: $SQL");
+            $rowArray = array();
+            while ($row = pg_fetch_array($result, null, PGSQL_ASSOC)) {
+                $rowArray[] = $row;
             }
 
-            echo "\"$campo\":" . json_encode($myArray);
+            echo "\"$campo\":" . json_encode($rowArray);
 
             if ($campo != "Versione" && ($campo != "Name" || $senderId != "Versione")) {
                 echo ",";
