@@ -9,6 +9,7 @@ $(function () {
 
 $(window).on("resize", function () {
     ResizeHeaderLoghi();
+    ResizeObjectsGrid();
 });
 
 // Resize functions
@@ -47,6 +48,25 @@ function ResizeHeaderLoghi() {
         $("#logo3DSurveyLarge").show();
         $("#logoPolimiSmall").hide();
         $("#logoPolimiLarge").show();
+    }
+}
+
+function ResizeObjectsGrid() {
+    var objectsGrid = $("#objectsGrid");
+    var objectsKendoGrid = objectsGrid.data("kendoGrid");
+
+    objectsKendoGrid.resize();
+
+    var width = kendo.support.scrollbar();
+    objectsKendoGrid.columns.forEach(function (col) {
+        width += col.width;
+    });
+
+    if (width < objectsGrid.parent().width()) {
+        objectsGrid.width(width);
+    }
+    else {
+        objectsGrid.css('width', 'auto');
     }
 }
 
@@ -114,6 +134,22 @@ function Login() {
     return true;
 }
 
+//Object Grid Data
+function LoadUserListObjectGrid() {
+    $.ajax({
+        type: 'GET',
+        url: 'php/getImportList.php',
+        dataType: "json",
+        success: function (resultData) {
+            $("#objectsGrid").data("kendoGrid").setDataSource(new kendo.data.DataSource({data: resultData["objectList"]}));
+        },
+        error: function (jqXHR, textStatus, errorThrown) {
+            console.log(textStatus, errorThrown);
+            alert("Unexpected error while loading import list.");
+        }
+    });
+}
+
 // Components
 function InitializeComponents() {
     function SetSearchForm() {
@@ -137,7 +173,7 @@ function InitializeComponents() {
             CreateCombobox("Layer1", _layer1Label);
             CreateCombobox("Layer2", _layer2Label);
             CreateCombobox("Layer3", _layer3Label);
-            CreateCombobox("Name", _nomeLabel);
+            CreateCombobox("Name", _nameLabel);
             CreateCombobox("Versione", _versionLabel);
         }
 
@@ -172,67 +208,42 @@ function InitializeComponents() {
         UpdateSearchFormCombobox();
     }
 
-    function SetSearchResultGrid() {
-
-        function SetGridColumnTitles() {
-            $.ajax({
-                type: 'GET',
-                url: "php/getGridHeaderTitles.php",
-                dataType: "json",
-                success: function (gridHeaderTitles) {
-                    $("#gridResult").data("kendoGrid").setOptions({
-                        columns: [
-                            {field: "CodiceOggetto", title: "Object id", width: 50},
-                            {field: "CodiceVersione", title: "Version id", width: 50},
-                            {field: "Layer0", title: gridHeaderTitles[0], width: 50},
-                            {field: "Layer1", title: gridHeaderTitles[1], width: 50},
-                            {field: "Layer2", title: gridHeaderTitles[2], width: 50},
-                            {field: "Layer3", title: gridHeaderTitles[3], width: 50},
-                            {field: "Name", title: gridHeaderTitles[4], width: 50},
-                            {field: "Version", title: gridHeaderTitles[5], width: 50},
-                            {
-                                field: "readonly",
-                                title: "Write",
-                                width: 30,
-                                template: "#= readonly ? '<span class=\"k-icon k-i-check main-color\"></span>' : '' #",
-                                attributes: {
-                                    "class": "writeReadFlagCell",
-                                    style: "text-align: center;"
-                                }
-                            },
-                            {
-                                title: "Remove", width: 30,
-                                command: [{
-                                    name: "destroy",
-                                    template: '<a data-command="destroy" class="k-button k-grid-delete avoid-k-button-style"><span class="k-icon k-i-close"></span></a>'
-                                }]
-                            }
-                        ]
-                    }, 100);
+    function SetObjectsGrid() {
+        function SetColumnsHeader() {
+            return [
+                {field: "CodiceOggetto", title: "Object id", width: 50},
+                {field: "CodiceVersione", title: "Version id", width: 50},
+                {field: "Layer0", title: _layer0Label, width: 50},
+                {field: "Layer1", title: _layer1Label, width: 50},
+                {field: "Layer2", title: _layer2Label, width: 50},
+                {field: "Layer3", title: _layer3Label, width: 50},
+                {field: "Name", title: _nameLabel, width: 50},
+                {field: "Versione", title: _versionLabel, width: 50},
+                {
+                    field: "readonly",
+                    title: "Write",
+                    width: 30,
+                    template: "#= readonly ? '' : '<span class=\"k-icon k-i-check main-color\"></span>' #",
+                    attributes: {
+                        "class": "writeReadFlagCell",
+                        style: "text-align: center;"
+                    }
                 },
-                error: function (jqXHR, textStatus, errorThrown) {
-                    alert("Si è verificato un errore nel leggere i titoli di colonna.");
+                {
+                    title: "Remove", width: 30,
+                    command: [{
+                        name: "destroy",
+                        template: '<a data-command="destroy" class="k-button k-grid-delete avoid-k-button-style"><span class="k-icon k-i-close"></span></a>'
+                    }]
                 }
-            });
+            ];
         }
 
-        function LoadUserListGrid() {
-            $.ajax({
-                type: 'GET',
-                url: 'php/getListaImportazioneUtente.php',
-                dataType: "json",
-                success: function (objectList) {
-                    var data = eval(objectList);
-                    var yourObjectList = data.objectList;
-
-                    $(yourObjectList).each(function (key, item) {
-                        $("#gridResult").data("kendoGrid").dataSource.add(item);
-                    });
-                },
-                error: function (jqXHR, textStatus, errorThrown) {
-                    alert("Si è verificato un errore.");
-                }
-            });
+        function AutoFitColumns(event) {
+            var grid = event.sender;
+            for (var i = 0; i < grid.columns.length; i++) {
+                grid.autoFitColumn(i);
+            }
         }
 
         function RemoveImportObject(codice) {
@@ -253,67 +264,26 @@ function InitializeComponents() {
 
         }
 
-        /*function toggleScrollbar(e) {
-            var gridWrapper = e.sender.wrapper;
-            var gridDataTable = e.sender.table;
-            var gridDataArea = gridDataTable.closest(".k-grid-content");
-
-
-            if ($("#UploadWindow").height() > $("#grid").height()) {
-                gridWrapper.addClass("no-scrollbar");
-            } else {
-                gridWrapper.removeClass("no-scrollbar");
-            };
-        }*/
-
-        SetGridColumnTitles();
-
-        $("#gridResult").kendoGrid({
-            dataSource: {
-                /*pageSize: 5,*/
-                autoSync: true,
-                schema: {
-                    model: {
-                        id: "CodiceOggetto",
-                        fields: {
-                            CodiceOggetto: {type: "number"},
-                            CodiceVersione: {type: "number"},
-                            Layer0: {type: "string"},
-                            Layer1: {type: "string"},
-                            Layer2: {type: "string"},
-                            Layer3: {type: "string"},
-                            Nome: {type: "string"},
-                            Version: {type: "string"},
-                            readonly: {type: "boolean"}
-                        }
-                    }
-                }
-            },
+        $("#objectsGrid").kendoGrid({
+            columns: SetColumnsHeader(),
+            dataBound: AutoFitColumns,
+            columnResize: ResizeObjectsGrid,
             sortable: {
-                mode: "single",
-                allowUnsort: false
+                mode: "multiple",
+                allowUnsort: true,
+                showIndexes: true
             },
             pageable: false,
             scrollable: true,
-            height: 300,
             resizable: true,
-            dataBound: function (e) {
-                //toggleScrollbar(e);
-            },
             mobile: false,
-            editable: {
-                mode: "inline",
-                confirmation: false
-            },
+            editable: false,
             remove: function (e) {
                 RemoveImportObject(e.model.CodiceVersione);
             }
         });
-
-        LoadUserListGrid();
     }
 
     SetSearchForm();
-
-    SetSearchResultGrid();
+    SetObjectsGrid();
 }
