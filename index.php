@@ -113,7 +113,7 @@
                                 </div>
                                 <div style="clear:both;"></div>
                                 <div class="btn-wrap">
-                                    <button class="k-button k-primary btn-md btn-thin">Search</button>&nbsp;
+                                    <button onclick="SearchObjects()" class="k-button k-primary btn-md btn-thin">Search</button>&nbsp;
                                 </div>
                             </div>
 
