@@ -150,6 +150,29 @@ function LoadUserListObjectGrid() {
     });
 }
 
+function SearchObjects() {
+    $.ajax({
+        type: 'GET',
+        url: 'php/searchObjects.php',
+        dataType: "json",
+        data: {
+            layer0: $("#selectLayer0").data("kendoComboBox").value(),
+            layer1: $("#selectLayer1").data("kendoComboBox").value(),
+            layer2: $("#selectLayer2").data("kendoComboBox").value(),
+            layer3: $("#selectLayer3").data("kendoComboBox").value(),
+            nome: $("#selectName").data("kendoComboBox").value(),
+            version: $("#selectVersione").data("kendoComboBox").value()
+        },
+        success: function (resultData) {
+            $("#objectsGrid").data("kendoGrid").setDataSource(new kendo.data.DataSource({data: resultData["objectList"]}));
+        },
+        error: function (jqXHR, textStatus, errorThrown) {
+            console.log(textStatus, errorThrown);
+            alert("Unexpected error while searching objects.");
+        }
+    });
+}
+
 // Components
 function InitializeComponents() {
     function SetSearchForm() {
