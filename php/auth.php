@@ -78,7 +78,6 @@
                     break;
             }
         }
-        die ($_SESSION["VersionLabel"]);
     }
 
     CheckUser();
