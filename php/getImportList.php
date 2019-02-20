@@ -12,5 +12,5 @@
     header("Content-type: application/json");
     echo "{\"objectList\":" . json_encode($rowArray) . "}";
 
-    pg_close($dbconn);
+    include("./defaultEnd.php");
 ?>
