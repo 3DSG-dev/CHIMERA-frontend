@@ -1,6 +1,7 @@
 // Events functions
 $(function () {
     ResizeHeaderLoghi();
+    getGridObjectListSearchResultHeight();
 
     if (Login()) {
         InitializeComponents();
@@ -10,6 +11,8 @@ $(function () {
 $(window).on("resize", function () {
     ResizeHeaderLoghi();
     ResizeObjectsGrid();
+
+    getGridObjectListSearchResultHeight();
 });
 
 // Resize functions
@@ -69,6 +72,12 @@ function ResizeObjectsGrid() {
         objectsGrid.css('width', 'auto');
     }
 }
+
+function getGridObjectListSearchResultHeight() {
+    var gridResultSpace = $(window).height() - $("#headerContainer").outerHeight() - $(".selectObjectSection").outerHeight() - 70;
+    $('.gridObjectListResultColumn').css('height', gridResultSpace);
+}
+
 
 // Login functions
 /**

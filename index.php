@@ -22,6 +22,7 @@
         <link href="libs/KendoUI/styles/kendo.default.mobile.min.css" rel="stylesheet" type="text/css" />
         <script src="libs/KendoUI/kendo.all.min.js"></script>
         <link rel="stylesheet" type="text/css" href="css/KendoUI.css" />
+        <link rel="stylesheet" type="text/css" href="css/KendoUIBootstrap.css" />
 
         <!--suppress JSUnusedLocalSymbols -->
         <script>
@@ -36,7 +37,6 @@
 
         <script type="text/javascript" src="js/BIM3DSG.js" charset="iso-8859-15"></script>
 
-        <link rel="stylesheet" type="text/css" href="css/main.css" />
         <link rel="stylesheet" type="text/css" href="css/BIM3DSG.css" />
     </head>
     <body>
@@ -79,59 +79,57 @@
             </div>
 
             <div id="pageContent">
-                <div class="page-section search-form-section">
+                <div class="pageSection selectObjectSection">
+                    <div class="pageRow selectObjectRow">
+                        <div class="pageColumn selectObjectColumn">
+                            <h2>Select object to edit</h2>
 
-                    <div class="page-row search-form-row">
-                        <div class="page-column search-title-column">
-                            <h2 class="search-title">Select object to edit</h2>
-                        </div>
-                        <div class="page-column search-form-column">
-                            <div class="search-form-searchfields">
-                                <div class="input-searchfield">
-                                    <label for="selectLayer0" class="inputLayerLabel"><?php echo $_SESSION["layer0Label"]; ?></label>
-                                    <input id="selectLayer0" type="text" class="inputLayer" />
+                            <div class="selectObjectSearchFieldsContainer">
+                                <div class="selectObjectComboContainer col-md-4 col-sm-6 col-xs-12">
+                                    <label for="selectLayer0"><?php echo $_SESSION["layer0Label"]; ?></label>
+                                    <input id="selectLayer0" type="text" />
                                 </div>
-                                <div class="input-searchfield">
-                                    <label for="selectLayer1" class="inputLayerLabel"><?php echo $_SESSION["layer1Label"]; ?></label>
-                                    <input id="selectLayer1" type="text" class="inputLayer">
+                                <div class="selectObjectComboContainer col-md-4 col-sm-6 col-xs-12">
+                                    <label for="selectLayer1"><?php echo $_SESSION["layer1Label"]; ?></label>
+                                    <input id="selectLayer1" type="text">
                                 </div>
-                                <div class="input-searchfield">
-                                    <label for="selectLayer2" class="inputLayerLabel"><?php echo $_SESSION["layer2Label"]; ?></label>
-                                    <input id="selectLayer2" type="text" class="inputLayer">
+                                <div class="selectObjectComboContainer col-md-4 col-sm-6 col-xs-12">
+                                    <label for="selectLayer2"><?php echo $_SESSION["layer2Label"]; ?></label>
+                                    <input id="selectLayer2" type="text">
                                 </div>
-                                <div class="input-searchfield">
-                                    <label for="selectLayer3" class="inputLayerLabel"><?php echo $_SESSION["layer3Label"]; ?></label>
-                                    <input id="selectLayer3" type="text" class="inputLayer">
+                                <div class="selectObjectComboContainer col-md-4 col-sm-6 col-xs-12">
+                                    <label for="selectLayer3"><?php echo $_SESSION["layer3Label"]; ?></label>
+                                    <input id="selectLayer3" type="text">
                                 </div>
-                                <div class="input-searchfield">
-                                    <label for="selectName" class="inputLayerLabel"><?php echo $_SESSION["nomeLabel"]; ?></label>
-                                    <input id="selectName" type="text" class="inputLayer">
+                                <div class="selectObjectComboContainer col-md-4 col-sm-6 col-xs-12">
+                                    <label for="selectName"><?php echo $_SESSION["nomeLabel"]; ?></label>
+                                    <input id="selectName" type="text">
                                 </div>
-                                <div class="input-searchfield">
-                                    <label for="selectVersione" class="inputLayerLabel"><?php echo $_SESSION["versionLabel"]; ?></label>
-                                    <input id="selectVersione" type="text" class="inputLayer">
+                                <div class="selectObjectComboContainer col-md-4 col-sm-6 col-xs-12">
+                                    <label for="selectVersione"><?php echo $_SESSION["versionLabel"]; ?></label>
+                                    <input id="selectVersione" type="text">
                                 </div>
                                 <div style="clear:both;"></div>
-                                <div class="btn-wrap">
-                                    <button onclick="SearchObjects()" class="k-button k-primary btn-md btn-thin">Search</button>&nbsp;
-                                </div>
                             </div>
 
-                            <div class="search-form-uselist">
-                                <div class="btn-wrap">
+                            <div class="selectObjectButtonsContainer">
+                                <div class="buttonContainer selectObjectSearchButton">
+                                    <button onclick="SearchObjects()" class="buttonBordered">SEARCH</button>
+                                </div>
+
+                                <div class="buttonContainer selectObjectUseyourlistButton">
                                     or
-                                    <button onclick="LoadUserListObjectGrid()" class="k-button k-primary btn-md">Use your list</button>&nbsp;
+                                    <button onclick="LoadUserListObjectGrid()" class="buttonBordered">USE YOUR LIST</button>
                                 </div>
                             </div>
-                            <div style="clear:both;"></div>
                         </div>
                     </div>
                 </div>
 
-                <div class="page-section grid-result-section">
-                    <div class="page-row grid-result-row" style="height: calc(100vh - 382px);">
-                        <div class="page-column grid-result-column">
-                            <div id="objectsGrid" style="text-align: center; height: calc(100vh - 382px);"></div>
+                <div class="pageSection gridObjectListResultSection">
+                    <div class="pageRow gridObjectListResultRow">
+                        <div class="pageColumn gridObjectListResultColumn">
+                            <div id="objectsGrid" style="height: calc(100vh - 382px);"></div>
                         </div>
                     </div>
                 </div>

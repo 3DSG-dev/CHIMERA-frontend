@@ -1,5 +1,81 @@
-/* Page */
-html, body, div#pageContainer {
+:root {
+    --main-color: #577cb1;
+    --main-color-over: #1a498c;
+    --grigioscuro: #9c9d9e;
+    --grigiomedio: #ccc;
+    --grigiochiaro: #f6f6f6;
+    --main-danger-color: #fc758e;
+    --gray: #6c757d;
+    --gray-dark: #343a40;
+    --primary: #007bff;
+    --secondary: #6c757d;
+    --success: #28a745;
+    --info: #17a2b8;
+    --warning: #ffc107;
+    --danger: #dc3545;
+    --dark: #343a40;
+}
+
+h1, h2, h3, h4 {
+    font-family: inherit;
+    font-weight: 500;
+    line-height: 1.1;
+    color: inherit;
+}
+
+h1 {
+    font-size: 30px;
+    color: var(--main-color);
+}
+
+h2 {
+    font-size: 22px;
+    color: var(--main-color);
+}
+
+h3 {
+    font-size: 19px;
+    color: var(--main-color);
+}
+
+h4 {
+    font-size: 14px;
+    font-weight: 400;
+    color: var(--main-color);
+}
+
+p {
+    margin: 0 0 10px;
+}
+
+a {
+    text-decoration: none;
+    color: var(--main-color);
+}
+
+a:hover, a:focus {
+    text-decoration: underline;
+    color: var(--main-color-over);
+}
+
+a:focus {
+    outline: 5px auto -webkit-focus-ring-color;
+    outline-offset: -2px;
+}
+
+/* PAGE */
+html, body {
+    font-family: 'Roboto', sans-serif;
+    font-size: 14px;
+    line-height: 1.42857143;
+    height: 100vh;
+    margin: 0;
+    color: #333;
+    -ms-text-size-adjust: 100%;
+    -webkit-text-size-adjust: 100%;
+}
+
+#pageContainer {
     height: 100vh;
     margin: 0;
 }
@@ -131,7 +207,115 @@ html, body, div#pageContainer {
     margin-bottom: 20px;
 }
 
-/* Login Window */
+/* PAGE SECTIONS, ROWS, COLUMNS */
+.pageSection {
+    padding: 10px 10px 10px 10px;
+}
+
+.pageRow {
+    display: block;
+    width: 80%;
+    max-width: 1080px;
+    margin: 0 auto;
+    padding: 27px 0;
+    border-radius: 9px;
+    background-color: #fff;
+}
+
+.pageColumn {
+    max-width: 1000px;
+    margin: 0 auto;
+    padding: 0 35px 0 35px;
+}
+
+/* SELECT OBJECT SECTION */
+.selectObjectSection {
+    padding: 15px 0;
+    background-color: #004577;
+}
+
+.selectObjectRow {
+    padding: 0 0;
+}
+
+.selectObjectColumn {
+    margin-right: 0;
+    margin-left: 0;
+    padding: 10px 40px 5px 40px;
+    border-radius: 0 0 9px 9px;
+}
+
+.selectObjectColumn h2 {
+    margin-top: 5px;
+    margin-bottom: 10px;
+}
+
+/* SELECT OBJECT FORM */
+.selectObjectSearchFieldsContainer {
+    width: 98%;
+    max-width: 1000px;
+    padding: 5px;
+    border-radius: 12px 12px 12px 0;
+    background-color: #d4e8f9;
+}
+
+.selectObjectSearchFieldsContainer .k-combobox .k-dropdown-wrap {
+    border-color: #d4e8f9;
+}
+
+.selectObjectComboContainer label {
+    line-height: .7;
+}
+
+.selectObjectUselistContainer {
+    margin-top: 14px;
+    margin-bottom: 10px;
+}
+
+.selectObjectButtonsContainer {
+    width: 98%;
+    max-width: 1000px;
+    min-height: 60px;
+}
+
+.selectObjectSearchButton {
+    float: left;
+    width: 33%;
+    padding: 5px;
+    border-radius: 0 0 12px 12px;
+    background-color: #d4e8f9;
+}
+
+.selectObjectSearchButton .buttonBordered {
+    background: rgba(255, 255, 255, 0.2);
+}
+
+.selectObjectSearchButton .buttonBordered:hover {
+    background-color: var(--main-color);
+}
+
+.selectObjectUseyourlistButton {
+    float: left;
+    width: 56%;
+    padding: 5px;
+    background-color: #fff;
+}
+
+/* SELECT OBJECT home page RESULT GRID */
+.gridObjectListResultRow {
+    width: 100%;
+    max-width: 1920px;
+}
+
+.gridObjectListResultColumn {
+    width: 95%;
+    max-width: 1890px;
+    margin: 0 auto;
+    padding: 0 0 0 0;
+    text-align: center;
+}
+
+/* LOGIN DIALOG WINDOW */
 .loginField {
     position: relative;
     width: 80%;
@@ -145,7 +329,236 @@ html, body, div#pageContainer {
     width: 145px;
 }
 
-/* Kendo UI Windows */
+/* Kendo UI - FORM INPUT FIELDS e COMBOBOX- Stilizzazione BASE */
+input {
+    border: none;
+}
+
+input[disabled] {
+    cursor: default;
+}
+
+input::-moz-focus-inner {
+    padding: 0;
+    border: 0;
+}
+
+input, optgroup, select, textarea {
+    font-family: inherit;
+    font-size: inherit;
+    line-height: inherit;
+    margin: 0;
+    color: inherit;
+}
+
+select {
+    text-transform: none;
+}
+
+.k-dropdown-wrap {
+    border-radius: 0.25rem;
+}
+
+.k-list-scroller {
+    color: #292b2c;
+    border-color: rgba(33, 37, 41, 0.125);
+    background-color: #fff;
+}
+
+.k-popup {
+    color: #333;
+    border-color: rgba(0, 0, 0, 0.08);
+    background-color: #fff;
+}
+
+.k-list .k-item.k-state-selected {
+    color: #fff;
+    background-color: #5994c7;
+}
+
+.k-combobox label {
+    font-size: inherit;
+    font-weight: normal;
+    line-height: 1.5;
+    display: inline-block;
+    margin-bottom: 0;
+    padding-top: calc(.375rem + 1px);
+    padding-bottom: calc(.375rem + 1px);
+
+}
+
+.k-combobox {
+    font-size: 14px;
+    float: left;
+    overflow: hidden;
+    align-items: center;
+    box-sizing: border-box;
+    width: 100%;
+    cursor: text;
+    vertical-align: text-top;
+    text-overflow: ellipsis;
+    border: none;
+    background: transparent;
+    -webkit-appearance: textfield;
+    -webkit-rtl-ordering: logical;
+}
+
+.k-combobox .k-select {
+    background-color: transparent;
+    background-image: none;
+}
+
+.k-combobox .k-state-hover .k-select {
+    background-color: transparent;
+    background-image: none;
+}
+
+.k-combobox .k-state-hover .k-select .k-i-arrow-60-down::before {
+    color: var(--main-color-over);
+}
+
+.k-textbox::placeholder, .k-input::placeholder, .k-input.k-textbox::placeholder, .k-textarea::placeholder {
+    color: var(--grigioscuro) !important;
+}
+
+/* Kendo UI - BUTTONS- Stilizzazione BASE */
+button {
+    font-family: inherit;
+    font-size: inherit;
+    line-height: inherit;
+    overflow: visible;
+    margin: 0;
+    text-transform: none;
+    color: inherit;
+}
+
+button, html input[type=button], input[type=reset], input[type=submit] {
+    cursor: pointer;
+    -webkit-appearance: button;
+}
+
+button[disabled] {
+    cursor: default;
+}
+
+button::-moz-focus-inner {
+    padding: 0;
+    border: 0;
+}
+
+.buttonContainer {
+    text-align: center;
+}
+
+.buttonBordered {
+    line-height: 30px;
+    padding: 0 10px;
+    -webkit-transition-duration: 0.4s;
+    transition-duration: 0.4s;
+    text-align: center;
+    color: var(--main-color);
+    border: 2px solid var(--main-color);
+    border-radius: 4px 4px 4px 4px;
+    background-color: transparent;
+}
+
+.buttonBordered:hover {
+    color: white;
+    background-color: var(--main-color);
+}
+
+/* Kendo UI - GRID - TABLE - Stilizzazione BASE */
+td, th {
+    padding: 0;
+}
+
+.table-hover thead tr:hover th, .table-hover tbody tr:hover td {
+    background-color: #d1d119;
+}
+
+.k-grid tr:hover {
+    background-color: rgba(174, 202, 242, 0.2);
+    background-image: none;
+}
+
+.k-grid-header {
+    display: block;
+}
+
+.k-grid-header .k-header:last-child {
+    color: var(--main-danger-color);
+}
+
+.k-grid-header th {
+    color: var(--main-color);
+    background-color: #fff;
+}
+
+.k-grid-header .k-header > .k-link {
+    color: var(--main-color);
+}
+
+col.k-sorted, th.k-sorted {
+    background-color: rgba(174, 202, 242, 0.2);
+}
+
+row.k-sorted, th.k-sorted {
+    background-color: rgba(174, 202, 242, 0.2);
+}
+
+th.k-sorted:hover, th.k-sorted:focus, th.k-sorted:active {
+    background-color: rgba(174, 202, 242, 0.2);
+}
+
+/* WRITE COLUMN - stilizzazione write flag in grid column*/
+.k-grid .k-i-check::before {
+    color: var(--main-color);
+}
+
+/* REMOVE COLUMN - stilizzazione command remove in grid column */
+.k-grid-delete .k-i-close::before {
+    color: var(--main-danger-color);
+}
+
+.avoid-k-button-style {
+    border: none;
+    background-color: transparent;
+    background-image: none;
+}
+
+.k-button.avoid-k-button-style:hover {
+    border: none;
+    background-color: transparent;
+    background-image: none;
+}
+
+td.k-command-cell {
+    text-align: center;
+}
+
+.k-command-cell > .k-button.avoid-k-button-style {
+    text-align: center;
+}
+
+/* Kendo UI - GRID SCROLLBAR */
+.no-scrollbar .k-grid-header {
+    padding: 0 !important;
+}
+
+.no-scrollbar .k-grid-content {
+    overflow-y: visible;
+}
+
+/* Kendo UI - DIALOG WINDOWS - Stilizzazione BASE */
+.k-header .k-link {
+    color: var(--main-color);
+}
+
+.k-header {
+    background-color: transparent;
+    background-image: none;
+}
+
 .k-widget.windowTitle {
     font-size: 14px;
     line-height: 1.72857;
@@ -159,9 +572,91 @@ html, body, div#pageContainer {
     vertical-align: middle;
 }
 
-/* Media Query */
+.k-window-titlebar {
+    position: relative;
+    top: -15px;
+    left: 15px;
+    padding: 2px 5px;
+    color: #fff;
+    border-color: inherit;
+    border-radius: 4px 4px 4px 4px;
+    background-color: #547ab0;
+}
+
+.k-dialog-titlebar {
+    position: relative;
+    top: -15px;
+    left: 15px;
+    width: 50%;
+    color: #fff;
+    border-color: inherit;
+    background-color: #547ab0;
+}
+
+.k-window {
+    background-color: #fff;
+    box-shadow: 0 0 3px 3px #dbdbdb;
+}
+
+.k-dialog {
+    box-shadow: 0 0 0 0;
+}
+
+.k-window-content form div {
+    padding: 0 20px 20px 20px;
+}
+
+.k-window-content {
+    padding: 0 16px 16px 16px;
+}
+
+.k-window-content h3 {
+    margin-top: 0;
+}
+
+/* MEDIA QUERIES */
+
+@media screen and (max-width: 1096px) {
+
+}
+
 @media screen and (max-width: 1000px) {
     #logoutButton {
         margin-right: 0;
     }
+
+    .userLabel {
+        margin-left: 0.3rem;
+    }
+}
+
+@media screen and (max-width: 992px) {
+
+}
+
+/*max-width: 768px -> .col-xs- */
+@media screen and (max-width: 768px) {
+    .pageRow {
+        width: 95%;
+    }
+}
+
+@media screen and (max-width: 576px) {
+
+}
+
+@media screen and (max-width: 497px) {
+
+}
+
+@media screen and (max-width: 450px) {
+
+}
+
+@media screen and (max-width: 390px) {
+
+}
+
+@media screen and (max-width: 300px) {
+
 }
