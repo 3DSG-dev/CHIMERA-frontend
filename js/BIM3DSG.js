@@ -199,7 +199,6 @@ function ChangeWriteMode(dataItem, rw) {
         },
         success: function (resultData) {
             if (resultData === "ok") {
-                dataItem.set("readonly", null);
                 $.ajax({
                     type: 'GET',
                     url: 'php/addImportListCodice.php',
@@ -216,10 +215,14 @@ function ChangeWriteMode(dataItem, rw) {
                             if (resultData2["addimportcodice"].substr(0, 10) === "ATTENZIONE") {
                                 dataItem.set("readonly", "t");
                             }
+                            else {
+                                dataItem.set("readonly", null);
+                            }
                             alert(resultData2["addimportcodice"]);
                         }
                     },
                     error: function (jqXHR, textStatus, errorThrown) {
+                        dataItem.set("readonly", null);
                         console.log(textStatus, errorThrown);
                         alert("Unexpected error while adding object to your list");
                     }
