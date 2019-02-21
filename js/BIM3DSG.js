@@ -78,7 +78,6 @@ function getGridObjectListSearchResultHeight() {
     $('.gridObjectListResultColumn').css('height', gridResultSpace);
 }
 
-
 // Login functions
 /**
  * @return {boolean}
@@ -182,6 +181,113 @@ function SearchObjects() {
     });
 }
 
+function SetReadOnlyObjectGrid(item) {
+    ChangeWriteMode($('#objectsGrid').data('kendoGrid').dataItem(item.parent().parent()), false);
+}
+
+function SetWriteObjectGrid(item) {
+    ChangeWriteMode($('#objectsGrid').data('kendoGrid').dataItem(item.parent().parent()), true);
+}
+
+function ChangeWriteMode(dataItem, rw) {
+    $.ajax({
+        type: 'GET',
+        url: 'php/removeFromImportListCodice.php',
+        dataType: "json",
+        data: {
+            codiceVersione: dataItem["CodiceVersione"]
+        },
+        success: function (resultData) {
+            if (resultData === "ok") {
+                dataItem.set("readonly", null);
+                $.ajax({
+                    type: 'GET',
+                    url: 'php/addImportListCodice.php',
+                    dataType: "json",
+                    data: {
+                        codiceVersione: dataItem["CodiceVersione"],
+                        rw: rw
+                    },
+                    success: function (resultData2) {
+                        if (resultData2["addimportcodice"] === "ok") {
+                            dataItem.set("readonly", rw ? "f" : "t");
+                        }
+                        else {
+                            if (resultData2["addimportcodice"].substr(0, 10) === "ATTENZIONE") {
+                                dataItem.set("readonly", "t");
+                            }
+                            alert(resultData2["addimportcodice"]);
+                        }
+                    },
+                    error: function (jqXHR, textStatus, errorThrown) {
+                        console.log(textStatus, errorThrown);
+                        alert("Unexpected error while adding object to your list");
+                    }
+                });
+            }
+        },
+        error: function (jqXHR, textStatus, errorThrown) {
+            console.log(textStatus, errorThrown);
+            alert("Unexpected error while removing object to your list");
+        }
+    });
+}
+
+function AddToYourListObjectGrid(item) {
+    AddToYourList($('#objectsGrid').data('kendoGrid').dataItem(item.parent().parent()), false);
+}
+
+function AddToYourList(dataItem, rw) {
+    $.ajax({
+        type: 'GET',
+        url: 'php/addImportListCodice.php',
+        dataType: "json",
+        data: {
+            codiceVersione: dataItem["CodiceVersione"],
+            rw: rw
+        },
+        success: function (resultData) {
+            if (resultData["addimportcodice"] === "ok") {
+                dataItem.set("readonly", rw ? "f" : "t");
+            }
+            else {
+                if (resultData["addimportcodice"].substr(0, 10) === "ATTENZIONE") {
+                    dataItem.set("readonly", "t");
+                }
+                alert(resultData["addimportcodice"]);
+            }
+        },
+        error: function (jqXHR, textStatus, errorThrown) {
+            console.log(textStatus, errorThrown);
+            alert("Unexpected error while adding object to your list");
+        }
+    });
+}
+
+function RemoveFromYourListObjectGrid(item) {
+    RemoveFromYourList($('#objectsGrid').data('kendoGrid').dataItem(item.parent().parent()));
+}
+
+function RemoveFromYourList(dataItem) {
+    $.ajax({
+        type: 'GET',
+        url: 'php/removeFromImportListCodice.php',
+        dataType: "json",
+        data: {
+            codiceVersione: dataItem["CodiceVersione"]
+        },
+        success: function (resultData) {
+            if (resultData === "ok") {
+                dataItem.set("readonly", null);
+            }
+        },
+        error: function (jqXHR, textStatus, errorThrown) {
+            console.log(textStatus, errorThrown);
+            alert("Unexpected error while removing object to your list");
+        }
+    });
+}
+
 // Components
 function InitializeComponents() {
     function SetSearchForm() {
@@ -255,18 +361,21 @@ function InitializeComponents() {
                     field: "readonly",
                     title: "Write",
                     width: 30,
-                    template: "#= readonly ? '' : '<span class=\"k-icon k-i-check main-color\"></span>' #",
+                    template: "#= readonly === 'f' ? '<span class=\"k-icon k-i-check\" onclick=\"SetReadOnlyObjectGrid($(this))\"></span>' : '<span class=\"k-icon\" onclick=\"SetWriteObjectGrid($(this))\"></span>' #",
                     attributes: {
                         "class": "writeReadFlagCell",
                         style: "text-align: center;"
                     }
                 },
                 {
-                    title: "Remove", width: 30,
-                    command: [{
-                        name: "destroy",
-                        template: '<a data-command="destroy" class="k-button k-grid-delete avoid-k-button-style"><span class="k-icon k-i-close"></span></a>'
-                    }]
+                    field: "readonly",
+                    title: "Your List",
+                    width: 30,
+                    template: "#= readonly == null ? '<span class=\"k-icon k-i-plus\" onclick=\"AddToYourListObjectGrid($(this))\"></span>' : '<span class=\"k-icon k-i-minus\" onclick=\"RemoveFromYourListObjectGrid($(this))\"></span>' #",
+                    attributes: {
+                        "class": "writeReadFlagCell",
+                        style: "text-align: center;"
+                    }
                 }
             ];
         }
@@ -276,24 +385,6 @@ function InitializeComponents() {
             for (var i = 0; i < grid.columns.length; i++) {
                 grid.autoFitColumn(i);
             }
-        }
-
-        function RemoveImportObject(codice) {
-            $.ajax({
-                type: 'POST',
-                url: 'php/removeOggettoImportazione.php',
-                dataType: "text",
-                data: {
-                    codiceVersione: codice
-                },
-                success: function () {
-                    //alert("Oggetto correttamente eliminato");
-                },
-                error: function (jqXHR, textStatus, errorThrown) {
-                    alert("Si è verificato un errore.");
-                }
-            });
-
         }
 
         $("#objectsGrid").kendoGrid({
@@ -309,10 +400,7 @@ function InitializeComponents() {
             scrollable: true,
             resizable: true,
             mobile: false,
-            editable: false,
-            remove: function (e) {
-                RemoveImportObject(e.model.CodiceVersione);
-            }
+            editable: false
         });
     }
 
