@@ -13,7 +13,7 @@
         <script src="libs/jquery-3.3.1.min.js"></script>
 
         <!-- Common Kendo UI CSS for web widgets and widgets for data visualization. -->
-        <!--<link href="libs/KendoUI/styles/kendo.common.min.css" rel="stylesheet" /> -->
+        <!--<link href="libs/KendoUI/styles/kendo.common.min.css" rel="stylesheet" />-->
         <!-- (Optional) RTL CSS for Kendo UI widgets for the web. Include only in right-to-left applications. -->
         <link href="libs/KendoUI/styles/kendo.rtl.min.css" rel="stylesheet" type="text/css" />
         <!-- Default Kendo UI theme CSS for web widgets and widgets for data visualization. -->
@@ -109,7 +109,6 @@
                                     <label for="selectVersione"><?php echo $_SESSION["versionLabel"]; ?></label>
                                     <input id="selectVersione" type="text">
                                 </div>
-                                <div style="clear:both;"></div>
                             </div>
 
                             <div class="selectObjectButtonsContainer">
@@ -126,12 +125,8 @@
                     </div>
                 </div>
 
-                <div class="pageSection gridObjectListResultSection">
-                    <div class="pageRow gridObjectListResultRow">
-                        <div class="pageColumn gridObjectListResultColumn">
-                            <div id="objectsGrid" style="height: calc(100vh - 382px);"></div>
-                        </div>
-                    </div>
+                <div id="objectsGridContainer" class="pageSection">
+                    <div id="objectsGrid"></div>
                 </div>
             </div>
 
@@ -149,7 +144,7 @@
                         </span>
                     </div>
                     <div class="sideToolbarItem">
-                        <span class="sideToolbarBtn" title="Information board">
+                        <span id="informationWindowOpenBtn" class="sideToolbarBtn" title="Information board">
                             <img src="img/info_icon.png" alt="Information board">
                         </span>
                     </div>
@@ -162,6 +157,110 @@
                 ';
             }
             ?>
+
+            <div id="informationWindow">
+                <div id="informationWindowTabstrip">
+                    <ul>
+                        <li class="k-state-active">Object information</li>
+                        <li>Version information</li>
+                        <li>Subversion information</li>
+                    </ul>
+
+                    <div id="informationWindowTabObject" class="informationWindowTabItem">
+                        <div id="infoWndCategoryCard" class="cardContainer col-md-12-boxed col-xs-12">
+                            <h3 class="cardTitle">Category informations</h3>
+                            <div class="cardInputFieldContainer col-md-6">
+                                <label for="selectGroupCategory">Category group</label>
+                                <input id="selectGroupCategory" type="text" />
+                            </div>
+                            <div class="cardInputFieldContainer col-md-6">
+                                <label for="selectCategory">Category</label>
+                                <input id="selectCategory" type="text">
+                            </div>
+                            <div class="buttonContainer">
+                                <button class="buttonBordered">SAVE</button>
+                            </div>
+                        </div>
+
+                        <div id="infoWndMainCard" class="cardContainer col-md-12-boxed col-xs-12">
+                            <h3 class="cardTitle">Main informations</h3>
+                            <div class="cardInputFieldContainer col-md-6">
+                                <label for="selectExcavationDate">ExcavationDate</label>
+                                <input id="selectExcavationDate" type="text" class="k-textbox" />
+                            </div>
+                            <div class="cardInputFieldContainer col-md-6">
+                                <label for="selectId">id</label>
+                                <input id="selectId" type="text" class="k-textbox" />
+                            </div>
+                            <div class="cardInputFieldContainer col-md-6">
+                                <label for="selectName">Name</label>
+                                <input id="selectName" type="text" class="k-textbox" />
+                            </div>
+                            <div class="cardInputFieldContainer col-md-6">
+                                <label for="selectRemoved">Removed</label>
+                                <input id="selectRemoved" type="text" class="k-textbox" />
+                            </div>
+                            <div class="cardInputFieldContainer col-md-6">
+                                <label for="selectStarted">Started</label>
+                                <input id="selectStarted" type="text" class="k-textbox" />
+                            </div>
+                            <div class="cardInputFieldContainer col-md-6">
+                                <label for="selectContext">Context</label>
+                                <input id="selectContext" type="text" class="k-textbox" />
+                            </div>
+                            <div class="cardInputFieldContainer col-md-6">
+                                <label for="selectCreated">Created</label>
+                                <input id="selectCreated" type="text" class="k-textbox" />
+                            </div>
+                            <div class="cardInputFieldContainer col-md-6">
+                                <label for="selectAddedDuringBuilding">site n°</label>
+                                <input id="selectAddedDuringBuilding" type="text" class="k-textbox" />
+                            </div>
+                            <div class="cardInputFieldContainer col-md-6">
+                                <label for="selectClosed">Closed</label>
+                                <input id="selectClosed" type="text" class="k-textbox" />
+                            </div>
+                            <div class="buttonContainer">
+                                <button class="buttonBordered">SAVE</button>
+                            </div>
+                        </div>
+
+                        <div id="infoWndProvaCard" class="cardContainer col-md-12-boxed col-xs-12">
+                            <h3 class="cardTitle">Prova informations</h3>
+                            <div class="cardInputFieldContainer col-md-6">
+                                <label for="selectNumber">Number</label>
+                                <input id="selectNumber" type="number" value="" min="0" max="100" step="1" />
+                            </div>
+                            <div class="cardInputFieldContainer col-md-6">
+                                <label for="selectNumberDecimal">Number Decimal</label>
+                                <input id="selectNumberDecimal" type="number" value="" min="0" max="100" step="1" />
+                            </div>
+                            <div class="cardInputFieldContainer col-md-6">
+                                <label for="selectDropDown">Dropdown list</label>
+                                <input id="selectDropDown" />
+                            </div>
+                            <div class="cardInputFieldContainer col-md-6">
+                                <label for="selectDate">Data</label>
+                                <input id="selectDate">
+                            </div>
+                            <div class="cardInputFieldContainer col-md-6">
+                                <label for="selectCheckbox" class="k-checkbox-label">Checkbox</label>
+                                <input id="selectCheckbox" type="checkbox" class="k-checkbox">
+                            </div>
+                            <div style="clear:both"></div>
+                            <div class="buttonContainer">
+                                <button class="buttonBordered">SAVE</button>
+                            </div>
+                        </div>
+
+                    </div>
+                    <div id="versionInfoTab" class="infownd-tabitem">
+                    </div>
+                    <div id="subversionInfoTab" class="infownd-tabitem">
+                    </div>
+                </div>
+            </div>
+
         </div>
     </body>
 </html>
