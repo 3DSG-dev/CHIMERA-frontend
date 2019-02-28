@@ -163,7 +163,7 @@ html, body {
     background-color: #6abd2d;
 }
 
-.sideToolbarBtn {
+.sideToolbarButton {
     display: block;
     height: 40px;
     margin: auto;
@@ -176,29 +176,29 @@ html, body {
     background-color: var(--main-color);
 }
 
-.sideToolbarBtn:hover {
+.sideToolbarButton:hover {
     background-color: #7590c6;
 }
 
-.sideToolbarBtn:focus {
+.sideToolbarButton:focus {
     background-color: #7590c6;
 }
 
-.sideToolbarBtn img {
+.sideToolbarButton img {
     display: inline-block;
     width: 40px;
     vertical-align: middle;
 }
 
-.sideToolbarBtn.mode3dBtn {
+.sideToolbarButton.mode3dBtn {
     background-color: #f79e45;
 }
 
-.sideToolbarBtn.mode3dBtn:hover {
+.sideToolbarButton.mode3dBtn:hover {
     background-color: #fcac5d;
 }
 
-.sideToolbarBtn.mode3dBtn:focus {
+.sideToolbarButton.mode3dBtn:focus {
     background-color: #fcac5d;
 }
 
@@ -342,7 +342,7 @@ html, body {
 }
 
 .informationWindowTitle .k-window-titlebar {
-    width: 220px;
+    width: 166px;
 }
 
 /* Information Window : Tabstrip */
@@ -425,7 +425,7 @@ html, body {
     border-radius: 4px 4px 4px 4px;
 }
 
-.k-window-content h3.cardTitle {
+.k-window-content h3.sheetTitle {
     font-size: 14px;
     font-weight: normal;
     margin-top: 5px;
@@ -433,42 +433,42 @@ html, body {
 }
 
 /* Kendo UI - Form input fields e combobox - Stilizzazione base */
-.cardInputFieldContainer label {
+.informationFieldContainer label {
     float: left;
     padding-top: 0.3rem;
     padding-bottom: 0.4rem;
 }
 
-.cardInputFieldContainer .k-combobox {
+.informationFieldContainer .k-combobox {
     float: left;
 }
 
-.cardInputFieldContainer label.label33 {
+.informationFieldContainer label.labelInline {
     width: 33%;
     text-align: right;
 }
 
-.cardInputFieldContainer .k-textbox.input66 {
+.informationFieldContainer .k-textbox.inputInline {
     width: 65%;
     margin-left: 5px;
 }
 
-.cardInputFieldContainer .k-widget.input66 {
+.informationFieldContainer .k-widget.inputInline {
     width: 65%;
     margin-left: 5px;
 }
 
-.cardInputFieldContainer label.label100 {
+.informationFieldContainer label.labelMultiline {
     width: 100%;
     text-align: left;
 }
 
-.cardInputFieldContainer .k-textbox.input100 {
+.informationFieldContainer .k-textbox.inputMultiline {
     width: 100%;
     margin-left: 0;
 }
 
-.cardInputFieldContainer .k-widget.input100 {
+.informationFieldContainer .k-widget.inputMultiline {
     width: 100%;
     margin-left: 0;
 }

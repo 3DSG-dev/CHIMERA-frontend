@@ -64,33 +64,6 @@ function ResizeComponents() {
         ResizeObjectsGrid();
     }
 
-    function ResizeInformationWindow() {
-        function ResizeCardInputFields() {
-            if ($(".cardInputFieldContainer").width() < 250) {
-                $(".cardInputFieldContainer label").removeClass("label33").addClass("label100");
-                $(".cardInputFieldContainer .k-textbox").removeClass("input66").addClass("input100");
-                $(".cardInputFieldContainer .k-widget").removeClass("input66").addClass("input100");
-            }
-            else {
-                $(".cardInputFieldContainer label").removeClass("label100").addClass("label33");
-                $(".cardInputFieldContainer .k-textbox").removeClass("input100").addClass("input66");
-                $(".cardInputFieldContainer .k-widget").removeClass("input100").addClass("input66");
-            }
-        }
-
-        $("#informationWindow").data("kendoWindow").center();
-
-        var widthScreen = $(window).width();
-        if (widthScreen < 500) {
-            $("#informationWindow").data("kendoWindow").wrapper.css({width: (widthScreen)});
-        }
-        else {
-            $("#informationWindow").data("kendoWindow").wrapper.css({width: (widthScreen <= 700 ? 500 : 700)});
-        }
-
-        ResizeCardInputFields();
-    }
-
     ResizeObjectsGridContainer();
     ResizeInformationWindow();
 }
@@ -111,6 +84,34 @@ function ResizeObjectsGrid() {
     }
     else {
         objectsGrid.css('width', 'auto');
+    }
+}
+
+function ResizeInformationWindow() {
+    var width = $(window).width();
+    if (width > 500) {
+        width = width > 700 ? 700 : 500;
+    }
+
+    var informationKendoWindow = $("#informationWindow").data("kendoWindow");
+    informationKendoWindow.wrapper.css({width: (width)});
+    informationKendoWindow.center();
+
+    ChangeInformationFieldsStyle();
+}
+
+function ChangeInformationFieldsStyle() {
+    if ($(".informationFieldContainer").width() < 250) {
+        if (!$("#infoCategoryCombo").hasClass("labelMultiline")) {
+            $(".informationFieldContainer label").removeClass("labelInline").addClass("labelMultiline");
+            $(".informationFieldContainer .k-textbox").removeClass("inputInline").addClass("inputMultiline");
+            $(".informationFieldContainer .k-widget").removeClass("inputInline").addClass("inputMultiline");
+        }
+    }
+    else if (!$("#infoCategoryCombo").hasClass("labelInline")) {
+        $(".informationFieldContainer label").removeClass("labelMultiline").addClass("labelInline");
+        $(".informationFieldContainer .k-textbox").removeClass("inputMultiline").addClass("inputInline");
+        $(".informationFieldContainer .k-widget").removeClass("inputMultiline").addClass("inputInline");
     }
 }
 
@@ -444,120 +445,124 @@ function InitializeComponents() {
     }
 
     function SetInformationWindow() {
-
-        function SetInformationWindowTabstrip() {
-            $("#informationWindowTabstrip").kendoTabStrip({
+        function SetInformationTabControl() {
+            $("#informationWindowTabControl").kendoTabStrip({
                 animation: {
                     open: {effects: "fadeIn"}
                 }
             });
         }
 
-        function SetInformationWindowCategoryCard() {
-            var data = [
-                {text: "Item 1", value: "1"},
-                {text: "Item 2", value: "2"},
-                {text: "Item 3", value: "3"}
-            ];
+        function AddReadWriteControl() {
+            var htmlReadWriteSwitch;
+            htmlReadWriteSwitch = '<div class="readwrite-checkbox">';
+            htmlReadWriteSwitch += '    <span class="label_rw">Read</span>';
+            htmlReadWriteSwitch += '       <label for="select-rw" class="switch">';
+            htmlReadWriteSwitch += '            <input type="checkbox" name="select-rw" id="select-rw" checked="false" value="">';
+            htmlReadWriteSwitch += '            <span class="slider round"></span>';
+            htmlReadWriteSwitch += '       </label>';
+            htmlReadWriteSwitch += '    <span class="label_rw">Write</span>';
+            htmlReadWriteSwitch += '</div>';
 
-            var data2 = [
-                {text: "Item 1", value: "1"},
-                {text: "Item 2", value: "2"},
-                {text: "Item 3", value: "3"}
-            ];
-
-            $("#selectGroupCategory").kendoComboBox({
-                dataSource: data
-            }).data("kendoComboBox");
-
-            $("#selectCategory").kendoComboBox({
-                dataSource: data2
-            }).data("kendoComboBox");
+            $(".informationWindowTitle").prepend(htmlReadWriteSwitch);
         }
 
-        function SetInformationWindowMainCard() {
+        function SetInformationDefaultSheets() {
+            function SetInformationCategorySheet() {
+                var data = [
+                    {text: "Item 1", value: "1"},
+                    {text: "Item 2", value: "2"},
+                    {text: "Item 3", value: "3"}
+                ];
 
-        }
+                var data2 = [
+                    {text: "Item 1", value: "1"},
+                    {text: "Item 2", value: "2"},
+                    {text: "Item 3", value: "3"}
+                ];
 
-        function SetInformationWindowProvaCard() {
+                $("#infoCategoryGroupCombo").kendoComboBox({
+                    dataSource: data
+                }).data("kendoComboBox");
 
-            // create NumericTextBox from input HTML element
-            $("#infoWndProvaCard #selectNumber").kendoNumericTextBox();
-            $("#infoWndProvaCard #selectNumberDecimal").kendoNumericTextBox({
-                format: "# Kg",
-                decimals: 3
-            });
+                $("#infoCategoryCombo").kendoComboBox({
+                    dataSource: data2
+                }).data("kendoComboBox");
+            }
 
-            // create Timepicker from div HTML element
-            $("#infoWndProvaCard #selectDate").kendoDateTimePicker({
-                value: new Date(),
-                dateInput: true
-            });
+            function SetObjectInformationMainSheet() {
 
-            // create Dropdownlist from div HTML element
-            var data = [
-                {text: "Black", value: "1"},
-                {text: "Orange", value: "2"},
-                {text: "Grey", value: "3"}
-            ];
+            }
 
-            $("#infoWndProvaCard #selectDropDown").kendoDropDownList({
-                dataTextField: "text",
-                dataValueField: "value",
-                dataSource: data
-            });
+            function SetInformationWindowProvaCard() {
+
+                // create NumericTextBox from input HTML element
+                $("#infoWndProvaCard #selectNumber").kendoNumericTextBox();
+                $("#infoWndProvaCard #selectNumberDecimal").kendoNumericTextBox({
+                    format: "# Kg",
+                    decimals: 3
+                });
+
+                // create Timepicker from div HTML element
+                $("#infoWndProvaCard #selectDate").kendoDateTimePicker({
+                    value: new Date(),
+                    dateInput: true
+                });
+
+                // create Dropdownlist from div HTML element
+                var data = [
+                    {text: "Black", value: "1"},
+                    {text: "Orange", value: "2"},
+                    {text: "Grey", value: "3"}
+                ];
+
+                $("#infoWndProvaCard #selectDropDown").kendoDropDownList({
+                    dataTextField: "text",
+                    dataValueField: "value",
+                    dataSource: data
+                });
+            }
+
+            SetInformationCategorySheet();
+            SetObjectInformationMainSheet();
+            SetInformationWindowProvaCard();
         }
 
         var informationWindow = $("#informationWindow");
         informationWindow.kendoWindow({
-            title: "Information board",
+            title: "Information",
             width: 700,
-            minWidth: 360,
+            minWidth: 350,
             visible: false,
             resizable: true,
-            resize: function () {
-                if ($(".cardInputFieldContainer").width() < 250) {
-                    $(".cardInputFieldContainer label").removeClass("label33").addClass("label100");
-                    $(".cardInputFieldContainer .k-textbox").removeClass("input66").addClass("input100");
-                    $(".cardInputFieldContainer .k-widget").removeClass("input66").addClass("input100");
-                }
-                else {
-                    $(".cardInputFieldContainer label").removeClass("label100").addClass("label33");
-                    $(".cardInputFieldContainer .k-textbox").removeClass("input100").addClass("input66");
-                    $(".cardInputFieldContainer .k-widget").removeClass("input100").addClass("input66");
-                }
-            }
-        }).data("kendoWindow").center();
+            resize: ChangeInformationFieldsStyle
+        }).data("kendoWindow");
 
         informationWindow.parents(".k-widget").addClass("windowTitle windowIcon informationWindowTitle informationWindowIcon");
 
-        SetInformationWindowTabstrip();
-        SetInformationWindowCategoryCard();
-        SetInformationWindowMainCard();
-        SetInformationWindowProvaCard();
+        AddReadWriteControl();
+        SetInformationTabControl();
 
+        SetInformationDefaultSheets();
+    }
+
+    function SetToolbarButtons() {
+        $("#informationButton").click(function () {
+            var informationKendoWindow = $("#informationWindow").data("kendoWindow");
+            if (!informationKendoWindow.options.visible) {
+                informationKendoWindow.open();
+
+                ResizeInformationWindow();
+                informationKendoWindow.center();
+            }
+            else {
+                informationKendoWindow.close();
+            }
+        })
     }
 
     SetSearchForm();
     SetObjectsGrid();
     SetInformationWindow();
-
-    $("#informationWindowOpenBtn").click(function () {
-        $("#informationWindow").data("kendoWindow").open();
-
-        var htmlReadWriteSwitch;
-        htmlReadWriteSwitch = '<div class="readwrite-checkbox">';
-        htmlReadWriteSwitch += '    <span class="label_rw">Read</span>';
-        htmlReadWriteSwitch += '       <label for="select-rw" class="switch">';
-        htmlReadWriteSwitch += '            <input type="checkbox" name="select-rw" id="select-rw" checked="false" value="">';
-        htmlReadWriteSwitch += '            <span class="slider round"></span>';
-        htmlReadWriteSwitch += '       </label>';
-        htmlReadWriteSwitch += '    <span class="label_rw">Write</span>';
-        htmlReadWriteSwitch += '</div>';
-
-        $(".informationWindowTitle").prepend(htmlReadWriteSwitch);
-
-        ResizeInformationWindow();
-    })
-
+    SetToolbarButtons();
 }

@@ -133,19 +133,19 @@
             <div id="sideToolbarContainer">
                 <div id="sideToolbarList" class="k-widget k-listview k-selectable">
                     <div class="sideToolbarItem">
-                        <span class="sideToolbarBtn mode3dBtn" title="Go to 3D mode">
+                        <span class="sideToolbarButton mode3dBtn" title="Go to 3D mode">
                             <img src="img/3d_mode_icon.png" alt="3D Mode">
                         </span>
                     </div>
                     <div class="sideToolbarSeparator"></div>
                     <div class="sideToolbarItem">
-                        <span class="sideToolbarBtn" title="Delete list">
+                        <span class="sideToolbarButton" title="Delete list">
                             <img src="img/delete_list_icon.png" alt="Delete list">
                         </span>
                     </div>
                     <div class="sideToolbarItem">
-                        <span id="informationWindowOpenBtn" class="sideToolbarBtn" title="Information board">
-                            <img src="img/info_icon.png" alt="Information board">
+                        <span id="informationButton" class="sideToolbarButton" title="Information">
+                            <img src="img/information_icon.png" alt="Information">
                         </span>
                     </div>
                 </div>
@@ -159,7 +159,7 @@
             ?>
 
             <div id="informationWindow">
-                <div id="informationWindowTabstrip">
+                <div id="informationWindowTabControl">
                     <ul>
                         <li class="k-state-active">Object information</li>
                         <li>Version information</li>
@@ -168,14 +168,14 @@
 
                     <div id="informationWindowTabObject" class="informationWindowTabItem">
                         <div id="infoWndCategoryCard" class="cardContainer col-md-12-boxed col-xs-12">
-                            <h3 class="cardTitle">Category informations</h3>
-                            <div class="cardInputFieldContainer col-md-6">
-                                <label for="selectGroupCategory">Category group</label>
-                                <input id="selectGroupCategory" type="text" />
+                            <h3 class="sheetTitle">Category</h3>
+                            <div class="informationFieldContainer col-md-6">
+                                <label for="infoCategoryGroupCombo">Category group</label>
+                                <input id="infoCategoryGroupCombo" type="text" />
                             </div>
-                            <div class="cardInputFieldContainer col-md-6">
-                                <label for="selectCategory">Category</label>
-                                <input id="selectCategory" type="text">
+                            <div class="informationFieldContainer col-md-6">
+                                <label for="infoCategoryCombo">Category</label>
+                                <input id="infoCategoryCombo" type="text">
                             </div>
                             <div class="buttonContainer">
                                 <button class="buttonBordered">SAVE</button>
@@ -183,40 +183,40 @@
                         </div>
 
                         <div id="infoWndMainCard" class="cardContainer col-md-12-boxed col-xs-12">
-                            <h3 class="cardTitle">Main informations</h3>
-                            <div class="cardInputFieldContainer col-md-6">
+                            <h3 class="sheetTitle">Main information</h3>
+                            <div class="informationFieldContainer col-md-6">
                                 <label for="selectExcavationDate">ExcavationDate</label>
                                 <input id="selectExcavationDate" type="text" class="k-textbox" />
                             </div>
-                            <div class="cardInputFieldContainer col-md-6">
+                            <div class="informationFieldContainer col-md-6">
                                 <label for="selectId">id</label>
                                 <input id="selectId" type="text" class="k-textbox" />
                             </div>
-                            <div class="cardInputFieldContainer col-md-6">
+                            <div class="informationFieldContainer col-md-6">
                                 <label for="selectName">Name</label>
                                 <input id="selectName" type="text" class="k-textbox" />
                             </div>
-                            <div class="cardInputFieldContainer col-md-6">
+                            <div class="informationFieldContainer col-md-6">
                                 <label for="selectRemoved">Removed</label>
                                 <input id="selectRemoved" type="text" class="k-textbox" />
                             </div>
-                            <div class="cardInputFieldContainer col-md-6">
+                            <div class="informationFieldContainer col-md-6">
                                 <label for="selectStarted">Started</label>
                                 <input id="selectStarted" type="text" class="k-textbox" />
                             </div>
-                            <div class="cardInputFieldContainer col-md-6">
+                            <div class="informationFieldContainer col-md-6">
                                 <label for="selectContext">Context</label>
                                 <input id="selectContext" type="text" class="k-textbox" />
                             </div>
-                            <div class="cardInputFieldContainer col-md-6">
+                            <div class="informationFieldContainer col-md-6">
                                 <label for="selectCreated">Created</label>
                                 <input id="selectCreated" type="text" class="k-textbox" />
                             </div>
-                            <div class="cardInputFieldContainer col-md-6">
+                            <div class="informationFieldContainer col-md-6">
                                 <label for="selectAddedDuringBuilding">site n°</label>
                                 <input id="selectAddedDuringBuilding" type="text" class="k-textbox" />
                             </div>
-                            <div class="cardInputFieldContainer col-md-6">
+                            <div class="informationFieldContainer col-md-6">
                                 <label for="selectClosed">Closed</label>
                                 <input id="selectClosed" type="text" class="k-textbox" />
                             </div>
@@ -226,24 +226,24 @@
                         </div>
 
                         <div id="infoWndProvaCard" class="cardContainer col-md-12-boxed col-xs-12">
-                            <h3 class="cardTitle">Prova informations</h3>
-                            <div class="cardInputFieldContainer col-md-6">
+                            <h3 class="sheetTitle">Prova informations</h3>
+                            <div class="informationFieldContainer col-md-6">
                                 <label for="selectNumber">Number</label>
                                 <input id="selectNumber" type="number" value="" min="0" max="100" step="1" />
                             </div>
-                            <div class="cardInputFieldContainer col-md-6">
+                            <div class="informationFieldContainer col-md-6">
                                 <label for="selectNumberDecimal">Number Decimal</label>
                                 <input id="selectNumberDecimal" type="number" value="" min="0" max="100" step="1" />
                             </div>
-                            <div class="cardInputFieldContainer col-md-6">
+                            <div class="informationFieldContainer col-md-6">
                                 <label for="selectDropDown">Dropdown list</label>
                                 <input id="selectDropDown" />
                             </div>
-                            <div class="cardInputFieldContainer col-md-6">
+                            <div class="informationFieldContainer col-md-6">
                                 <label for="selectDate">Data</label>
                                 <input id="selectDate">
                             </div>
-                            <div class="cardInputFieldContainer col-md-6">
+                            <div class="informationFieldContainer col-md-6">
                                 <label for="selectCheckbox" class="k-checkbox-label">Checkbox</label>
                                 <input id="selectCheckbox" type="checkbox" class="k-checkbox">
                             </div>
