@@ -1,18 +1,16 @@
 // Events functions
 $(function () {
     ResizeHeaderLoghi();
-    getGridObjectListSearchResultHeight();
 
     if (Login()) {
         InitializeComponents();
+        ResizeComponents();
     }
 });
 
 $(window).on("resize", function () {
     ResizeHeaderLoghi();
-    ResizeObjectsGrid();
-
-    getGridObjectListSearchResultHeight();
+    ResizeComponents();
 });
 
 // Resize functions
@@ -54,6 +52,49 @@ function ResizeHeaderLoghi() {
     }
 }
 
+function ResizeComponents() {
+    function ResizeObjectsGridContainer() {
+        var availableSpace = $(window).height() - $("#headerContainer").outerHeight() - $(".selectObjectSection").outerHeight();
+        if (availableSpace < 200) {
+            availableSpace = 200;
+        }
+
+        $('#objectsGridContainer').outerHeight(availableSpace);
+
+        ResizeObjectsGrid();
+    }
+
+    function ResizeInformationWindow() {
+        function ResizeCardInputFields() {
+            if ($(".cardInputFieldContainer").width() < 250) {
+                $(".cardInputFieldContainer label").removeClass("label33").addClass("label100");
+                $(".cardInputFieldContainer .k-textbox").removeClass("input66").addClass("input100");
+                $(".cardInputFieldContainer .k-widget").removeClass("input66").addClass("input100");
+            }
+            else {
+                $(".cardInputFieldContainer label").removeClass("label100").addClass("label33");
+                $(".cardInputFieldContainer .k-textbox").removeClass("input100").addClass("input66");
+                $(".cardInputFieldContainer .k-widget").removeClass("input100").addClass("input66");
+            }
+        }
+
+        $("#informationWindow").data("kendoWindow").center();
+
+        var widthScreen = $(window).width();
+        if (widthScreen < 500) {
+            $("#informationWindow").data("kendoWindow").wrapper.css({width: (widthScreen)});
+        }
+        else {
+            $("#informationWindow").data("kendoWindow").wrapper.css({width: (widthScreen <= 700 ? 500 : 700)});
+        }
+
+        ResizeCardInputFields();
+    }
+
+    ResizeObjectsGridContainer();
+    ResizeInformationWindow();
+}
+
 function ResizeObjectsGrid() {
     var objectsGrid = $("#objectsGrid");
     var objectsKendoGrid = objectsGrid.data("kendoGrid");
@@ -71,11 +112,6 @@ function ResizeObjectsGrid() {
     else {
         objectsGrid.css('width', 'auto');
     }
-}
-
-function getGridObjectListSearchResultHeight() {
-    var gridResultSpace = $(window).height() - $("#headerContainer").outerHeight() - $(".selectObjectSection").outerHeight() - 70;
-    $('.gridObjectListResultColumn').css('height', gridResultSpace);
 }
 
 // Login functions
@@ -407,6 +443,121 @@ function InitializeComponents() {
         });
     }
 
+    function SetInformationWindow() {
+
+        function SetInformationWindowTabstrip() {
+            $("#informationWindowTabstrip").kendoTabStrip({
+                animation: {
+                    open: {effects: "fadeIn"}
+                }
+            });
+        }
+
+        function SetInformationWindowCategoryCard() {
+            var data = [
+                {text: "Item 1", value: "1"},
+                {text: "Item 2", value: "2"},
+                {text: "Item 3", value: "3"}
+            ];
+
+            var data2 = [
+                {text: "Item 1", value: "1"},
+                {text: "Item 2", value: "2"},
+                {text: "Item 3", value: "3"}
+            ];
+
+            $("#selectGroupCategory").kendoComboBox({
+                dataSource: data
+            }).data("kendoComboBox");
+
+            $("#selectCategory").kendoComboBox({
+                dataSource: data2
+            }).data("kendoComboBox");
+        }
+
+        function SetInformationWindowMainCard() {
+
+        }
+
+        function SetInformationWindowProvaCard() {
+
+            // create NumericTextBox from input HTML element
+            $("#infoWndProvaCard #selectNumber").kendoNumericTextBox();
+            $("#infoWndProvaCard #selectNumberDecimal").kendoNumericTextBox({
+                format: "# Kg",
+                decimals: 3
+            });
+
+            // create Timepicker from div HTML element
+            $("#infoWndProvaCard #selectDate").kendoDateTimePicker({
+                value: new Date(),
+                dateInput: true
+            });
+
+            // create Dropdownlist from div HTML element
+            var data = [
+                {text: "Black", value: "1"},
+                {text: "Orange", value: "2"},
+                {text: "Grey", value: "3"}
+            ];
+
+            $("#infoWndProvaCard #selectDropDown").kendoDropDownList({
+                dataTextField: "text",
+                dataValueField: "value",
+                dataSource: data
+            });
+        }
+
+        var informationWindow = $("#informationWindow");
+        informationWindow.kendoWindow({
+            title: "Information board",
+            width: 700,
+            minWidth: 360,
+            visible: false,
+            resizable: true,
+            resize: function () {
+                if ($(".cardInputFieldContainer").width() < 250) {
+                    $(".cardInputFieldContainer label").removeClass("label33").addClass("label100");
+                    $(".cardInputFieldContainer .k-textbox").removeClass("input66").addClass("input100");
+                    $(".cardInputFieldContainer .k-widget").removeClass("input66").addClass("input100");
+                }
+                else {
+                    $(".cardInputFieldContainer label").removeClass("label100").addClass("label33");
+                    $(".cardInputFieldContainer .k-textbox").removeClass("input100").addClass("input66");
+                    $(".cardInputFieldContainer .k-widget").removeClass("input100").addClass("input66");
+                }
+            }
+        }).data("kendoWindow").center();
+
+        informationWindow.parents(".k-widget").addClass("windowTitle windowIcon informationWindowTitle informationWindowIcon");
+
+        SetInformationWindowTabstrip();
+        SetInformationWindowCategoryCard();
+        SetInformationWindowMainCard();
+        SetInformationWindowProvaCard();
+
+    }
+
     SetSearchForm();
     SetObjectsGrid();
+    SetInformationWindow();
+
+    $("#informationWindowOpenBtn").click(function () {
+        $("#informationWindow").data("kendoWindow").open();
+
+        var htmlReadWriteSwitch;
+        htmlReadWriteSwitch = '<div class="readwrite-checkbox">';
+        htmlReadWriteSwitch += '    <span class="label_rw">Read</span>';
+        htmlReadWriteSwitch += '       <label for="select-rw" class="switch">';
+        htmlReadWriteSwitch += '            <input type="checkbox" name="select-rw" id="select-rw" checked="false" value="">';
+        htmlReadWriteSwitch += '            <span class="slider round"></span>';
+        htmlReadWriteSwitch += '       </label>';
+        htmlReadWriteSwitch += '    <span class="label_rw">Write</span>';
+        htmlReadWriteSwitch += '</div>';
+
+        $(".informationWindowTitle").prepend(htmlReadWriteSwitch);
+
+        ResizeInformationWindow();
+    })
+
 }
