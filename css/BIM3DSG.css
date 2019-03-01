@@ -84,6 +84,10 @@ html, body {
     height: calc(100vh - 68px);
 }
 
+.fixedPosition {
+    position: fixed;
+}
+
 /* Header */
 #headerContainer {
     height: 68px;

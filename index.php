@@ -150,117 +150,206 @@
                     </div>
                 </div>
             </div>
+        </div>
 
-            <?php if (!isset($_SESSION['validUser'])) {
-                echo '
+        <?php if (!isset($_SESSION['validUser'])) {
+            echo '
                     <div id="loginDialog"></div>
                 ';
-            }
-            ?>
+        }
+        ?>
 
-            <div id="informationWindow">
-                <div id="informationWindowTabControl">
-                    <ul>
-                        <li class="k-state-active">Object information</li>
-                        <li>Version information</li>
-                        <li>Subversion information</li>
-                    </ul>
+        <div id="informationWindow" class="fixedPosition">
+            <div id="informationWindowTabControl">
+                <ul>
+                    <li class="k-state-active">Object information</li>
+                    <li>Version information</li>
+                    <li>Subversion information</li>
+                </ul>
 
-                    <div id="informationWindowTabObject" class="informationWindowTabItem">
-                        <div id="infoWndCategoryCard" class="cardContainer col-md-12-boxed col-xs-12">
-                            <h3 class="sheetTitle">Category</h3>
-                            <div class="informationFieldContainer col-md-6">
-                                <label for="infoCategoryGroupCombo">Category group</label>
-                                <input id="infoCategoryGroupCombo" type="text" />
-                            </div>
-                            <div class="informationFieldContainer col-md-6">
-                                <label for="infoCategoryCombo">Category</label>
-                                <input id="infoCategoryCombo" type="text">
-                            </div>
-                            <div class="buttonContainer">
-                                <button class="buttonBordered">SAVE</button>
-                            </div>
+                <div id="informationWindowTabObject" class="informationWindowTabItem">
+                    <div id="objectInformationMainSheet" class="cardContainer col-md-6-boxed col-xs-12">
+                        <h3 class="sheetTitle">Main information</h3>
+                        <div class="informationFieldContainer">
+                            <label for="infoLayer0"><?php echo $_SESSION["layer0Label"]; ?></label>
+                            <input id="infoLayer0" type="text" class="k-textbox" readonly />
                         </div>
-
-                        <div id="infoWndMainCard" class="cardContainer col-md-12-boxed col-xs-12">
-                            <h3 class="sheetTitle">Main information</h3>
-                            <div class="informationFieldContainer col-md-6">
-                                <label for="selectExcavationDate">ExcavationDate</label>
-                                <input id="selectExcavationDate" type="text" class="k-textbox" />
-                            </div>
-                            <div class="informationFieldContainer col-md-6">
-                                <label for="selectId">id</label>
-                                <input id="selectId" type="text" class="k-textbox" />
-                            </div>
-                            <div class="informationFieldContainer col-md-6">
-                                <label for="selectName">Name</label>
-                                <input id="selectName" type="text" class="k-textbox" />
-                            </div>
-                            <div class="informationFieldContainer col-md-6">
-                                <label for="selectRemoved">Removed</label>
-                                <input id="selectRemoved" type="text" class="k-textbox" />
-                            </div>
-                            <div class="informationFieldContainer col-md-6">
-                                <label for="selectStarted">Started</label>
-                                <input id="selectStarted" type="text" class="k-textbox" />
-                            </div>
-                            <div class="informationFieldContainer col-md-6">
-                                <label for="selectContext">Context</label>
-                                <input id="selectContext" type="text" class="k-textbox" />
-                            </div>
-                            <div class="informationFieldContainer col-md-6">
-                                <label for="selectCreated">Created</label>
-                                <input id="selectCreated" type="text" class="k-textbox" />
-                            </div>
-                            <div class="informationFieldContainer col-md-6">
-                                <label for="selectAddedDuringBuilding">site n°</label>
-                                <input id="selectAddedDuringBuilding" type="text" class="k-textbox" />
-                            </div>
-                            <div class="informationFieldContainer col-md-6">
-                                <label for="selectClosed">Closed</label>
-                                <input id="selectClosed" type="text" class="k-textbox" />
-                            </div>
-                            <div class="buttonContainer">
-                                <button class="buttonBordered">SAVE</button>
-                            </div>
+                        <div class="informationFieldContainer">
+                            <label for="infoLayer1"><?php echo $_SESSION["layer1Label"]; ?></label>
+                            <input id="infoLayer1" type="text" class="k-textbox" readonly />
                         </div>
-
-                        <div id="infoWndProvaCard" class="cardContainer col-md-12-boxed col-xs-12">
-                            <h3 class="sheetTitle">Prova informations</h3>
-                            <div class="informationFieldContainer col-md-6">
-                                <label for="selectNumber">Number</label>
-                                <input id="selectNumber" type="number" value="" min="0" max="100" step="1" />
-                            </div>
-                            <div class="informationFieldContainer col-md-6">
-                                <label for="selectNumberDecimal">Number Decimal</label>
-                                <input id="selectNumberDecimal" type="number" value="" min="0" max="100" step="1" />
-                            </div>
-                            <div class="informationFieldContainer col-md-6">
-                                <label for="selectDropDown">Dropdown list</label>
-                                <input id="selectDropDown" />
-                            </div>
-                            <div class="informationFieldContainer col-md-6">
-                                <label for="selectDate">Data</label>
-                                <input id="selectDate">
-                            </div>
-                            <div class="informationFieldContainer col-md-6">
-                                <label for="selectCheckbox" class="k-checkbox-label">Checkbox</label>
-                                <input id="selectCheckbox" type="checkbox" class="k-checkbox">
-                            </div>
-                            <div style="clear:both"></div>
-                            <div class="buttonContainer">
-                                <button class="buttonBordered">SAVE</button>
-                            </div>
+                        <div class="informationFieldContainer">
+                            <label for="infoLayer2"><?php echo $_SESSION["layer2Label"]; ?></label>
+                            <input id="infoLayer2" type="text" class="k-textbox" readonly />
                         </div>
-
+                        <div class="informationFieldContainer">
+                            <label for="infoLayer3"><?php echo $_SESSION["layer3Label"]; ?></label>
+                            <input id="infoLayer3" type="text" class="k-textbox" readonly />
+                        </div>
+                        <div class="informationFieldContainer">
+                            <label for="infoName"><?php echo $_SESSION["nomeLabel"]; ?></label>
+                            <input id="infoName" type="text" class="k-textbox" readonly />
+                        </div>
+                        <div class="informationFieldContainer">
+                            <label for="infoCreated">Created</label>
+                            <input id="infoCreated" type="text" class="k-textbox" readonly />
+                        </div>
+                        <div class="informationFieldContainer">
+                            <label for="infoRemoved">Removed</label>
+                            <input id="infoRemoved" type="text" class="k-textbox" readonly />
+                        </div>
+                        <div class="informationFieldContainer">
+                            <label for="infoCantiereCreazione">Added during campaign n&ordm;</label>
+                            <input id="infoCantiereCreazione" type="text" class="k-textbox" readonly />
+                        </div>
+                        <div class="informationFieldContainer">
+                            <label for="infoCantiereCreazioneInizio"> .started</label>
+                            <input id="infoCantiereCreazioneInizio" type="text" class="k-textbox" readonly />
+                        </div>
+                        <div class="informationFieldContainer">
+                            <label for="infoCantiereCreazioneFine"> .closed</label>
+                            <input id="infoCantiereCreazioneFine" type="text" class="k-textbox" readonly />
+                        </div>
+                        <div class="informationFieldContainer">
+                            <label for="infoCantiereEliminazione">Removed during campaign n&ordm;</label>
+                            <input id="infoCantiereEliminazione" type="text" class="k-textbox" readonly />
+                        </div>
+                        <div class="informationFieldContainer">
+                            <label for="infoCantiereEliminazioneInizio"> .started</label>
+                            <input id="infoCantiereEliminazioneInizio" type="text" class="k-textbox" readonly />
+                        </div>
+                        <div class="informationFieldContainer">
+                            <label for="infoCantiereEliminazioneFine"> .closed</label>
+                            <input id="infoCantiereEliminazioneFine" type="text" class="k-textbox" readonly />
+                        </div>
                     </div>
-                    <div id="versionInfoTab" class="infownd-tabitem">
+
+                    <div id="infoWndCategoryCard" class="cardContainer col-md-6-boxed col-xs-12">
+                        <h3 class="sheetTitle">Category</h3>
+                        <div class="informationFieldContainer">
+                            <label for="infoCategoryGroupCombo">Category group</label>
+                            <input id="infoCategoryGroupCombo" type="text" />
+                        </div>
+                        <div class="informationFieldContainer">
+                            <label for="infoCategoryCombo">Category</label>
+                            <input id="infoCategoryCombo" type="text">
+                        </div>
+                        <div class="buttonContainer">
+                            <button class="buttonBordered">SAVE</button>
+                        </div>
+                    </div>
+
+                    <div id="infoWndProvaCard" class="cardContainer col-md-6-boxed col-xs-12">
+                        <h3 class="sheetTitle">Prova informations</h3>
+                        <div class="informationFieldContainer ">
+                            <label for="selectNumber">Number</label>
+                            <input id="selectNumber" type="number" value="" min="0" max="100" step="1" />
+                        </div>
+                        <div class="informationFieldContainer">
+                            <label for="selectNumberDecimal">Number Decimal</label>
+                            <input id="selectNumberDecimal" type="number" value="" min="0" max="100" step="1" />
+                        </div>
+                        <div class="informationFieldContainer ">
+                            <label for="selectDropDown">Dropdown list</label>
+                            <input id="selectDropDown" />
+                        </div>
+                        <div class="informationFieldContainer">
+                            <label for="selectDate">Data</label>
+                            <input id="selectDate">
+                        </div>
+                        <div class="informationFieldContainer">
+                            <label for="selectCheckbox" class="k-checkbox-label">Checkbox</label>
+                            <input id="selectCheckbox" type="checkbox" class="k-checkbox">
+                        </div>
+                        <div style="clear:both"></div>
+                        <div class="buttonContainer">
+                            <button class="buttonBordered">SAVE</button>
+                        </div>
+                    </div>
+
+                </div>
+                <div id="versionInfoTab" class="infownd-tabitem">
+                    <div id="versionInformationSheet" class="cardContainer col-md-6-boxed col-xs-12">
+                        <h3 class="sheetTitle">Internal information</h3>
+                        <div class="informationFieldContainer">
+                            <label for="infoCodiceOggetto">Codice Oggetto</label>
+                            <input id="infoCodiceOggetto" type="text" class="k-textbox" readonly />
+                        </div>
+                        <div class="informationFieldContainer">
+                            <label for="infoCodiceVersione">Codice Versione</label>
+                            <input id="infoCodiceVersione" type="text" class="k-textbox" readonly />
+                        </div>
+                        <div class="informationFieldContainer">
+                            <label for="infoVersione">Versione</label>
+                            <input id="infoVersione" type="text" class="k-textbox" readonly />
+                        </div>
+                        <div class="informationFieldContainer">
+                            <label for="infoOriginale">Originale</label>
+                            <input id="infoOriginale" type="text" class="k-textbox" readonly />
+                        </div>
+                        <div class="informationFieldContainer">
+                            <label for="infoCodiceModello">Codice Modello</label>
+                            <input id="infoCodiceModello" type="text" class="k-textbox" readonly />
+                        </div>
+                        <div class="informationFieldContainer">
+                            <label for="infoLive">State</label>
+                            <input id="infoLive" type="text" class="k-textbox" readonly />
+                        </div>
+                        <div class="informationFieldContainer">
+                            <label for="infoLastUpdateBy">Update by</label>
+                            <input id="infoLastUpdateBy" type="text" class="k-textbox" readonly />
+                        </div>
+                        <div class="informationFieldContainer">
+                            <label for="infoLastUpdate">Update on</label>
+                            <input id="infoLastUpdate" type="text" class="k-textbox" readonly />
+                        </div>
+                        <div class="informationFieldContainer">
+                            <label for="infoLock">Lock by</label>
+                            <input id="infoLock" type="text" class="k-textbox" readonly />
+                        </div>
+                    </div>
+                    <div id="modelInformationSheet" class="cardContainer col-md-6-boxed col-xs-12">
+                        <h3 class="sheetTitle">Model information</h3>
+                        <div class="informationFieldContainer">
+                            <label for="infoCodiceModello2">Codice Modello</label>
+                            <input id="infoCodiceModello2" type="text" class="k-textbox" readonly />
+                        </div>
+                        <div class="informationFieldContainer">
+                            <label for="infoSuperficie">Area</label>
+                            <input id="infoSuperficie" type="text" class="k-textbox" readonly />
+                        </div>
+                        <div class="informationFieldContainer">
+                            <label for="infoVolume">Volume</label>
+                            <input id="infoVolume" type="text" class="k-textbox" readonly />
+                        </div>
+                        <div class="informationFieldContainer">
+                            <label for="infoUpdateBy">Update by</label>
+                            <input id="infoUpdateBy" type="text" class="k-textbox" readonly />
+                        </div>
+                        <div class="informationFieldContainer">
+                            <label for="infoUpdateOn">Update on</label>
+                            <input id="infoUpdateOn" type="text" class="k-textbox" readonly />
+                        </div>
+                        <div class="informationFieldContainer">
+                            <label for="infoCenterX">Center x</label>
+                            <input id="infoCenterX" type="text" class="k-textbox" readonly />
+                        </div>
+                        <div class="informationFieldContainer">
+                            <label for="infoCenterY">Center y</label>
+                            <input id="infoCenterY" type="text" class="k-textbox" readonly />
+                        </div>
+                        <div class="informationFieldContainer">
+                            <label for="infoCenterZ">Center z</label>
+                            <input id="infoCenterZ" type="text" class="k-textbox" readonly />
+                        </div>
+                        <div class="informationFieldContainer">
+                            <label for="infoRadius">Diagonal</label>
+                            <input id="infoRadius" type="text" class="k-textbox" readonly />
+                        </div>
                     </div>
                     <div id="subversionInfoTab" class="infownd-tabitem">
                     </div>
                 </div>
             </div>
-
-        </div>
     </body>
 </html>

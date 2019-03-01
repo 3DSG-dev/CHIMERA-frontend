@@ -1,3 +1,6 @@
+//Global vars
+var _openedWindows = 0;
+
 // Events functions
 $(function () {
     ResizeHeaderLoghi();
@@ -96,12 +99,10 @@ function ResizeInformationWindow() {
     var informationKendoWindow = $("#informationWindow").data("kendoWindow");
     informationKendoWindow.wrapper.css({width: (width)});
     informationKendoWindow.center();
-
-    ChangeInformationFieldsStyle();
 }
 
 function ChangeInformationFieldsStyle() {
-    if ($(".informationFieldContainer").width() < 250) {
+    if ($("#informationWindowTabObject").width() < 600) {
         if (!$("#infoCategoryCombo").hasClass("labelMultiline")) {
             $(".informationFieldContainer label").removeClass("labelInline").addClass("labelMultiline");
             $(".informationFieldContainer .k-textbox").removeClass("inputInline").addClass("inputMultiline");
@@ -112,6 +113,15 @@ function ChangeInformationFieldsStyle() {
         $(".informationFieldContainer label").removeClass("labelMultiline").addClass("labelInline");
         $(".informationFieldContainer .k-textbox").removeClass("inputMultiline").addClass("inputInline");
         $(".informationFieldContainer .k-widget").removeClass("inputMultiline").addClass("inputInline");
+    }
+}
+
+function ObjectsGridChangeAlignment() {
+    if (_openedWindows > 0) {
+        $("#objectsGrid").css("margin", "0");
+    }
+    else {
+        $("#objectsGrid").css("margin", "0 auto");
     }
 }
 
@@ -333,12 +343,124 @@ function RemoveFromYourList(dataItem) {
 }
 
 // Information
-function UpdateInformation(codiceVersione) {
+function getLocaleDateTime(data) {
+    return data != null ? new Date(Date.parse(data.replace(" ", "T").substring(0, data.length - 3))).toLocaleString() : "";
+}
 
+function getLocaleDate(data) {
+    return data != null ? new Date(Date.parse(data.replace(" ", "T").substring(0, data.length - 3))).toLocaleDateString() : "";
+}
+
+function UpdateInformation(codiceVersione) {
+    function UpdateBaseInformation() {
+        /**
+         * @return {string}
+         */
+        function ParseLiveState(live) {
+            switch (live) {
+                case "0":
+                    return "Non attivo";
+                case "1":
+                    return "Live on-line";
+                case "2":
+                    return "Live on-line, ma morto (figli non pronti)";
+                case "3":
+                    return "Modello ancora da creare";
+                case "4":
+                    return "Inserito da Rhino, da attivare";
+                case "5":
+                    return "Live on-line e clonato";
+                case "6":
+                    return "Modello pronto, ma non ancora on-line";
+                case "7":
+                    return "Live on-line e clonato, ma morto (figli non pronti)";
+                case "8":
+                    return "Non attivo e clonato";
+                default:
+                    return live;
+            }
+        }
+
+        /**
+         * @return {string}
+         */
+        function ParseAreaValue(area) {
+            return (area == null || area === 0) ? "Unknown" : area < 0 ? "Computed area untrusted!" : parseFloat(area).toFixed(4) + " m\u00B2";
+        }
+
+        /**
+         * @return {string}
+         */
+        function ParseVolumeValue(volume) {
+            return (volume == null || volume === 0) ? "Unknown" : volume < 0 ? "Computed volume untrusted!" : parseFloat(volume).toFixed(6) + " m\u00B3";
+        }
+
+        $.ajax({
+            type: 'GET',
+            url: 'php/getBaseInformation.php',
+            dataType: "json",
+            data: {
+                codiceVersione: codiceVersione
+            },
+            success: function (resultData) {
+                $("#infoLayer0").val(resultData["Layer0"]);
+                $("#infoLayer1").val(resultData["Layer1"]);
+                $("#infoLayer2").val(resultData["Layer2"]);
+                $("#infoLayer3").val(resultData["Layer3"]);
+                $("#infoName").val(resultData["Name"]);
+                $("#infoCreated").val(getLocaleDateTime(resultData["DataCreazione"]));
+                $("#infoRemoved").val(getLocaleDateTime(resultData["DataEliminazione"]));
+                $("#infoCantiereCreazione").val(resultData["CantiereCreazione"] + 1);
+                $("#infoCantiereCreazioneInizio").val(getLocaleDate(resultData["CreazioneDataInizio"]));
+                $("#infoCantiereCreazioneFine").val(getLocaleDate(resultData["CreazioneDataFine"]));
+                $("#infoCantiereEliminazione").val(resultData["CantiereEliminazione"]);
+                $("#infoCantiereEliminazioneInizio").val(getLocaleDate(resultData["EliminazioneDataInizio"]));
+                $("#infoCantiereEliminazioneFine").val(getLocaleDate(resultData["EliminazioneDataFine"]));
+
+                $("#infoCodiceOggetto").val(resultData["CodiceOggetto"]);
+                $("#infoCodiceVersione").val(resultData["CodiceVersione"]);
+                $("#infoVersione").val(resultData["Versione"]);
+                $("#infoOriginale").val(resultData["Originale"]);
+                $("#infoCodiceModello").val(resultData["CodiceModello"]);
+                $("#infoLive").val(ParseLiveState(resultData["Live"]));
+                $("#infoLastUpdateBy").val(resultData["UpdateFullName"] != null ? resultData["UpdateFullName"] : resultData["UpdateUser"]);
+                $("#infoLastUpdate").val(getLocaleDateTime(resultData["UpdateDatetime"]));
+                $("#infoLock").val(resultData["LockFullName"] != null ? resultData["LockFullName"] : resultData["LockUser"]);
+
+                $("#infoCodiceModello2").val(resultData["CodiceModello"]);
+                $("#infoSuperficie").val(ParseAreaValue(resultData["Superficie"]));
+                $("#infoVolume").val(ParseVolumeValue(resultData["Volume"]));
+                $("#infoUpdateBy").val(resultData["UpdateModelliFullName"] != null ? resultData["UpdateModelliFullName"] : resultData["UpdateModelliUser"]);
+                $("#infoUpdateOn").val(getLocaleDateTime(resultData["LastUpdate"]));
+                $("#infoCenterX").val(resultData["xc"] == null ? "Unknown" : parseFloat(resultData["xc"]).toFixed(2) + " m");
+                $("#infoCenterY").val(resultData["yc"] == null ? "Unknown" : parseFloat(resultData["yc"]).toFixed(2) + " m");
+                $("#infoCenterZ").val(resultData["zc"] == null ? "Unknown" : parseFloat(resultData["zc"]).toFixed(2) + " m");
+                $("#infoRadius").val(resultData["Radius"] == null ? "Unknown" : parseFloat(resultData["Radius"]).toFixed(2) + " m");
+            },
+            error: function (jqXHR, textStatus, errorThrown) {
+                console.log(textStatus, errorThrown);
+                alert("Unexpected error while removing object to your list");
+            }
+        });
+    }
+
+    UpdateBaseInformation();
 }
 
 // Components
 function InitializeComponents() {
+    function Windows_OnOpen() {
+        _openedWindows++;
+
+        ObjectsGridChangeAlignment();
+    }
+
+    function Windows_OnClose() {
+        _openedWindows--;
+
+        ObjectsGridChangeAlignment();
+    }
+
     function SetSearchForm() {
         function CreateSearchFormCombobox() {
             function CreateCombobox(field, label) {
@@ -505,10 +627,6 @@ function InitializeComponents() {
                 }).data("kendoComboBox");
             }
 
-            function SetObjectInformationMainSheet() {
-
-            }
-
             function SetInformationWindowProvaCard() {
 
                 // create NumericTextBox from input HTML element
@@ -539,17 +657,19 @@ function InitializeComponents() {
             }
 
             SetInformationCategorySheet();
-            SetObjectInformationMainSheet();
             SetInformationWindowProvaCard();
         }
 
         var informationWindow = $("#informationWindow");
+        informationWindow.removeClass("fixedPosition");
         informationWindow.kendoWindow({
             title: "Information",
             width: 700,
             minWidth: 350,
             visible: false,
             resizable: true,
+            open: Windows_OnOpen,
+            close: Windows_OnClose,
             resize: ChangeInformationFieldsStyle
         }).data("kendoWindow");
 
@@ -568,7 +688,7 @@ function InitializeComponents() {
                 informationKendoWindow.open();
 
                 ResizeInformationWindow();
-                informationKendoWindow.center();
+                ChangeInformationFieldsStyle();
             }
             else {
                 informationKendoWindow.close();
