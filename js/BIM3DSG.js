@@ -218,11 +218,13 @@ function SearchObjects() {
     });
 }
 
-function SetReadOnlyObjectGrid(item) {
+function SetReadOnlyObjectGrid(event, item) {
+    event.stopPropagation();
     ChangeWriteMode($('#objectsGrid').data('kendoGrid').dataItem(item.parent().parent()), false);
 }
 
-function SetWriteObjectGrid(item) {
+function SetWriteObjectGrid(event, item) {
+    event.stopPropagation();
     ChangeWriteMode($('#objectsGrid').data('kendoGrid').dataItem(item.parent().parent()), true);
 }
 
@@ -273,7 +275,8 @@ function ChangeWriteMode(dataItem, rw) {
     });
 }
 
-function AddToYourListObjectGrid(item) {
+function AddToYourListObjectGrid(event, item) {
+    event.stopPropagation();
     AddToYourList($('#objectsGrid').data('kendoGrid').dataItem(item.parent().parent()), false);
 }
 
@@ -304,7 +307,8 @@ function AddToYourList(dataItem, rw) {
     });
 }
 
-function RemoveFromYourListObjectGrid(item) {
+function RemoveFromYourListObjectGrid(event, item) {
+    event.stopPropagation();
     RemoveFromYourList($('#objectsGrid').data('kendoGrid').dataItem(item.parent().parent()));
 }
 
@@ -326,6 +330,11 @@ function RemoveFromYourList(dataItem) {
             alert("Unexpected error while removing object to your list");
         }
     });
+}
+
+// Information
+function UpdateInformation(codiceVersione) {
+
 }
 
 // Components
@@ -401,7 +410,7 @@ function InitializeComponents() {
                     field: "readonly",
                     title: "Write",
                     width: 30,
-                    template: "#= readonly === 'f' ? '<span class=\"k-icon k-i-check\" onclick=\"SetReadOnlyObjectGrid($(this))\"></span>' : '<span class=\"k-icon\" onclick=\"SetWriteObjectGrid($(this))\"></span>' #",
+                    template: "#= readonly === 'f' ? '<span class=\"k-icon k-i-check\" onclick=\"SetReadOnlyObjectGrid(event,$(this))\"></span>' : '<span class=\"k-icon\" onclick=\"SetWriteObjectGrid(event,$(this))\"></span>' #",
                     attributes: {
                         "class": "writeReadFlagCell",
                         style: "text-align: center;"
@@ -411,7 +420,7 @@ function InitializeComponents() {
                     field: "readonly",
                     title: "Your List",
                     width: 30,
-                    template: "#= readonly == null ? '<span class=\"k-icon k-i-plus\" onclick=\"AddToYourListObjectGrid($(this))\"></span>' : '<span class=\"k-icon k-i-minus\" onclick=\"RemoveFromYourListObjectGrid($(this))\"></span>' #",
+                    template: "#= readonly == null ? '<span class=\"k-icon k-i-plus\" onclick=\"AddToYourListObjectGrid(event,$(this))\"></span>' : '<span class=\"k-icon k-i-minus\" onclick=\"RemoveFromYourListObjectGrid(event,$(this))\"></span>' #",
                     attributes: {
                         "class": "writeReadFlagCell",
                         style: "text-align: center;"
@@ -427,10 +436,15 @@ function InitializeComponents() {
             }
         }
 
+        function ObjectsGrid_OnChange() {
+            UpdateInformation(this.dataItem(this.select())["CodiceVersione"]);
+        }
+
         $("#objectsGrid").kendoGrid({
             columns: SetColumnsHeader(),
             dataBound: AutoFitColumns,
             columnResize: ResizeObjectsGrid,
+            change: ObjectsGrid_OnChange,
             sortable: {
                 mode: "multiple",
                 allowUnsort: true,
@@ -439,6 +453,7 @@ function InitializeComponents() {
             pageable: false,
             scrollable: true,
             resizable: true,
+            selectable: "row",
             mobile: false,
             editable: false
         });
