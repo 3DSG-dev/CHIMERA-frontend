@@ -246,7 +246,7 @@ function GetDataItemFromVersione(codiceVersione) {
 
 function AddToYourListObjectGrid(event, item) {
     event.stopPropagation();
-    AddToYourList($('#objectsGrid').data('kendoGrid').dataItem(item.parent().parent()["CodiceVersione"]), false);
+    AddToYourList($('#objectsGrid').data('kendoGrid').dataItem(item.parent().parent())["CodiceVersione"], false);
 }
 
 function ChangeWriteModeObjectGrid(event, item, rw) {
