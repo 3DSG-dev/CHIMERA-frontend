@@ -228,23 +228,91 @@ function SearchObjects() {
     });
 }
 
-function SetReadOnlyObjectGrid(event, item) {
-    event.stopPropagation();
-    ChangeWriteMode($('#objectsGrid').data('kendoGrid').dataItem(item.parent().parent()), false);
+/**
+ * @return {string, null}
+ */
+function GetDataItemFromVersione(codiceVersione) {
+    var dataItem;
+    var grid = $("#objectsGrid").data("kendoGrid");
+    var items = grid.items();
+    for (var i = 0; items.length; i++) {
+        dataItem = grid.dataItem(items[i]);
+        if (dataItem["CodiceVersione"] === codiceVersione) {
+            return dataItem;
+        }
+    }
+    return null;
 }
 
-function SetWriteObjectGrid(event, item) {
+function AddToYourListObjectGrid(event, item) {
     event.stopPropagation();
-    ChangeWriteMode($('#objectsGrid').data('kendoGrid').dataItem(item.parent().parent()), true);
+    AddToYourList($('#objectsGrid').data('kendoGrid').dataItem(item.parent().parent()["CodiceVersione"]), false);
 }
 
-function ChangeWriteMode(dataItem, rw) {
+function ChangeWriteModeObjectGrid(event, item, rw) {
+    event.stopPropagation();
+    ChangeWriteMode($('#objectsGrid').data('kendoGrid').dataItem(item.parent().parent())["CodiceVersione"], rw);
+}
+
+function RemoveFromYourList(codiceVersione) {
     $.ajax({
         type: 'GET',
         url: 'php/removeFromImportListCodice.php',
         dataType: "json",
         data: {
-            codiceVersione: dataItem["CodiceVersione"]
+            codiceVersione: codiceVersione
+        },
+        success: function (resultData) {
+            if (resultData === "ok") {
+                var dataItem = GetDataItemFromVersione(codiceVersione);
+                dataItem.set("readonly", null);
+                UpdateInformation(dataItem["CodiceVersione"], dataItem["readonly"])
+            }
+        },
+        error: function (jqXHR, textStatus, errorThrown) {
+            console.log(textStatus, errorThrown);
+            alert("Unexpected error while removing object to your list");
+        }
+    });
+}
+
+// Manage read-write mode & your list
+function AddToYourList(codiceVersione, rw) {
+    $.ajax({
+        type: 'GET',
+        url: 'php/addImportListCodice.php',
+        dataType: "json",
+        data: {
+            codiceVersione: codiceVersione,
+            rw: rw
+        },
+        success: function (resultData) {
+            var dataItem = GetDataItemFromVersione(codiceVersione);
+            if (resultData["addimportcodice"] === "ok") {
+                dataItem.set("readonly", rw ? "f" : "t");
+            }
+            else {
+                if (resultData["addimportcodice"].substr(0, 10) === "ATTENZIONE") {
+                    dataItem.set("readonly", "t");
+                }
+                alert(resultData["addimportcodice"]);
+            }
+            UpdateInformation(dataItem["CodiceVersione"], dataItem["readonly"])
+        },
+        error: function (jqXHR, textStatus, errorThrown) {
+            console.log(textStatus, errorThrown);
+            alert("Unexpected error while adding object to your list");
+        }
+    });
+}
+
+function ChangeWriteMode(codiceVersione, rw) {
+    $.ajax({
+        type: 'GET',
+        url: 'php/removeFromImportListCodice.php',
+        dataType: "json",
+        data: {
+            codiceVersione: codiceVersione
         },
         success: function (resultData) {
             if (resultData === "ok") {
@@ -253,10 +321,11 @@ function ChangeWriteMode(dataItem, rw) {
                     url: 'php/addImportListCodice.php',
                     dataType: "json",
                     data: {
-                        codiceVersione: dataItem["CodiceVersione"],
+                        codiceVersione: codiceVersione,
                         rw: rw
                     },
                     success: function (resultData2) {
+                        var dataItem = GetDataItemFromVersione(codiceVersione);
                         if (resultData2["addimportcodice"] === "ok") {
                             dataItem.set("readonly", rw ? "f" : "t");
                         }
@@ -269,6 +338,7 @@ function ChangeWriteMode(dataItem, rw) {
                             }
                             alert(resultData2["addimportcodice"]);
                         }
+                        UpdateInformation(dataItem["CodiceVersione"], dataItem["readonly"])
                     },
                     error: function (jqXHR, textStatus, errorThrown) {
                         dataItem.set("readonly", null);
@@ -285,74 +355,28 @@ function ChangeWriteMode(dataItem, rw) {
     });
 }
 
-function AddToYourListObjectGrid(event, item) {
-    event.stopPropagation();
-    AddToYourList($('#objectsGrid').data('kendoGrid').dataItem(item.parent().parent()), false);
-}
-
-function AddToYourList(dataItem, rw) {
-    $.ajax({
-        type: 'GET',
-        url: 'php/addImportListCodice.php',
-        dataType: "json",
-        data: {
-            codiceVersione: dataItem["CodiceVersione"],
-            rw: rw
-        },
-        success: function (resultData) {
-            if (resultData["addimportcodice"] === "ok") {
-                dataItem.set("readonly", rw ? "f" : "t");
-            }
-            else {
-                if (resultData["addimportcodice"].substr(0, 10) === "ATTENZIONE") {
-                    dataItem.set("readonly", "t");
-                }
-                alert(resultData["addimportcodice"]);
-            }
-        },
-        error: function (jqXHR, textStatus, errorThrown) {
-            console.log(textStatus, errorThrown);
-            alert("Unexpected error while adding object to your list");
-        }
-    });
-}
-
 function RemoveFromYourListObjectGrid(event, item) {
     event.stopPropagation();
-    RemoveFromYourList($('#objectsGrid').data('kendoGrid').dataItem(item.parent().parent()));
-}
-
-function RemoveFromYourList(dataItem) {
-    $.ajax({
-        type: 'GET',
-        url: 'php/removeFromImportListCodice.php',
-        dataType: "json",
-        data: {
-            codiceVersione: dataItem["CodiceVersione"]
-        },
-        success: function (resultData) {
-            if (resultData === "ok") {
-                dataItem.set("readonly", null);
-            }
-        },
-        error: function (jqXHR, textStatus, errorThrown) {
-            console.log(textStatus, errorThrown);
-            alert("Unexpected error while removing object to your list");
-        }
-    });
+    RemoveFromYourList($('#objectsGrid').data('kendoGrid').dataItem(item.parent().parent())["CodiceVersione"]);
 }
 
 // Information
-function getLocaleDateTime(data) {
+/**
+ * @return {string}
+ */
+function GetLocaleDateTime(data) {
     return data != null ? new Date(Date.parse(data.replace(" ", "T").substring(0, data.length - 3))).toLocaleString() : "";
 }
 
-function getLocaleDate(data) {
+/**
+ * @return {string}
+ */
+function GetLocaleDate(data) {
     return data != null ? new Date(Date.parse(data.replace(" ", "T").substring(0, data.length - 3))).toLocaleDateString() : "";
 }
 
-function UpdateInformation(codiceVersione) {
-    function UpdateBaseInformation() {
+function UpdateInformation(codiceVersione, readonly) {
+    function UpdateBaseInformation(codiceVersione) {
         /**
          * @return {string}
          */
@@ -408,14 +432,14 @@ function UpdateInformation(codiceVersione) {
                 $("#infoLayer2").val(resultData["Layer2"]);
                 $("#infoLayer3").val(resultData["Layer3"]);
                 $("#infoName").val(resultData["Name"]);
-                $("#infoCreated").val(getLocaleDateTime(resultData["DataCreazione"]));
-                $("#infoRemoved").val(getLocaleDateTime(resultData["DataEliminazione"]));
+                $("#infoCreated").val(GetLocaleDateTime(resultData["DataCreazione"]));
+                $("#infoRemoved").val(GetLocaleDateTime(resultData["DataEliminazione"]));
                 $("#infoCantiereCreazione").val(resultData["CantiereCreazione"] + 1);
-                $("#infoCantiereCreazioneInizio").val(getLocaleDate(resultData["CreazioneDataInizio"]));
-                $("#infoCantiereCreazioneFine").val(getLocaleDate(resultData["CreazioneDataFine"]));
+                $("#infoCantiereCreazioneInizio").val(GetLocaleDate(resultData["CreazioneDataInizio"]));
+                $("#infoCantiereCreazioneFine").val(GetLocaleDate(resultData["CreazioneDataFine"]));
                 $("#infoCantiereEliminazione").val(resultData["CantiereEliminazione"]);
-                $("#infoCantiereEliminazioneInizio").val(getLocaleDate(resultData["EliminazioneDataInizio"]));
-                $("#infoCantiereEliminazioneFine").val(getLocaleDate(resultData["EliminazioneDataFine"]));
+                $("#infoCantiereEliminazioneInizio").val(GetLocaleDate(resultData["EliminazioneDataInizio"]));
+                $("#infoCantiereEliminazioneFine").val(GetLocaleDate(resultData["EliminazioneDataFine"]));
 
                 $("#infoCodiceOggetto").val(resultData["CodiceOggetto"]);
                 $("#infoCodiceVersione").val(resultData["CodiceVersione"]);
@@ -424,14 +448,14 @@ function UpdateInformation(codiceVersione) {
                 $("#infoCodiceModello").val(resultData["CodiceModello"]);
                 $("#infoLive").val(ParseLiveState(resultData["Live"]));
                 $("#infoLastUpdateBy").val(resultData["UpdateFullName"] != null ? resultData["UpdateFullName"] : resultData["UpdateUser"]);
-                $("#infoLastUpdate").val(getLocaleDateTime(resultData["UpdateDatetime"]));
+                $("#infoLastUpdate").val(GetLocaleDateTime(resultData["UpdateDatetime"]));
                 $("#infoLock").val(resultData["LockFullName"] != null ? resultData["LockFullName"] : resultData["LockUser"]);
 
                 $("#infoCodiceModello2").val(resultData["CodiceModello"]);
                 $("#infoSuperficie").val(ParseAreaValue(resultData["Superficie"]));
                 $("#infoVolume").val(ParseVolumeValue(resultData["Volume"]));
                 $("#infoUpdateBy").val(resultData["UpdateModelliFullName"] != null ? resultData["UpdateModelliFullName"] : resultData["UpdateModelliUser"]);
-                $("#infoUpdateOn").val(getLocaleDateTime(resultData["LastUpdate"]));
+                $("#infoUpdateOn").val(GetLocaleDateTime(resultData["LastUpdate"]));
                 $("#infoCenterX").val(resultData["xc"] == null ? "Unknown" : parseFloat(resultData["xc"]).toFixed(2) + " m");
                 $("#infoCenterY").val(resultData["yc"] == null ? "Unknown" : parseFloat(resultData["yc"]).toFixed(2) + " m");
                 $("#infoCenterZ").val(resultData["zc"] == null ? "Unknown" : parseFloat(resultData["zc"]).toFixed(2) + " m");
@@ -444,7 +468,8 @@ function UpdateInformation(codiceVersione) {
         });
     }
 
-    UpdateBaseInformation();
+    UpdateBaseInformation(codiceVersione);
+    $("#informationReadOnlySwitch").data("kendoSwitch").check(readonly === "f");
 }
 
 // Components
@@ -532,7 +557,7 @@ function InitializeComponents() {
                     field: "readonly",
                     title: "Write",
                     width: 30,
-                    template: "#= readonly === 'f' ? '<span class=\"k-icon k-i-check\" onclick=\"SetReadOnlyObjectGrid(event,$(this))\"></span>' : '<span class=\"k-icon\" onclick=\"SetWriteObjectGrid(event,$(this))\"></span>' #",
+                    template: "#= readonly === 'f' ? '<span class=\"k-icon k-i-check\" onclick=\"ChangeWriteModeObjectGrid(event,$(this),false)\"></span>' : '<span class=\"k-icon\" onclick=\"ChangeWriteModeObjectGrid(event,$(this),true)\"></span>' #",
                     attributes: {
                         "class": "writeReadFlagCell",
                         style: "text-align: center;"
@@ -559,7 +584,8 @@ function InitializeComponents() {
         }
 
         function ObjectsGrid_OnChange() {
-            UpdateInformation(this.dataItem(this.select())["CodiceVersione"]);
+            var selectedObject = this.dataItem(this.select());
+            UpdateInformation(selectedObject["CodiceVersione"], selectedObject["readonly"]);
         }
 
         $("#objectsGrid").kendoGrid({
@@ -594,14 +620,20 @@ function InitializeComponents() {
             var htmlReadWriteSwitch;
             htmlReadWriteSwitch = '<div class="readwrite-checkbox">';
             htmlReadWriteSwitch += '    <span class="label_rw">Read</span>';
-            htmlReadWriteSwitch += '       <label for="select-rw" class="switch">';
-            htmlReadWriteSwitch += '            <input type="checkbox" name="select-rw" id="select-rw" checked="false" value="">';
-            htmlReadWriteSwitch += '            <span class="slider round"></span>';
-            htmlReadWriteSwitch += '       </label>';
+            htmlReadWriteSwitch += '            <input type="checkbox" id="informationReadOnlySwitch">';
             htmlReadWriteSwitch += '    <span class="label_rw">Write</span>';
             htmlReadWriteSwitch += '</div>';
 
             $(".informationWindowTitle").prepend(htmlReadWriteSwitch);
+            $("#informationReadOnlySwitch").kendoSwitch({
+                checked: false,
+                change: function (event) {
+                    var codiceVersione = $("#infoCodiceVersione").val();
+                    if (codiceVersione != null && codiceVersione !== "") {
+                        ChangeWriteMode(codiceVersione, event.checked);
+                    }
+                }
+            });
         }
 
         function SetInformationDefaultSheets() {
