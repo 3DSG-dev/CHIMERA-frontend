@@ -168,7 +168,7 @@
                 </ul>
 
                 <div id="informationWindowTabObject" class="informationWindowTabItem">
-                    <div id="objectInformationMainSheet" class="cardContainer col-md-6-boxed col-xs-12">
+                    <div class="cardContainer col-md-6-boxed col-xs-12">
                         <h3 class="sheetTitle">Main information</h3>
                         <div class="informationFieldContainer">
                             <label for="infoLayer0"><?php echo $_SESSION["layer0Label"]; ?></label>
@@ -227,12 +227,8 @@
                     <div id="infoWndCategoryCard" class="cardContainer col-md-6-boxed col-xs-12">
                         <h3 class="sheetTitle">Category</h3>
                         <div class="informationFieldContainer">
-                            <label for="infoCategoryGroupCombo">Category group</label>
-                            <input id="infoCategoryGroupCombo" type="text" />
-                        </div>
-                        <div class="informationFieldContainer">
-                            <label for="infoCategoryCombo">Category</label>
-                            <input id="infoCategoryCombo" type="text">
+                            <label for="infoCategory">Category</label>
+                            <input id="infoCategory" type="text">
                         </div>
                         <div class="buttonContainer">
                             <button class="buttonBordered">SAVE</button>
