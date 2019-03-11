@@ -463,7 +463,7 @@ function UpdateInformation(codiceVersione, readonly) {
             },
             error: function (jqXHR, textStatus, errorThrown) {
                 console.log(textStatus, errorThrown);
-                alert("Unexpected error while removing object to your list");
+                alert("Unexpected error while loading base information");
             }
         });
     }
