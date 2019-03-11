@@ -190,13 +190,35 @@ function Login() {
 }
 
 //Object Grid Data
+/**
+ * @return {string, null}
+ */
+function GetDataItemFromVersione(codiceVersione) {
+    var dataItem;
+    var grid = $("#objectsGrid").data("kendoGrid");
+    var items = grid.items();
+    for (var i = 0; items.length; i++) {
+        dataItem = grid.dataItem(items[i]);
+        if (dataItem["CodiceVersione"] === codiceVersione) {
+            return dataItem;
+        }
+    }
+    return null;
+}
+
+function SetObjectGridDataSource(objectList) {
+    $("#objectsGrid").data("kendoGrid").setDataSource(new kendo.data.DataSource({data: objectList}));
+
+    UpdateDynamicInformationFields();
+}
+
 function LoadUserListObjectGrid() {
     $.ajax({
         type: 'GET',
         url: 'php/getImportList.php',
         dataType: "json",
         success: function (resultData) {
-            $("#objectsGrid").data("kendoGrid").setDataSource(new kendo.data.DataSource({data: resultData["objectList"]}));
+            SetObjectGridDataSource(resultData["objectList"]);
         },
         error: function (jqXHR, textStatus, errorThrown) {
             console.log(textStatus, errorThrown);
@@ -219,29 +241,13 @@ function SearchObjects() {
             version: $("#selectVersione").data("kendoComboBox").value()
         },
         success: function (resultData) {
-            $("#objectsGrid").data("kendoGrid").setDataSource(new kendo.data.DataSource({data: resultData["objectList"]}));
+            SetObjectGridDataSource(resultData["objectList"]);
         },
         error: function (jqXHR, textStatus, errorThrown) {
             console.log(textStatus, errorThrown);
             alert("Unexpected error while searching objects.");
         }
     });
-}
-
-/**
- * @return {string, null}
- */
-function GetDataItemFromVersione(codiceVersione) {
-    var dataItem;
-    var grid = $("#objectsGrid").data("kendoGrid");
-    var items = grid.items();
-    for (var i = 0; items.length; i++) {
-        dataItem = grid.dataItem(items[i]);
-        if (dataItem["CodiceVersione"] === codiceVersione) {
-            return dataItem;
-        }
-    }
-    return null;
 }
 
 function AddToYourListObjectGrid(event, item) {
@@ -254,29 +260,12 @@ function ChangeWriteModeObjectGrid(event, item, rw) {
     ChangeWriteMode($('#objectsGrid').data('kendoGrid').dataItem(item.parent().parent())["CodiceVersione"], rw);
 }
 
-function RemoveFromYourList(codiceVersione) {
-    $.ajax({
-        type: 'GET',
-        url: 'php/removeFromImportListCodice.php',
-        dataType: "json",
-        data: {
-            codiceVersione: codiceVersione
-        },
-        success: function (resultData) {
-            if (resultData === "ok") {
-                var dataItem = GetDataItemFromVersione(codiceVersione);
-                dataItem.set("readonly", null);
-                UpdateInformation(dataItem["CodiceVersione"], dataItem["readonly"])
-            }
-        },
-        error: function (jqXHR, textStatus, errorThrown) {
-            console.log(textStatus, errorThrown);
-            alert("Unexpected error while removing object to your list");
-        }
-    });
+function RemoveFromYourListObjectGrid(event, item) {
+    event.stopPropagation();
+    RemoveFromYourList($('#objectsGrid').data('kendoGrid').dataItem(item.parent().parent())["CodiceVersione"]);
 }
 
-// Manage read-write mode & your list
+// Your list management
 function AddToYourList(codiceVersione, rw) {
     $.ajax({
         type: 'GET',
@@ -355,9 +344,26 @@ function ChangeWriteMode(codiceVersione, rw) {
     });
 }
 
-function RemoveFromYourListObjectGrid(event, item) {
-    event.stopPropagation();
-    RemoveFromYourList($('#objectsGrid').data('kendoGrid').dataItem(item.parent().parent())["CodiceVersione"]);
+function RemoveFromYourList(codiceVersione) {
+    $.ajax({
+        type: 'GET',
+        url: 'php/removeFromImportListCodice.php',
+        dataType: "json",
+        data: {
+            codiceVersione: codiceVersione
+        },
+        success: function (resultData) {
+            if (resultData === "ok") {
+                var dataItem = GetDataItemFromVersione(codiceVersione);
+                dataItem.set("readonly", null);
+                UpdateInformation(dataItem["CodiceVersione"], dataItem["readonly"])
+            }
+        },
+        error: function (jqXHR, textStatus, errorThrown) {
+            console.log(textStatus, errorThrown);
+            alert("Unexpected error while removing object to your list");
+        }
+    });
 }
 
 // Information
@@ -373,6 +379,28 @@ function GetLocaleDateTime(data) {
  */
 function GetLocaleDate(data) {
     return data != null ? new Date(Date.parse(data.replace(" ", "T").substring(0, data.length - 3))).toLocaleDateString() : "";
+}
+
+function UpdateDynamicInformationFields() {
+    UpdateCategoryList();
+}
+
+function UpdateCategoryList() {
+    $.ajax({
+        type: 'GET',
+        url: 'php/getCategoryList.php',
+        dataType: "json",
+        data: {},
+        success: function (resultData) {
+            var categoryCombo = $("#infoCategory").data("kendoComboBox");
+            categoryCombo.setDataSource(resultData["categoryList"]);
+            categoryCombo.dataSource.group({field: "GruppoCategoria"});
+        },
+        error: function (jqXHR, textStatus, errorThrown) {
+            console.log(textStatus, errorThrown);
+            alert("Unexpected error during the update of the category list.");
+        }
+    });
 }
 
 function UpdateInformation(codiceVersione, readonly) {
@@ -440,6 +468,8 @@ function UpdateInformation(codiceVersione, readonly) {
                 $("#infoCantiereEliminazione").val(resultData["CantiereEliminazione"]);
                 $("#infoCantiereEliminazioneInizio").val(GetLocaleDate(resultData["EliminazioneDataInizio"]));
                 $("#infoCantiereEliminazioneFine").val(GetLocaleDate(resultData["EliminazioneDataFine"]));
+
+                $("#infoCategory").data("kendoComboBox").value(resultData["Categoria"]);
 
                 $("#infoCodiceOggetto").val(resultData["CodiceOggetto"]);
                 $("#infoCodiceVersione").val(resultData["CodiceVersione"]);
@@ -638,30 +668,10 @@ function InitializeComponents() {
 
         function SetInformationDefaultSheets() {
             function SetInformationCategorySheet() {
-                function UpdateCategoryList() {
-                    $.ajax({
-                        type: 'GET',
-                        url: 'php/getCategoryList.php',
-                        dataType: "json",
-                        data: {},
-                        success: function (resultData) {
-                            var categoryCombo = $("#infoCategory").data("kendoComboBox");
-                            categoryCombo.setDataSource(resultData["categoryList"]);
-                            categoryCombo.dataSource.group({field: "GruppoCategoria"});
-                        },
-                        error: function (jqXHR, textStatus, errorThrown) {
-                            console.log(textStatus, errorThrown);
-                            alert("Unexpected error during the update of the category list.");
-                        }
-                    });
-                }
-
                 $("#infoCategory").kendoComboBox({
                     dataTextField: "Nome",
                     dataValueField: "Codice"
                 }).data("kendoComboBox");
-
-                UpdateCategoryList();
             }
 
             function SetInformationWindowProvaCard() {
