@@ -103,13 +103,13 @@ function ResizeInformationWindow() {
 
 function ChangeInformationFieldsStyle() {
     if ($("#informationWindowTabObject").width() < 600) {
-        if (!$("#infoCategoryCombo").hasClass("labelMultiline")) {
+        if (!$("#infoCategory").hasClass("labelMultiline")) {
             $(".informationFieldContainer label").removeClass("labelInline").addClass("labelMultiline");
             $(".informationFieldContainer .k-textbox").removeClass("inputInline").addClass("inputMultiline");
             $(".informationFieldContainer .k-widget").removeClass("inputInline").addClass("inputMultiline");
         }
     }
-    else if (!$("#infoCategoryCombo").hasClass("labelInline")) {
+    else if (!$("#infoCategory").hasClass("labelInline")) {
         $(".informationFieldContainer label").removeClass("labelMultiline").addClass("labelInline");
         $(".informationFieldContainer .k-textbox").removeClass("inputMultiline").addClass("inputInline");
         $(".informationFieldContainer .k-widget").removeClass("inputMultiline").addClass("inputInline");
@@ -638,25 +638,30 @@ function InitializeComponents() {
 
         function SetInformationDefaultSheets() {
             function SetInformationCategorySheet() {
-                var data = [
-                    {text: "Item 1", value: "1"},
-                    {text: "Item 2", value: "2"},
-                    {text: "Item 3", value: "3"}
-                ];
+                function UpdateCategoryList() {
+                    $.ajax({
+                        type: 'GET',
+                        url: 'php/getCategoryList.php',
+                        dataType: "json",
+                        data: {},
+                        success: function (resultData) {
+                            var categoryCombo = $("#infoCategory").data("kendoComboBox");
+                            categoryCombo.setDataSource(resultData["categoryList"]);
+                            categoryCombo.dataSource.group({field: "GruppoCategoria"});
+                        },
+                        error: function (jqXHR, textStatus, errorThrown) {
+                            console.log(textStatus, errorThrown);
+                            alert("Unexpected error during the update of the category list.");
+                        }
+                    });
+                }
 
-                var data2 = [
-                    {text: "Item 1", value: "1"},
-                    {text: "Item 2", value: "2"},
-                    {text: "Item 3", value: "3"}
-                ];
-
-                $("#infoCategoryGroupCombo").kendoComboBox({
-                    dataSource: data
+                $("#infoCategory").kendoComboBox({
+                    dataTextField: "Nome",
+                    dataValueField: "Codice"
                 }).data("kendoComboBox");
 
-                $("#infoCategoryCombo").kendoComboBox({
-                    dataSource: data2
-                }).data("kendoComboBox");
+                UpdateCategoryList();
             }
 
             function SetInformationWindowProvaCard() {
