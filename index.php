@@ -231,7 +231,7 @@
                             <input id="infoCategory" type="text">
                         </div>
                         <div class="buttonContainer">
-                            <button class="buttonBordered">SAVE</button>
+                            <button id="saveInfoCategory" class="buttonBordered">SAVE</button>
                         </div>
                     </div>
 

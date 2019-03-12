@@ -214,7 +214,6 @@ function SetObjectGridDataSource(objectList) {
 
 function LoadUserListObjectGrid() {
     $.ajax({
-        type: 'GET',
         url: 'php/getImportList.php',
         dataType: "json",
         success: function (resultData) {
@@ -222,14 +221,13 @@ function LoadUserListObjectGrid() {
         },
         error: function (jqXHR, textStatus, errorThrown) {
             console.log(textStatus, errorThrown);
-            alert("Unexpected error while loading import list.");
+            alert("Unexpected error while loading import list!");
         }
     });
 }
 
 function SearchObjects() {
     $.ajax({
-        type: 'GET',
         url: 'php/searchObjects.php',
         dataType: "json",
         data: {
@@ -245,7 +243,7 @@ function SearchObjects() {
         },
         error: function (jqXHR, textStatus, errorThrown) {
             console.log(textStatus, errorThrown);
-            alert("Unexpected error while searching objects.");
+            alert("Unexpected error while searching objects!");
         }
     });
 }
@@ -268,7 +266,6 @@ function RemoveFromYourListObjectGrid(event, item) {
 // Your list management
 function AddToYourList(codiceVersione, rw) {
     $.ajax({
-        type: 'GET',
         url: 'php/addImportListCodice.php',
         dataType: "json",
         data: {
@@ -290,14 +287,13 @@ function AddToYourList(codiceVersione, rw) {
         },
         error: function (jqXHR, textStatus, errorThrown) {
             console.log(textStatus, errorThrown);
-            alert("Unexpected error while adding object to your list");
+            alert("Unexpected error while adding object to your list!");
         }
     });
 }
 
 function ChangeWriteMode(codiceVersione, rw) {
     $.ajax({
-        type: 'GET',
         url: 'php/removeFromImportListCodice.php',
         dataType: "json",
         data: {
@@ -306,7 +302,6 @@ function ChangeWriteMode(codiceVersione, rw) {
         success: function (resultData) {
             if (resultData === "ok") {
                 $.ajax({
-                    type: 'GET',
                     url: 'php/addImportListCodice.php',
                     dataType: "json",
                     data: {
@@ -332,21 +327,20 @@ function ChangeWriteMode(codiceVersione, rw) {
                     error: function (jqXHR, textStatus, errorThrown) {
                         dataItem.set("readonly", null);
                         console.log(textStatus, errorThrown);
-                        alert("Unexpected error while adding object to your list");
+                        alert("Unexpected error while adding object to your list!");
                     }
                 });
             }
         },
         error: function (jqXHR, textStatus, errorThrown) {
             console.log(textStatus, errorThrown);
-            alert("Unexpected error while removing object to your list");
+            alert("Unexpected error while removing object to your list!");
         }
     });
 }
 
 function RemoveFromYourList(codiceVersione) {
     $.ajax({
-        type: 'GET',
         url: 'php/removeFromImportListCodice.php',
         dataType: "json",
         data: {
@@ -361,7 +355,7 @@ function RemoveFromYourList(codiceVersione) {
         },
         error: function (jqXHR, textStatus, errorThrown) {
             console.log(textStatus, errorThrown);
-            alert("Unexpected error while removing object to your list");
+            alert("Unexpected error while removing object to your list!");
         }
     });
 }
@@ -388,10 +382,8 @@ function SetDynamicInformationFields() {
 
 function UpdateCategoryList() {
     $.ajax({
-        type: 'GET',
         url: 'php/getCategoryList.php',
         dataType: "json",
-        data: {},
         success: function (resultData) {
             var categoryCombo = $("#infoCategory").data("kendoComboBox");
             categoryCombo.setDataSource(resultData["categoryList"]);
@@ -400,7 +392,7 @@ function UpdateCategoryList() {
         },
         error: function (jqXHR, textStatus, errorThrown) {
             console.log(textStatus, errorThrown);
-            alert("Unexpected error during the update of the category list.");
+            alert("Unexpected error during the update of the category list!");
         }
     });
 }
@@ -409,6 +401,8 @@ function ResetInformation() {
     $("#informationWindowTabControl").find("input").each(function (i, elem) {
         elem.value = null;
     });
+
+    $("#saveInfoCategory").unbind("click", ChangeCategory);
 }
 
 function UpdateInformation(codiceVersione, readonly) {
@@ -456,7 +450,6 @@ function UpdateInformation(codiceVersione, readonly) {
         }
 
         $.ajax({
-            type: 'GET',
             url: 'php/getBaseInformation.php',
             dataType: "json",
             data: {
@@ -501,13 +494,39 @@ function UpdateInformation(codiceVersione, readonly) {
             },
             error: function (jqXHR, textStatus, errorThrown) {
                 console.log(textStatus, errorThrown);
-                alert("Unexpected error while loading base information");
+                alert("Unexpected error while loading base information!");
             }
         });
     }
 
     UpdateBaseInformation(codiceVersione);
     $("#informationReadOnlySwitch").data("kendoSwitch").check(readonly === "f");
+
+    $("#saveInfoCategory").unbind("click", ChangeCategory).bind("click", ChangeCategory);
+}
+
+function ChangeCategory() {
+    if ($("#informationReadOnlySwitch").data("kendoSwitch").check()) {
+        var categoryCombo = $("#infoCategory").data("kendoComboBox");
+        $.ajax({
+            url: 'php/setCategory.php',
+            dataType: "json",
+            data: {
+                codiceOggetto: $("#infoCodiceOggetto").val(),
+                codiceCategoria: categoryCombo.select() !== -1 ? categoryCombo.value() : "null"
+            },
+            success: function () {
+                alert("Category changed");
+            },
+            error: function (jqXHR, textStatus, errorThrown) {
+                console.log(textStatus, errorThrown);
+                alert("Unexpected error while change object category!");
+            }
+        });
+    }
+    else {
+        alert("Can't change category in read only mode!");
+    }
 }
 
 // Components
@@ -551,7 +570,6 @@ function InitializeComponents() {
 
         function UpdateSearchFormCombobox(senderId) {
             $.ajax({
-                type: 'GET',
                 url: 'php/getListLayersAndName.php',
                 dataType: "json",
                 data: {
@@ -570,7 +588,7 @@ function InitializeComponents() {
                 },
                 error: function (jqXHR, textStatus, errorThrown) {
                     console.log(textStatus, errorThrown);
-                    alert("Unexpected error during the update of the search fields.");
+                    alert("Unexpected error during the update of the search fields!");
                 }
             });
         }
