@@ -209,7 +209,7 @@ function GetDataItemFromVersione(codiceVersione) {
 function SetObjectGridDataSource(objectList) {
     $("#objectsGrid").data("kendoGrid").setDataSource(new kendo.data.DataSource({data: objectList}));
 
-    UpdateDynamicInformationFields();
+    SetDynamicInformationFields();
 }
 
 function LoadUserListObjectGrid() {
@@ -381,8 +381,9 @@ function GetLocaleDate(data) {
     return data != null ? new Date(Date.parse(data.replace(" ", "T").substring(0, data.length - 3))).toLocaleDateString() : "";
 }
 
-function UpdateDynamicInformationFields() {
+function SetDynamicInformationFields() {
     UpdateCategoryList();
+    ResetInformation();
 }
 
 function UpdateCategoryList() {
@@ -395,11 +396,18 @@ function UpdateCategoryList() {
             var categoryCombo = $("#infoCategory").data("kendoComboBox");
             categoryCombo.setDataSource(resultData["categoryList"]);
             categoryCombo.dataSource.group({field: "GruppoCategoria"});
+            categoryCombo.value(null);
         },
         error: function (jqXHR, textStatus, errorThrown) {
             console.log(textStatus, errorThrown);
             alert("Unexpected error during the update of the category list.");
         }
+    });
+}
+
+function ResetInformation() {
+    $("#informationWindowTabControl").find("input").each(function (i, elem) {
+        elem.value = null;
     });
 }
 

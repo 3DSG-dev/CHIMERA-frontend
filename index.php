@@ -224,7 +224,7 @@
                         </div>
                     </div>
 
-                    <div id="infoWndCategoryCard" class="cardContainer col-md-6-boxed col-xs-12">
+                    <div class="cardContainer col-md-6-boxed col-xs-12">
                         <h3 class="sheetTitle">Category</h3>
                         <div class="informationFieldContainer">
                             <label for="infoCategory">Category</label>
