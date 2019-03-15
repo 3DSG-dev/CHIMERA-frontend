@@ -1,5 +1,5 @@
 <?php
-    include("php/auth.php");
+    include("./php/auth.php");
 ?>
 
 <!DOCTYPE html>
@@ -10,19 +10,19 @@
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <meta charset="iso-8859-15">
 
-        <script src="libs/jquery-3.3.1.min.js"></script>
+        <script src="./libs/jquery-3.3.1.min.js"></script>
 
         <!-- Common Kendo UI CSS for web widgets and widgets for data visualization. -->
-        <!--<link href="libs/KendoUI/styles/kendo.common.min.css" rel="stylesheet" />-->
+        <link href="./libs/KendoUI/styles/kendo.common.min.css" rel="stylesheet" />
         <!-- (Optional) RTL CSS for Kendo UI widgets for the web. Include only in right-to-left applications. -->
-        <link href="libs/KendoUI/styles/kendo.rtl.min.css" rel="stylesheet" type="text/css" />
+        <link href="./libs/KendoUI/styles/kendo.rtl.min.css" rel="stylesheet" type="text/css" />
         <!-- Default Kendo UI theme CSS for web widgets and widgets for data visualization. -->
-        <link href="libs/KendoUI/styles/kendo.default.min.css" rel="stylesheet" type="text/css" />
+        <link href="./libs/KendoUI/styles/kendo.default.min.css" rel="stylesheet" type="text/css" />
         <!-- (Optional) Kendo UI Hybrid CSS. Include only if you will use the mobile devices features. -->
-        <link href="libs/KendoUI/styles/kendo.default.mobile.min.css" rel="stylesheet" type="text/css" />
-        <script src="libs/KendoUI/kendo.all.min.js"></script>
-        <link rel="stylesheet" type="text/css" href="css/KendoUI.css" />
-        <link rel="stylesheet" type="text/css" href="css/KendoUIBootstrap.css" />
+        <link href="./libs/KendoUI/styles/kendo.default.mobile.min.css" rel="stylesheet" type="text/css" />
+        <script src="./libs/KendoUI/kendo.all.min.js"></script>
+        <link rel="stylesheet" type="text/css" href="./css/KendoUI.css" />
+        <link rel="stylesheet" type="text/css" href="./css/KendoUIBootstrap.css" />
 
         <!--suppress JSUnusedLocalSymbols -->
         <script>
@@ -35,42 +35,42 @@
             var _validUser = "<?php echo isset($_SESSION['validUser']); ?>";
         </script>
 
-        <script type="text/javascript" src="js/BIM3DSG.js" charset="iso-8859-15"></script>
+        <script type="text/javascript" src="./js/BIM3DSG.js" charset="iso-8859-15"></script>
 
-        <link rel="stylesheet" type="text/css" href="css/BIM3DSG.css" />
+        <link rel="stylesheet" type="text/css" href="./css/BIM3DSG.css" />
     </head>
     <body>
         <div id="pageContainer">
             <div id="headerContainer">
                 <div id="logo3DSurveySmall" class="loghi">
                     <a href="http://www.sitech-3dsurvey.polimi.it" target="_blank">
-                        <img src="img/logo_3dsurvey_60.png" alt="Logo 3D Survey">
+                        <img src="img/loghi/logo_3dsurvey_tiny.png" alt="Logo 3D Survey Group">
                     </a>
                 </div>
                 <div id="logo3DSurveyLarge" class="loghi">
                     <a href="http://www.sitech-3dsurvey.polimi.it" target="_blank">
-                        <img src="img/logo_3dsurvey_full_60.png" alt="Logo 3D Survey">
+                        <img src="img/loghi/logo_3dsurvey_full.png" alt="Logo 3D Survey Group">
                     </a>
                 </div>
                 <div id="logoPolimiSmall" class="loghi">
                     <a href="http://www.polimi.it" target="_blank">
-                        <img src="img/logo_polimi_60.png" alt="Logo Polimi">
+                        <img src="img/loghi/logo_polimi_tiny.png" alt="Logo Politecnico di Milano">
                     </a>
                 </div>
                 <div id="logoPolimiLarge" class="loghi">
                     <a href="http://www.polimi.it" target="_blank">
-                        <img src="img/logo_polimi_full_60.png" alt="Logo Polimi">
+                        <img src="img/loghi/logo_polimi_full.png" alt="Logo Politecnico di Milano">
                     </a>
                 </div>
 
                 <?php
                     if (isset($_SESSION['validUser'])) {
                         echo '
-                            <div id="logoutButton" class="logoutIcon userInfo">
-                                <a href="php/logout.php" title="Logout ' . $_SESSION['validUserName'] . '"><img src="img/lock_icon_grey.png" alt="logout"></a>
+                            <div id="logoutButton">
+                                <a href="php/logout.php" title="Logout ' . $_SESSION['validUserName'] . '"><img src="./img/icons/lock_icon_grey.png" alt="logout"></a>
                             </div>
                             <div id="userContainer">
-                                <div id="userPicture" class="userInfo" style=\'background-image: url("img/user_icon.png")\'></div>
+                                <div id="userPicture" class="userInfo"></div>
                                 <div id="userName" class="userInfo">' . $_SESSION['fullName'] . '</div>
                             </div>
                         ';
@@ -112,11 +112,10 @@
                             </div>
 
                             <div class="selectObjectButtonsContainer">
-                                <div class="buttonContainer selectObjectSearchButton">
+                                <div id="searchObjectButton" class="buttonContainer">
                                     <button onclick="SearchObjects()" class="buttonBordered">SEARCH</button>
                                 </div>
-
-                                <div class="buttonContainer selectObjectUseyourlistButton">
+                                <div id="loadUserListButton" class="buttonContainer">
                                     or
                                     <button onclick="LoadUserListObjectGrid()" class="buttonBordered">USE YOUR LIST</button>
                                 </div>
@@ -134,18 +133,18 @@
                 <div id="sideToolbarList" class="k-widget k-listview k-selectable">
                     <div class="sideToolbarItem">
                         <span class="sideToolbarButton mode3dBtn" title="Go to 3D mode">
-                            <img src="img/3d_mode_icon.png" alt="3D Mode">
+                            <img src="img/icons/3d_icon.png" alt="3D Mode">
                         </span>
                     </div>
                     <div class="sideToolbarSeparator"></div>
                     <div class="sideToolbarItem">
                         <span class="sideToolbarButton" title="Delete list">
-                            <img src="img/delete_list_icon.png" alt="Delete list">
+                            <img src="img/icons/deleteList_icon.png" alt="Delete list">
                         </span>
                     </div>
                     <div class="sideToolbarItem">
                         <span id="informationButton" class="sideToolbarButton" title="Information">
-                            <img src="img/information_icon.png" alt="Information">
+                            <img src="img/icons/information_icon49x49.png" alt="Information">
                         </span>
                     </div>
                 </div>
@@ -167,185 +166,190 @@
                     <li>Subversion information</li>
                 </ul>
 
-                <div id="informationWindowTabObject" class="informationWindowTabItem">
-                    <div class="cardContainer col-md-6-boxed col-xs-12">
+                <div id="informationObjectTab" class="informationWindowTabItem">
+                    <div class="sheetBoxedContainer">
                         <h3 class="sheetTitle">Main information</h3>
                         <div class="informationFieldContainer">
-                            <label for="infoLayer0"><?php echo $_SESSION["layer0Label"]; ?></label>
+                            <div class="labelContainer"><label for="infoLayer0"><?php echo $_SESSION["layer0Label"]; ?></label></div>
                             <input id="infoLayer0" type="text" class="k-textbox" readonly />
                         </div>
                         <div class="informationFieldContainer">
-                            <label for="infoLayer1"><?php echo $_SESSION["layer1Label"]; ?></label>
+                            <div class="labelContainer"><label for="infoLayer1"><?php echo $_SESSION["layer1Label"]; ?></label></div>
                             <input id="infoLayer1" type="text" class="k-textbox" readonly />
                         </div>
                         <div class="informationFieldContainer">
-                            <label for="infoLayer2"><?php echo $_SESSION["layer2Label"]; ?></label>
+                            <div class="labelContainer"><label for="infoLayer2"><?php echo $_SESSION["layer2Label"]; ?></label></div>
                             <input id="infoLayer2" type="text" class="k-textbox" readonly />
                         </div>
                         <div class="informationFieldContainer">
-                            <label for="infoLayer3"><?php echo $_SESSION["layer3Label"]; ?></label>
+                            <div class="labelContainer"><label for="infoLayer3"><?php echo $_SESSION["layer3Label"]; ?></label></div>
                             <input id="infoLayer3" type="text" class="k-textbox" readonly />
                         </div>
                         <div class="informationFieldContainer">
-                            <label for="infoName"><?php echo $_SESSION["nomeLabel"]; ?></label>
+                            <div class="labelContainer"><label for="infoName"><?php echo $_SESSION["nomeLabel"]; ?></label></div>
                             <input id="infoName" type="text" class="k-textbox" readonly />
                         </div>
                         <div class="informationFieldContainer">
-                            <label for="infoCreated">Created</label>
+                            <div class="labelContainer"><label for="infoCreated">Created</label></div>
                             <input id="infoCreated" type="text" class="k-textbox" readonly />
                         </div>
                         <div class="informationFieldContainer">
-                            <label for="infoRemoved">Removed</label>
+                            <div class="labelContainer"><label for="infoRemoved">Removed</label></div>
                             <input id="infoRemoved" type="text" class="k-textbox" readonly />
                         </div>
                         <div class="informationFieldContainer">
-                            <label for="infoCantiereCreazione">Added during campaign n&ordm;</label>
+                            <div class="labelContainer"><label for="infoCantiereCreazione">Added during campaign n&ordm;</label></div>
                             <input id="infoCantiereCreazione" type="text" class="k-textbox" readonly />
                         </div>
                         <div class="informationFieldContainer">
-                            <label for="infoCantiereCreazioneInizio"> .started</label>
+                            <div class="labelContainer"><label for="infoCantiereCreazioneInizio"> .started</label></div>
                             <input id="infoCantiereCreazioneInizio" type="text" class="k-textbox" readonly />
                         </div>
                         <div class="informationFieldContainer">
-                            <label for="infoCantiereCreazioneFine"> .closed</label>
+                            <div class="labelContainer"><label for="infoCantiereCreazioneFine"> .closed</label></div>
                             <input id="infoCantiereCreazioneFine" type="text" class="k-textbox" readonly />
                         </div>
                         <div class="informationFieldContainer">
-                            <label for="infoCantiereEliminazione">Removed during campaign n&ordm;</label>
+                            <div class="labelContainer"><label for="infoCantiereEliminazione">Removed during campaign n&ordm;</label></div>
                             <input id="infoCantiereEliminazione" type="text" class="k-textbox" readonly />
                         </div>
                         <div class="informationFieldContainer">
-                            <label for="infoCantiereEliminazioneInizio"> .started</label>
+                            <div class="labelContainer"><label for="infoCantiereEliminazioneInizio"> .started</label></div>
                             <input id="infoCantiereEliminazioneInizio" type="text" class="k-textbox" readonly />
                         </div>
                         <div class="informationFieldContainer">
-                            <label for="infoCantiereEliminazioneFine"> .closed</label>
+                            <div class="labelContainer"><label for="infoCantiereEliminazioneFine"> .closed</label></div>
                             <input id="infoCantiereEliminazioneFine" type="text" class="k-textbox" readonly />
                         </div>
                     </div>
-
-                    <div class="cardContainer col-md-6-boxed col-xs-12">
+                    <div id="infoCategoryContainer" class="sheetBoxedContainer">
                         <h3 class="sheetTitle">Category</h3>
                         <div class="informationFieldContainer">
-                            <label for="infoCategory">Category</label>
+                            <div class="labelContainer"><label for="infoCategory">Category</label></div>
                             <input id="infoCategory" type="text">
                         </div>
                         <div class="buttonContainer">
                             <button id="saveInfoCategory" class="buttonBordered">SAVE</button>
                         </div>
                     </div>
-
-                    <div id="infoWndProvaCard" class="cardContainer col-md-6-boxed col-xs-12">
+                    <div class="sheetBoxedContainer">
                         <h3 class="sheetTitle">Prova informations</h3>
                         <div class="informationFieldContainer ">
-                            <label for="selectNumber">Number</label>
+                            <div class="labelContainer"><label for="selectNumber">Number</label></div>
                             <input id="selectNumber" type="number" value="" min="0" max="100" step="1" />
                         </div>
                         <div class="informationFieldContainer">
-                            <label for="selectNumberDecimal">Number Decimal</label>
+                            <div class="labelContainer"><label for="selectNumberDecimal">Number Decimal</label></div>
                             <input id="selectNumberDecimal" type="number" value="" min="0" max="100" step="1" />
                         </div>
                         <div class="informationFieldContainer ">
-                            <label for="selectDropDown">Dropdown list</label>
+                            <div class="labelContainer"><label for="selectDropDown">Dropdown list</label></div>
                             <input id="selectDropDown" />
                         </div>
                         <div class="informationFieldContainer">
-                            <label for="selectDate">Data</label>
+                            <div class="labelContainer"><label for="selectMultiSelect">Multiselect</label></div>
+                            <select id="selectMultiSelect"></select>
+                        </div>
+                        <div class="informationFieldContainer">
+                            <div class="labelContainer"><label for="selectDate">Data</label></div>
                             <input id="selectDate">
                         </div>
                         <div class="informationFieldContainer">
-                            <label for="selectCheckbox" class="k-checkbox-label">Checkbox</label>
-                            <input id="selectCheckbox" type="checkbox" class="k-checkbox">
+                            <div class="labelContainer"><label for="selectSwitch">switch checkbox</label></div>
+                            <input type="checkbox" id="selectSwitch" />
                         </div>
-                        <div style="clear:both"></div>
+                        <div class="informationFieldContainer">
+                            <div class="labelContainer"><label for="provaGroupComboCategory">Category</label></div>
+                            <input id="provaGroupComboCategory" type="text">
+                        </div>
                         <div class="buttonContainer">
                             <button class="buttonBordered">SAVE</button>
                         </div>
                     </div>
-
                 </div>
-                <div id="versionInfoTab" class="infownd-tabitem">
-                    <div id="versionInformationSheet" class="cardContainer col-md-6-boxed col-xs-12">
+                <div id="informationVersionTab" class="informationWindowTabItem">
+                    <div class="sheetBoxedContainer">
                         <h3 class="sheetTitle">Internal information</h3>
                         <div class="informationFieldContainer">
-                            <label for="infoCodiceOggetto">Codice Oggetto</label>
+                            <div class="labelContainer"><label for="infoCodiceOggetto">Codice Oggetto</label></div>
                             <input id="infoCodiceOggetto" type="text" class="k-textbox" readonly />
                         </div>
                         <div class="informationFieldContainer">
-                            <label for="infoCodiceVersione">Codice Versione</label>
+                            <div class="labelContainer"><label for="infoCodiceVersione">Codice Versione</label></div>
                             <input id="infoCodiceVersione" type="text" class="k-textbox" readonly />
                         </div>
                         <div class="informationFieldContainer">
-                            <label for="infoVersione">Versione</label>
+                            <div class="labelContainer"><label for="infoVersione">Versione</label></div>
                             <input id="infoVersione" type="text" class="k-textbox" readonly />
                         </div>
                         <div class="informationFieldContainer">
-                            <label for="infoOriginale">Originale</label>
+                            <div class="labelContainer"><label for="infoOriginale">Originale</label></div>
                             <input id="infoOriginale" type="text" class="k-textbox" readonly />
                         </div>
                         <div class="informationFieldContainer">
-                            <label for="infoCodiceModello">Codice Modello</label>
+                            <div class="labelContainer"><label for="infoCodiceModello">Codice Modello</label></div>
                             <input id="infoCodiceModello" type="text" class="k-textbox" readonly />
                         </div>
                         <div class="informationFieldContainer">
-                            <label for="infoLive">State</label>
+                            <div class="labelContainer"><label for="infoLive">State</label></div>
                             <input id="infoLive" type="text" class="k-textbox" readonly />
                         </div>
                         <div class="informationFieldContainer">
-                            <label for="infoLastUpdateBy">Update by</label>
+                            <div class="labelContainer"><label for="infoLastUpdateBy">Update by</label></div>
                             <input id="infoLastUpdateBy" type="text" class="k-textbox" readonly />
                         </div>
                         <div class="informationFieldContainer">
-                            <label for="infoLastUpdate">Update on</label>
+                            <div class="labelContainer"><label for="infoLastUpdate">Update on</label></div>
                             <input id="infoLastUpdate" type="text" class="k-textbox" readonly />
                         </div>
                         <div class="informationFieldContainer">
-                            <label for="infoLock">Lock by</label>
+                            <div class="labelContainer"><label for="infoLock">Lock by</label></div>
                             <input id="infoLock" type="text" class="k-textbox" readonly />
                         </div>
                     </div>
-                    <div id="modelInformationSheet" class="cardContainer col-md-6-boxed col-xs-12">
+                    <div class="sheetBoxedContainer">
                         <h3 class="sheetTitle">Model information</h3>
                         <div class="informationFieldContainer">
-                            <label for="infoCodiceModello2">Codice Modello</label>
+                            <div class="labelContainer"><label for="infoCodiceModello2">Codice Modello</label></div>
                             <input id="infoCodiceModello2" type="text" class="k-textbox" readonly />
                         </div>
                         <div class="informationFieldContainer">
-                            <label for="infoSuperficie">Area</label>
+                            <div class="labelContainer"><label for="infoSuperficie">Area</label></div>
                             <input id="infoSuperficie" type="text" class="k-textbox" readonly />
                         </div>
                         <div class="informationFieldContainer">
-                            <label for="infoVolume">Volume</label>
+                            <div class="labelContainer"><label for="infoVolume">Volume</label></div>
                             <input id="infoVolume" type="text" class="k-textbox" readonly />
                         </div>
                         <div class="informationFieldContainer">
-                            <label for="infoUpdateBy">Update by</label>
+                            <div class="labelContainer"><label for="infoUpdateBy">Update by</label></div>
                             <input id="infoUpdateBy" type="text" class="k-textbox" readonly />
                         </div>
                         <div class="informationFieldContainer">
-                            <label for="infoUpdateOn">Update on</label>
+                            <div class="labelContainer"><label for="infoUpdateOn">Update on</label></div>
                             <input id="infoUpdateOn" type="text" class="k-textbox" readonly />
                         </div>
                         <div class="informationFieldContainer">
-                            <label for="infoCenterX">Center x</label>
+                            <div class="labelContainer"><label for="infoCenterX">Center x</label></div>
                             <input id="infoCenterX" type="text" class="k-textbox" readonly />
                         </div>
                         <div class="informationFieldContainer">
-                            <label for="infoCenterY">Center y</label>
+                            <div class="labelContainer"><label for="infoCenterY">Center y</label></div>
                             <input id="infoCenterY" type="text" class="k-textbox" readonly />
                         </div>
                         <div class="informationFieldContainer">
-                            <label for="infoCenterZ">Center z</label>
+                            <div class="labelContainer"><label for="infoCenterZ">Center z</label></div>
                             <input id="infoCenterZ" type="text" class="k-textbox" readonly />
                         </div>
                         <div class="informationFieldContainer">
-                            <label for="infoRadius">Diagonal</label>
+                            <div class="labelContainer"><label for="infoRadius">Diagonal</label></div>
                             <input id="infoRadius" type="text" class="k-textbox" readonly />
                         </div>
                     </div>
-                    <div id="subversionInfoTab" class="infownd-tabitem">
-                    </div>
+                </div>
+                <div id="informationSubVersionTab" class="informationWindowTabItem">
                 </div>
             </div>
+        </div>
     </body>
 </html>
