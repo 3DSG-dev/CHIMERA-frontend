@@ -1,6 +1,10 @@
 :root {
-    --main-color: #577cb1;
+    --main-color: #547ab0;
     --main-color-over: #1a498c;
+    --bluchiaro-sfondo: #ebeff5;
+    --bluchiaro-hovered-background: #d4e8f9;
+    --blumedio-selected-background: #1984c8;
+    --bluscuro-sfondo: #004577;
     --grigioscuro: #9c9d9e;
     --grigiomedio: #ccc;
     --grigiochiaro: #f6f6f6;
@@ -63,7 +67,7 @@ a:focus {
     outline-offset: -2px;
 }
 
-/* PAGE */
+/* Page */
 html, body {
     font-family: 'Roboto', sans-serif;
     font-size: 14px;
@@ -71,8 +75,13 @@ html, body {
     height: 100vh;
     margin: 0;
     color: #333;
+    background-color: var(--bluchiaro-sfondo);
     -ms-text-size-adjust: 100%;
     -webkit-text-size-adjust: 100%;
+}
+
+body {
+    overflow: hidden;
 }
 
 #pageContainer {
@@ -88,11 +97,26 @@ html, body {
     position: fixed;
 }
 
+.colonnaInteraBoxed {
+    float: left;
+    width: calc(96% - 2px);
+    margin-bottom: 6px;
+    padding: 3px 2%;
+}
+
+.colonnaMezziBoxed {
+    float: left;
+    width: calc(44% - 2px);
+    margin: 1%;
+    padding: 3px 2%;
+}
+
 /* Header */
 #headerContainer {
     height: 68px;
     min-height: 68px;
     text-align: center;
+    background-color: #fff;
 }
 
 .loghi {
@@ -129,19 +153,15 @@ html, body {
     height: 2rem;
     border: 2px solid var(--grigiochiaro);
     border-radius: 50%;
-    background: #fff no-repeat;
+    background: url("../img/icons/user_icon.png") no-repeat;
     background-size: cover;
 }
 
 #logoutButton {
     float: right;
-    height: 68px;
-    margin-right: 25px;
-}
-
-.logoutIcon {
     width: 2.5rem;
-    height: 2.5rem;
+    height: 68px;
+    margin: 20px 25px 0 0;
 }
 
 /* Sidebar */
@@ -180,12 +200,16 @@ html, body {
     background-color: var(--main-color);
 }
 
-.sideToolbarButton:hover {
+.sideToolbarButton:hover, .sideToolbarButton:focus {
     background-color: #7590c6;
 }
 
-.sideToolbarButton:focus {
-    background-color: #7590c6;
+.sideToolbarButton.mode3dBtn {
+    background-color: #f79e45;
+}
+
+.sideToolbarButton.mode3dBtn:hover, .sideToolbarButton.mode3dBtn:focus {
+    background-color: #fcac5d;
 }
 
 .sideToolbarButton img {
@@ -194,23 +218,11 @@ html, body {
     vertical-align: middle;
 }
 
-.sideToolbarButton.mode3dBtn {
-    background-color: #f79e45;
-}
-
-.sideToolbarButton.mode3dBtn:hover {
-    background-color: #fcac5d;
-}
-
-.sideToolbarButton.mode3dBtn:focus {
-    background-color: #fcac5d;
-}
-
 .sideToolbarSeparator {
     margin-bottom: 20px;
 }
 
-/* PAGE SECTIONS, ROWS, COLUMNS */
+/* Page Sections, Rows, Columns */
 .pageSection {
     padding: 10px 10px 10px 10px;
 }
@@ -231,7 +243,7 @@ html, body {
     padding: 0 35px 0 35px;
 }
 
-/* SELECT OBJECT SECTION */
+/* Select object section */
 .selectObjectSection {
     padding: 15px 0;
     background-color: #004577;
@@ -253,7 +265,7 @@ html, body {
     margin-bottom: 10px;
 }
 
-/* SELECT OBJECT FORM */
+/* Select object form */
 .selectObjectSearchFieldsContainer {
     overflow: hidden;
     width: 98%;
@@ -269,12 +281,7 @@ html, body {
 }
 
 .selectObjectComboContainer label {
-    line-height: .7;
-}
-
-.selectObjectUselistContainer {
-    margin-top: 14px;
-    margin-bottom: 10px;
+    height: 31px;
 }
 
 .selectObjectButtonsContainer {
@@ -285,7 +292,7 @@ html, body {
     margin: 0 auto;
 }
 
-.selectObjectSearchButton {
+#searchObjectButton {
     float: left;
     width: 33%;
     min-height: 35px;
@@ -294,15 +301,15 @@ html, body {
     background-color: #d4e8f9;
 }
 
-.selectObjectSearchButton .buttonBordered {
+#searchObjectButton .buttonBordered {
     background: rgba(255, 255, 255, 0.2);
 }
 
-.selectObjectSearchButton .buttonBordered:hover {
+#searchObjectButton .buttonBordered:hover {
     background-color: var(--main-color);
 }
 
-.selectObjectUseyourlistButton {
+#loadUserListButton {
     float: left;
     width: 56%;
     min-height: 35px;
@@ -310,11 +317,10 @@ html, body {
     background-color: #fff;
 }
 
-/* SELECT OBJECT home page RESULT GRID */
+/* Grid object list section */
 #objectsGridContainer {
     padding: 30px 15px 30px 15px;
     background-color: #ebeff5;
-
 }
 
 #objectsGrid {
@@ -322,18 +328,22 @@ html, body {
     margin: 0 auto;
 }
 
-/* LOGIN DIALOG WINDOW */
+/* Login dialog window */
+.k-dialog {
+    overflow: visible;
+}
+
 .loginField {
     position: relative;
     width: 80%;
 }
 
 .loginDialogIcon .k-window-title::before {
-    background: url("../img/lock_icon.png") no-repeat;
+    background: url("../img/icons/lock_icon.png") no-repeat;
 }
 
 .loginDialogTitle .k-window-titlebar {
-    width: 145px;
+    width: 180px;
 }
 
 /* Information Window */
@@ -342,86 +352,15 @@ html, body {
 }
 
 .informationWindowIcon .k-window-title::before {
-    background: url("../img/information_icon.png") no-repeat;
+    background: url("../img/icons/information_icon_35x35.png") no-repeat;
 }
 
 .informationWindowTitle .k-window-titlebar {
-    width: 166px;
-}
-
-/* Information Window : Tabstrip */
-#infoWindowTabstrip.k-header {
-    background-color: transparent;
-    background-image: none;
-}
-
-#infoWindowTabstrip.k-tabstrip {
-    border-width: 0;
-    background: none transparent;
-}
-
-#infoWindowTabstrip.k-tabstrip .k-tabstrip-items {
-    padding: 0;
-}
-
-#infoWindowTabstrip.k-tabstrip .k-content {
-    margin: 0;
-}
-
-#infoWindowTabstrip.k-tabstrip .k-content.k-state-active {
-    background-color: transparent;
-}
-
-#infoWindowTabstrip.k-tabstrip > .k-content {
-    padding: 14px 8px;
-}
-
-#infoWindowTabstrip.k-tabstrip-top > .k-content {
-    border: 0;
-}
-
-#infoWindowTabstrip.k-tabstrip-top > .k-tabstrip-items {
-    border-bottom-width: 0;
-}
-
-#infoWindowTabstrip.k-tabstrip .k-item.k-state-active {
-    color: var(--main-color-over);
-    border-color: rgba(0, 0, 0, 0.00);
-    background-color: transparent;
-}
-
-#infoWindowTabstrip.k-tabstrip:focus {
-    -webkit-box-shadow: 0 0 0 0 rgba(0, 0, 0, 0.00);
-    box-shadow: 0 0 0 0 rgba(0, 0, 0, 0.00);
-}
-
-#infoWindowTabstrip .k-state-active .k-link {
-    border-bottom: 2px solid var(--main-color-over);;
-}
-
-#infoWindowTabstrip.k-widget {
-    font-size: 14px;
-    border-width: 0;
-}
-
-#infoWindowTabstrip.k-tabstrip .k-item {
-    color: #333;
-}
-
-#infoWindowTabstrip ul.k-tabstrip-items li.k-item {
-    background-image: none, linear-gradient(to bottom, rgba(255, 255, 255, 0) 0, rgba(255, 255, 255, 0) 0%);
-}
-
-.infownd-tabitem.k-content {
-    background-color: transparent;
-}
-
-.infownd-tabitem.k-content.k-state-active {
-    background-color: transparent;
+    width: 190px;
 }
 
 /* Scheda - bordata grigio in popup window */
-.cardContainer {
+.sheetBoxedContainer {
     display: block;
     overflow: hidden;
     text-align: center;
@@ -436,49 +375,63 @@ html, body {
     color: var(--grigioscuro);
 }
 
-/* Kendo UI - Form input fields e combobox - Stilizzazione base */
-.informationFieldContainer label {
-    float: left;
-    padding-top: 0.3rem;
-    padding-bottom: 0.4rem;
+/* Kendo UI - Form input fields, combobox, datepickers - Stilizzazione base */
+.informationFieldContainer {
+    overflow: auto;
+    margin-bottom: 7px;
 }
 
-.informationFieldContainer .k-combobox {
+.informationFieldContainer .labelContainer {
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
     float: left;
 }
 
-.informationFieldContainer label.labelInline {
+.informationFieldContainer .labelContainer:after {
+    display: inline-block;
+    width: 0;
+    height: 100%;
+    content: '';
+    vertical-align: middle;
+}
+
+.informationFieldContainer .labelContainer.labelInline {
     width: 33%;
+    height: 31px;
     text-align: right;
 }
 
-.informationFieldContainer .k-textbox.inputInline {
-    width: 65%;
-    margin-left: 5px;
-}
-
-.informationFieldContainer .k-widget.inputInline {
-    width: 65%;
-    margin-left: 5px;
-}
-
-.informationFieldContainer label.labelMultiline {
+.informationFieldContainer .labelContainer.labelMultiline {
     width: 100%;
     text-align: left;
 }
 
-.informationFieldContainer .k-textbox.inputMultiline {
+.informationFieldContainer .labelContainer label {
+    line-height: 1.1rem;
+    display: inline-block;
+    vertical-align: middle;
+}
+
+.informationFieldContainer .k-widget, .informationFieldContainer .k-textbox, .informationFieldContainer .k-combobox, .informationFieldContainer .k-dropdown-wrap {
+    height: 31px;
+}
+
+.informationFieldContainer .k-widget.inputInline, .informationFieldContainer .k-textbox.inputInline, .informationFieldContainer .k-combobox.inputInline, .informationFieldContainer .k-dropdown-wrap.inputInline {
+    float: left;
+    width: 60%;
+    margin-left: 5px;
+}
+
+.informationFieldContainer .k-widget.inputMultiline, .informationFieldContainer .k-textbox.inputMultiline, .informationFieldContainer .k-combobox.inputMultiline, .informationFieldContainer .k-dropdown-wrap.inputMultiline {
     width: 100%;
     margin-left: 0;
 }
 
-.informationFieldContainer .k-widget.inputMultiline {
+.sheetContainer .buttonContainer {
     width: 100%;
-    margin-left: 0;
-}
-
-.cardContainer .buttonContainer {
-    width: 100%
+    padding: 10px 0 10px 0;
 }
 
 input {
@@ -506,8 +459,8 @@ select {
     text-transform: none;
 }
 
-.k-dropdown-wrap {
-    border-radius: 0.25rem;
+.k-dropdown-wrap, .k-textbox {
+    border-radius: 3px;
 }
 
 .k-list-scroller {
@@ -522,11 +475,45 @@ select {
     background-color: #fff;
 }
 
-.k-list .k-item.k-state-selected {
-    color: #fff;
-    background-color: #5994c7;
+/* Combobox Group - dropdown menu */
+.k-popup .k-list .k-item > .k-group::before {
+    display: none;
+    border-color: transparent;
 }
 
+.k-popup .k-list .k-item > .k-group {
+    text-transform: lowercase;
+    color: #fff;
+    border-radius: 3px;
+    background: var(--bluscuro-sfondo);
+}
+
+/* Combobox Group - group name top of list */
+.k-popup > .k-group-header {
+    color: #fff;
+    border-radius: 3px;
+    background: var(--main-color);
+}
+
+.k-popup .k-list > .k-item.k-first {
+    padding-top: 1em;
+}
+
+.k-popup .k-list > .k-state-hover.k-first {
+    padding-top: calc(1em - 1px);
+}
+
+.k-popup .k-list > .k-item.k-first > .k-group {
+    left: 0;
+    height: inherit;
+}
+
+.k-popup .k-list > .k-state-hover.k-first > .k-group {
+    top: -1px;
+    left: -1px;
+}
+
+/* Combobox */
 .k-combobox label {
     font-size: inherit;
     font-weight: normal;
@@ -535,7 +522,6 @@ select {
     margin-bottom: 0;
     padding-top: calc(.375rem + 1px);
     padding-bottom: calc(.375rem + 1px);
-
 }
 
 .k-combobox {
@@ -554,16 +540,6 @@ select {
     -webkit-rtl-ordering: logical;
 }
 
-.k-combobox .k-select {
-    background-color: transparent;
-    background-image: none;
-}
-
-.k-combobox .k-state-hover .k-select {
-    background-color: transparent;
-    background-image: none;
-}
-
 .k-combobox .k-state-hover .k-select .k-i-arrow-60-down::before {
     color: var(--main-color-over);
 }
@@ -572,7 +548,31 @@ select {
     color: var(--grigioscuro) !important;
 }
 
-/* Kendo UI - BUTTONS- Stilizzazione BASE */
+input.k-textbox, textarea.k-textbox {
+    border-color: rgba(0, 0, 0, 0.08);
+}
+
+.k-combobox .k-select, .k-numerictextbox .k-select, .k-datetimepicker .k-select, .k-dropdown-wrap.k-state-default, .k-datetimepicker.k-state-default {
+    background-color: #fff;
+    background-image: none;
+}
+
+.k-combobox .k-select:hover, .k-combobox .k-state-hover .k-select, .k-dropdown .k-dropdown-wrap:hover, .k-numerictextbox .k-select:hover, .k-datetimepicker .k-select:hover, .k-dropdown-wrap.k-state-hover, .k-dropdown-wrap.k-state-focused, .k-dropdown-wrap.k-state-active {
+    background-color: #fff;
+    background-image: none;
+}
+
+.k-numerictextbox .k-numeric-wrap.k-state-hover .k-select, .k-numerictextbox .k-numeric-wrap.k-state-focused .k-select, .k-numerictextbox .k-numeric-wrap.k-state-active .k-select, .k-datetimepicker .k-state-hover .k-select {
+    background-color: #fff;
+    background-image: none;
+}
+
+/* DateTimePicker */
+.k-calendar-view {
+    padding: 0 0;
+}
+
+/* Kendo UI - Buttons - Stilizzazione BASE */
 button {
     font-family: inherit;
     font-size: inherit;
@@ -621,75 +621,36 @@ button::-moz-focus-inner {
 
 /* Read only - write Switch - Stilizzazione base*/
 /* The switch - the box around the slider */
-.readwrite-checkbox {
+.readOnlySwitchContainer {
     position: absolute;
     z-index: 1000;
     top: 6px;
     right: 20px;
 }
 
-.switch {
-    position: relative;
-    display: inline-block;
+.k-switch-container, .k-switch {
     width: 50px;
-    height: 25px;
-    vertical-align: middle;
 }
 
-/* Hide default HTML checkbox */
-.switch input {
+.k-switch-on .k-switch-handle {
+    left: calc(100% - 2em);
+}
+
+.k-switch-handle {
+    width: 2em;
+    height: 2em;
+    margin: 0;
+}
+
+.k-switch-label-off, k-switch-label-on {
     display: none;
 }
 
-/* The switch - the slider */
-.slider {
-    position: absolute;
-    top: 0;
-    right: 0;
-    bottom: 0;
-    left: 0;
-    cursor: pointer;
-    -webkit-transition: .4s;
-    transition: .4s;
-    background-color: var(--grigiomedio);
+.k-switch:active, .k-switch:focus {
+    box-shadow: none;
 }
 
-.slider:before {
-    position: absolute;
-    bottom: 2px;
-    left: 4px;
-    width: 21px;
-    height: 21px;
-    content: "";
-    -webkit-transition: .4s;
-    transition: .4s;
-    background-color: white;
-}
-
-input:checked + .slider {
-    background-color: var(--main-color);
-}
-
-input:focus + .slider {
-    box-shadow: 0 0 1px var(--main-color);
-}
-
-input:checked + .slider:before {
-    -ms-transform: translateX(21px);
-    -webkit-transform: translateX(21px);
-    transform: translateX(21px);
-}
-
-/* The switch - rounded sliders */
-.slider.round {
-    border-radius: 34px;
-}
-
-.slider.round:before {
-    border-radius: 50%;
-}
-
-.label_rw {
+.readOnlySwitchLabel {
     line-height: 25px;
     display: inline-block;
     vertical-align: middle;
@@ -750,11 +711,7 @@ td, th {
     color: var(--main-color);
 }
 
-col.k-sorted, th.k-sorted {
-    background-color: rgba(174, 202, 242, 0.2);
-}
-
-row.k-sorted, th.k-sorted {
+col.k-sorted, th.k-sorted, row.k-sorted, th.k-sorted {
     background-color: rgba(174, 202, 242, 0.2);
 }
 
@@ -762,12 +719,12 @@ th.k-sorted:hover, th.k-sorted:focus, th.k-sorted:active {
     background-color: rgba(174, 202, 242, 0.2);
 }
 
-/* WRITE COLUMN - stilizzazione write flag in grid column*/
+/* Write Grid column - stilizzazione write flag in grid column*/
 .k-grid .k-i-check::before {
     color: var(--main-color);
 }
 
-/* REMOVE COLUMN - stilizzazione command remove in grid column */
+/* Remove Grid column - stilizzazione command remove in grid column */
 .k-grid-delete .k-i-close::before {
     color: var(--main-danger-color);
 }
@@ -792,9 +749,22 @@ td.k-command-cell {
     text-align: center;
 }
 
-/* Kendo UI - Dialog window - Stilizzazione base */
-.k-header .k-link {
-    color: var(--main-color);
+/* Kendo UI - Dialog window e Popup window- Stilizzazione base */
+.k-window, .k-dialog {
+    background-color: #fff;
+    box-shadow: 0 0 3px 3px #dbdbdb;
+}
+
+.k-window-content {
+    padding: 0 16px 16px 16px;
+}
+
+.k-window-content form div {
+    padding: 0 20px 20px 20px;
+}
+
+.k-window-content h3 {
+    margin-top: 0;
 }
 
 .k-header {
@@ -815,7 +785,7 @@ td.k-command-cell {
     vertical-align: middle;
 }
 
-.k-window-titlebar {
+.k-window-titlebar, .k-dialog-titlebar {
     position: relative;
     top: -15px;
     left: 15px;
@@ -823,44 +793,24 @@ td.k-command-cell {
     color: #fff;
     border-color: inherit;
     border-radius: 4px 4px 4px 4px;
-    background-color: #547ab0;
+    background-color: var(--main-color);
 }
 
-.k-dialog-titlebar {
-    position: relative;
-    top: -15px;
-    left: 15px;
-    width: 50%;
-    color: #fff;
-    border-color: inherit;
-    background-color: #547ab0;
+.k-window-titlebar .k-window-action {
+    width: 35px;
+    height: 35px;
+    padding: 2px;
 }
 
-.k-window {
-    background-color: #fff;
-    box-shadow: 0 0 3px 3px #dbdbdb;
-}
-
-.k-dialog {
-    box-shadow: 0 0 0 0;
-}
-
-.k-window-content form div {
-    padding: 0 20px 20px 20px;
-}
-
-.k-window-content {
-    padding: 0 16px 16px 16px;
-}
-
-.k-window-content h3 {
-    margin-top: 0;
-}
-
-/* MEDIA QUERIES */
-
+/* Media queries */
 @media screen and (max-width: 1096px) {
 
+}
+
+@media screen and (max-width: 1024px) {
+    body {
+        overflow: auto;
+    }
 }
 
 @media screen and (max-width: 1000px) {
@@ -889,11 +839,11 @@ td.k-command-cell {
         border-radius: 12px 12px 0 0;
     }
 
-    .selectObjectSearchButton {
+    #searchObjectButton {
         width: 100%;
     }
 
-    .selectObjectUseyourlistButton {
+    #loadUserListButton {
         width: 100%
     }
 }

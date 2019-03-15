@@ -1,4 +1,4 @@
-.col-md-1, .col-md-2, .col-md-3, .col-md-4, .col-md-4-nopadding, .col-md-5, .col-md-6, .col-md-7, .col-md-8, .col-md-8-nopadding, .col-md-9, .col-md-10, .col-md-11, .col-md-12 {
+.col-md-1, .col-md-2, .col-md-3, .col-md-4, .col-md-4-nopadding, .col-md-5, .col-md-6, .col-md-6-boxed, .col-md-7, .col-md-8, .col-md-8-nopadding, .col-md-9, .col-md-10, .col-md-11, .col-md-12 {
     float: left;
 }
 
@@ -21,9 +21,9 @@
 }
 
 .col-md-6-boxed {
-    width: 45%;
+    width: calc(44% - 2px);
     margin: 1%;
-    padding: 3px 1%;
+    padding: 3px 2%;
 }
 
 .col-md-8 {
@@ -32,9 +32,9 @@
 }
 
 .col-md-12-boxed {
-    width: 96%;
-    margin: 1%;
-    padding: 3px 1%;
+    width: calc(96% - 2px);
+    margin-bottom: 6px;
+    padding: 3px 2%;
 }
 
 .col-sm-4 {
@@ -61,7 +61,7 @@
     }
 }
 
-@media screen and (max-width: 576px) {
+@media screen and (max-width: 450px) {
     .col-xs-12 {
         width: 96%;
     }

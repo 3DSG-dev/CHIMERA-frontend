@@ -91,32 +91,59 @@ function ResizeObjectsGrid() {
 }
 
 function ResizeInformationWindow() {
-    var width = $(window).width();
-    if (width > 500) {
-        width = width > 700 ? 700 : 500;
+    var windowsWidth = $(window).width();
+    var windowsHeight = $(window).height() - 20;
+
+    var width = windowsWidth - 10;
+    if (width > 555) {
+        width = width > 775 ? 720 : 500;
+    }
+    var height = windowsHeight - 10;
+    if (height > 450) {
+        height -= height > 720 ? 150 : 90;
     }
 
     var informationKendoWindow = $("#informationWindow").data("kendoWindow");
-    informationKendoWindow.wrapper.css({width: (width)});
-    informationKendoWindow.center();
+    informationKendoWindow.wrapper.css({
+        width: width,
+        height: height,
+        top: (windowsHeight + 20 - height) * 3 / 4,
+        right: maxWidth ? "auto" : 55
+    });
 }
 
 function ChangeInformationFieldsStyle() {
-    if ($("#informationWindowTabObject").width() < 600) {
-        if (!$("#infoCategory").hasClass("labelMultiline")) {
-            $(".informationFieldContainer label").removeClass("labelInline").addClass("labelMultiline");
+    var informationWidth = $("#informationObjectTab").width();
+    if (informationWidth > 680) {
+        if (!$("#infoCategoryContainer .labelContainer").hasClass("labelInline")) {
+            $(".informationFieldContainer .labelContainer").removeClass("labelMultiline").addClass("labelInline");
+            $(".informationFieldContainer .k-textbox").removeClass("inputMultiline").addClass("inputInline");
+            $(".informationFieldContainer .k-widget").removeClass("inputMultiline").addClass("inputInline");
+        }
+        if (!$("#infoCategoryContainer").hasClass("colonnaMezziBoxed")) {
+            $(".informationWindowTabItem .sheetBoxedContainer").removeClass("colonnaInteraBoxed").addClass("colonnaMezziBoxed");
+        }
+    }
+    else {
+        if (!$("#infoCategoryContainer .labelContainer").hasClass("labelMultiline")) {
+            $(".informationFieldContainer .labelContainer").removeClass("labelInline").addClass("labelMultiline");
             $(".informationFieldContainer .k-textbox").removeClass("inputInline").addClass("inputMultiline");
             $(".informationFieldContainer .k-widget").removeClass("inputInline").addClass("inputMultiline");
         }
-    }
-    else if (!$("#infoCategory").hasClass("labelInline")) {
-        $(".informationFieldContainer label").removeClass("labelMultiline").addClass("labelInline");
-        $(".informationFieldContainer .k-textbox").removeClass("inputMultiline").addClass("inputInline");
-        $(".informationFieldContainer .k-widget").removeClass("inputMultiline").addClass("inputInline");
+        if (informationWidth > 400) {
+            if (!$("#infoCategoryContainer").hasClass("colonnaMezziBoxed")) {
+                $(".informationWindowTabItem .sheetBoxedContainer").removeClass("colonnaInteraBoxed").addClass("colonnaMezziBoxed");
+            }
+        }
+        else {
+            if (!$("#infoCategoryContainer").hasClass("colonnaInteraBoxed")) {
+                $(".informationWindowTabItem .sheetBoxedContainer").removeClass("colonnaMezziBoxed").addClass("colonnaInteraBoxed");
+            }
+        }
     }
 }
 
-function ObjectsGridChangeAlignment() {
+function ChangeObjectsGridAlignment() {
     if (_openedWindows > 0) {
         $("#objectsGrid").css("margin", "0");
     }
@@ -534,13 +561,13 @@ function InitializeComponents() {
     function Windows_OnOpen() {
         _openedWindows++;
 
-        ObjectsGridChangeAlignment();
+        ChangeObjectsGridAlignment();
     }
 
     function Windows_OnClose() {
         _openedWindows--;
 
-        ObjectsGridChangeAlignment();
+        ChangeObjectsGridAlignment();
     }
 
     function SetSearchForm() {
@@ -673,14 +700,14 @@ function InitializeComponents() {
         }
 
         function AddReadWriteControl() {
-            var htmlReadWriteSwitch;
-            htmlReadWriteSwitch = '<div class="readwrite-checkbox">';
-            htmlReadWriteSwitch += '    <span class="label_rw">Read</span>';
-            htmlReadWriteSwitch += '            <input type="checkbox" id="informationReadOnlySwitch">';
-            htmlReadWriteSwitch += '    <span class="label_rw">Write</span>';
-            htmlReadWriteSwitch += '</div>';
+            var html;
+            html = '<div class="readOnlySwitchContainer">';
+            html += '    <span class="readOnlySwitchLabel">Read</span>';
+            html += '            <input type="checkbox" id="informationReadOnlySwitch">';
+            html += '    <span class="readOnlySwitchLabel">Write</span>';
+            html += '</div>';
 
-            $(".informationWindowTitle").prepend(htmlReadWriteSwitch);
+            $(".informationWindowTitle").prepend(html);
             $("#informationReadOnlySwitch").kendoSwitch({
                 checked: false,
                 change: function (event) {
@@ -703,14 +730,17 @@ function InitializeComponents() {
             function SetInformationWindowProvaCard() {
 
                 // create NumericTextBox from input HTML element
-                $("#infoWndProvaCard #selectNumber").kendoNumericTextBox();
-                $("#infoWndProvaCard #selectNumberDecimal").kendoNumericTextBox({
+                $("#selectNumber").kendoNumericTextBox();
+                $("#selectNumberDecimal").kendoNumericTextBox({
                     format: "# Kg",
                     decimals: 3
                 });
 
                 // create Timepicker from div HTML element
-                $("#infoWndProvaCard #selectDate").kendoDateTimePicker({
+                $("#selectDate").kendoDateTimePicker({
+                    timeFormat: "HH:mm",
+                    format: "dd/MM/yy HH:mm",
+                    parseFormats: ["dd/MM/yy hh:mm", "dd/MM/yy HH:mm", "dd/MM/yy", "HH:mm"],
                     value: new Date(),
                     dateInput: true
                 });
@@ -722,10 +752,36 @@ function InitializeComponents() {
                     {text: "Grey", value: "3"}
                 ];
 
-                $("#infoWndProvaCard #selectDropDown").kendoDropDownList({
+                $("#selectDropDown").kendoDropDownList({
                     dataTextField: "text",
                     dataValueField: "value",
                     dataSource: data
+                });
+
+                $("#selectMultiSelect").kendoMultiSelect({
+                    autoClose: false
+                }).data("kendoMultiSelect");
+
+                $("#selectSwitch").kendoSwitch({
+                    messages: {
+                        checked: "YES",
+                        unchecked: "NO"
+                    }
+                });
+
+                $("#provaGroupComboCategory").kendoComboBox({
+                    dataTextField: "ContactName",
+                    dataValueField: "CustomerID",
+                    fixedGroupTemplate: "#=data#",
+                    groupTemplate: "#: data #",
+                    height: 400,
+                    dataSource: {
+                        type: "odata",
+                        transport: {
+                            read: "https://demos.telerik.com/kendo-ui/service/Northwind.svc/Customers"
+                        },
+                        group: {field: "Country"}
+                    }
                 });
             }
 
@@ -737,8 +793,8 @@ function InitializeComponents() {
         informationWindow.removeClass("fixedPosition");
         informationWindow.kendoWindow({
             title: "Information",
-            width: 700,
             minWidth: 350,
+            minHeight: 200,
             visible: false,
             resizable: true,
             open: Windows_OnOpen,
