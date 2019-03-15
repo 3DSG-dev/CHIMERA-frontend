@@ -91,29 +91,27 @@ function ResizeObjectsGrid() {
 }
 
 function ResizeInformationWindow() {
-    var windowsWidth = $(window).width();
-    var windowsHeight = $(window).height() - 20;
+    var portingWidth = $(window).width();
+    var portingHeight = $(window).height();
 
-    var width = windowsWidth - 10;
+    var width = portingWidth - 10;
     var maxWidth = true;
     if (width > 555) {
-        width = width > 775 ? 720 : 500;
+        width = width > 800 ? 745 : 500;
         maxWidth = false;
     }
-    var height = windowsHeight - 10;
+    var height = portingHeight - 30;
     if (height > 450) {
         height -= height > 720 ? 150 : 90;
     }
 
-    var informationKendoWindow = $("#informationWindow").data("kendoWindow");
-    informationKendoWindow.wrapper.css({
+    $("#informationWindow").data("kendoWindow").wrapper.css({
         width: width,
         height: height,
-        top: (windowsHeight + 20 - height) * 3 / 4,
+        top: (portingHeight - height) * 3 / 4,
         right: maxWidth ? "auto" : 55,
         left: "auto"
     });
-
     ChangeInformationFieldsStyle();
 }
 
@@ -139,7 +137,7 @@ function ChangeInformationFieldsStyle() {
     else {
         SwitchBoxedStyle("colonnaInteraBoxed", "colonnaMezziBoxed");
     }
-    if (informationWidth > 680) {
+    if (informationWidth > 710) {
         SwitchFieldStyle("labelInline", "labelMultiline", "inputInline", "inputMultiline");
     }
     else {
