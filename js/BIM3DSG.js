@@ -110,8 +110,11 @@ function ResizeInformationWindow() {
         width: width,
         height: height,
         top: (windowsHeight + 20 - height) * 3 / 4,
-        right: maxWidth ? "auto" : 55
+        right: maxWidth ? "auto" : 55,
+        left: "auto"
     });
+
+    ChangeInformationFieldsStyle();
 }
 
 function ChangeInformationFieldsStyle() {
