@@ -118,33 +118,32 @@ function ResizeInformationWindow() {
 }
 
 function ChangeInformationFieldsStyle() {
-    var informationWidth = $("#informationObjectTab").width();
-    if (informationWidth > 680) {
-        if (!$("#infoCategoryContainer .labelContainer").hasClass("labelInline")) {
-            $(".informationFieldContainer .labelContainer").removeClass("labelMultiline").addClass("labelInline");
-            $(".informationFieldContainer .k-textbox").removeClass("inputMultiline").addClass("inputInline");
-            $(".informationFieldContainer .k-widget").removeClass("inputMultiline").addClass("inputInline");
-        }
-        if (!$("#infoCategoryContainer").hasClass("colonnaMezziBoxed")) {
-            $(".informationWindowTabItem .sheetBoxedContainer").removeClass("colonnaInteraBoxed").addClass("colonnaMezziBoxed");
+    function SwitchFieldStyle(addLabel, removeLabel, addInput, removeInput) {
+        if (!$("#infoCategoryContainer .labelContainer").hasClass(addLabel)) {
+            $(".informationFieldContainer .labelContainer").removeClass(removeLabel).addClass(addLabel);
+            $(".informationFieldContainer .k-textbox").removeClass(removeInput).addClass(addInput);
+            $(".informationFieldContainer .k-widget").removeClass(removeInput).addClass(addInput);
         }
     }
+
+    function SwitchBoxedStyle(addClass, removeClass) {
+        if (!$("#infoCategoryContainer").hasClass(addClass)) {
+            $(".informationWindowTabItem .sheetBoxedContainer").removeClass(removeClass).addClass(addClass);
+        }
+    }
+
+    var informationWidth = $("#informationObjectTab").width();
+    if (informationWidth > 400) {
+        SwitchBoxedStyle("colonnaMezziBoxed", "colonnaInteraBoxed");
+    }
     else {
-        if (!$("#infoCategoryContainer .labelContainer").hasClass("labelMultiline")) {
-            $(".informationFieldContainer .labelContainer").removeClass("labelInline").addClass("labelMultiline");
-            $(".informationFieldContainer .k-textbox").removeClass("inputInline").addClass("inputMultiline");
-            $(".informationFieldContainer .k-widget").removeClass("inputInline").addClass("inputMultiline");
-        }
-        if (informationWidth > 400) {
-            if (!$("#infoCategoryContainer").hasClass("colonnaMezziBoxed")) {
-                $(".informationWindowTabItem .sheetBoxedContainer").removeClass("colonnaInteraBoxed").addClass("colonnaMezziBoxed");
-            }
-        }
-        else {
-            if (!$("#infoCategoryContainer").hasClass("colonnaInteraBoxed")) {
-                $(".informationWindowTabItem .sheetBoxedContainer").removeClass("colonnaMezziBoxed").addClass("colonnaInteraBoxed");
-            }
-        }
+        SwitchBoxedStyle("colonnaInteraBoxed", "colonnaMezziBoxed");
+    }
+    if (informationWidth > 680) {
+        SwitchFieldStyle("labelInline", "labelMultiline", "inputInline", "inputMultiline");
+    }
+    else {
+        SwitchFieldStyle("labelMultiline", "labelInline", "inputMultiline", "inputInline");
     }
 }
 
