@@ -95,8 +95,10 @@ function ResizeInformationWindow() {
     var windowsHeight = $(window).height() - 20;
 
     var width = windowsWidth - 10;
+    var maxWidth = true;
     if (width > 555) {
         width = width > 775 ? 720 : 500;
+        maxWidth = false;
     }
     var height = windowsHeight - 10;
     if (height > 450) {
