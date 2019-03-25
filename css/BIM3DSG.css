@@ -1,3 +1,4 @@
+/* Stilizzazione GENERICA - Tema base */
 :root {
     --main-color: #547ab0;
     --main-color-over: #1a498c;
@@ -67,7 +68,7 @@ a:focus {
     outline-offset: -2px;
 }
 
-/* Page */
+/* Page - Tema base*/
 html, body {
     font-family: 'Roboto', sans-serif;
     font-size: 14px;
@@ -84,6 +85,410 @@ body {
     overflow: hidden;
 }
 
+/* Page Sections, Rows, Columns - Tema base*/
+.pageSection {
+    padding: 10px 10px 10px 10px;
+}
+
+.pageRow {
+    display: block;
+    width: 80%;
+    max-width: 1080px;
+    margin: 0 auto;
+    padding: 27px 0;
+    border-radius: 9px;
+    background-color: #fff;
+}
+
+.pageColumn {
+    max-width: 1000px;
+    margin: 0 auto;
+    padding: 0 35px 0 35px;
+}
+
+.fixedPosition {
+    position: fixed;
+}
+
+/* Kendo UI - Window and Dialog popup */
+.k-dialog {
+    overflow: visible;
+}
+
+.k-window, .k-dialog {
+    background-color: #fff;
+    box-shadow: 0 0 3px 3px #dbdbdb;
+}
+
+.k-window-content {
+    padding: 0 16px 16px 16px;
+}
+
+.k-window-content form div {
+    padding: 0 20px 20px 20px;
+}
+
+.k-window-content h3 {
+    margin-top: 0;
+}
+
+.k-header {
+    background-color: transparent;
+    background-image: none;
+}
+
+.k-window-titlebar, .k-dialog-titlebar {
+    position: relative;
+    top: -15px;
+    left: 15px;
+    padding: 2px 5px;
+    color: #fff;
+    border-color: inherit;
+    border-radius: 4px 4px 4px 4px;
+    background-color: var(--main-color);
+}
+
+.k-window-titlebar .k-window-action {
+    width: 35px;
+    height: 35px;
+    padding: 2px;
+}
+
+.windowIcon .k-window-title::before {
+    display: inline-block;
+    width: 35px;
+    height: 35px;
+    content: "";
+    vertical-align: middle;
+}
+
+.k-widget.windowTitle {
+    font-size: 14px;
+    line-height: 1.72857;
+}
+
+/* Kendo UI - Form input fields, combobox, datepickers */
+input {
+    border: none;
+}
+
+input[disabled] {
+    cursor: default;
+}
+
+input::-moz-focus-inner {
+    padding: 0;
+    border: 0;
+}
+
+input, optgroup, select, textarea {
+    font-family: inherit;
+    font-size: inherit;
+    line-height: inherit;
+    margin: 0;
+    color: inherit;
+}
+
+select {
+    text-transform: none;
+}
+
+.k-dropdown-wrap, .k-textbox {
+    border-radius: 3px;
+}
+
+.k-list-scroller {
+    color: #292b2c;
+    border-color: rgba(33, 37, 41, 0.125);
+    background-color: #fff;
+}
+
+.k-popup {
+    color: #333;
+    border-color: rgba(0, 0, 0, 0.08);
+    background-color: #fff;
+}
+
+/* Kendo UI - Combobox Group - dropdown menu */
+.k-popup .k-list .k-item > .k-group::before {
+    display: none;
+    border-color: transparent;
+}
+
+.k-popup .k-list .k-item > .k-group {
+    text-transform: lowercase;
+    color: #fff;
+    border-radius: 3px;
+    background: var(--bluscuro-sfondo);
+}
+
+/* Kendo UI - Combobox Group - group name top of list */
+.k-popup > .k-group-header {
+    color: #fff;
+    border-radius: 3px;
+    background: var(--main-color);
+}
+
+.k-popup .k-list > .k-item.k-first {
+    padding-top: 1em;
+}
+
+.k-popup .k-list > .k-state-hover.k-first {
+    padding-top: calc(1em - 1px);
+}
+
+.k-popup .k-list > .k-item.k-first > .k-group {
+    left: 0;
+    height: inherit;
+}
+
+.k-popup .k-list > .k-state-hover.k-first > .k-group {
+    top: -1px;
+    left: -1px;
+}
+
+/* Kendo UI - Combobox */
+.k-combobox label {
+    font-size: inherit;
+    font-weight: normal;
+    line-height: 1.5;
+    display: inline-block;
+    margin-bottom: 0;
+    padding-top: calc(.375rem + 1px);
+    padding-bottom: calc(.375rem + 1px);
+}
+
+.k-combobox {
+    font-size: 14px;
+    float: left;
+    overflow: hidden;
+    align-items: center;
+    box-sizing: border-box;
+    width: 100%;
+    cursor: text;
+    vertical-align: text-top;
+    text-overflow: ellipsis;
+    border: none;
+    background: transparent;
+    -webkit-appearance: textfield;
+    -webkit-rtl-ordering: logical;
+}
+
+.k-combobox .k-state-hover .k-select .k-i-arrow-60-down::before {
+    color: var(--main-color-over);
+}
+
+.k-textbox::placeholder, .k-input::placeholder, .k-input.k-textbox::placeholder, .k-textarea::placeholder {
+    color: var(--grigioscuro) !important;
+}
+
+input.k-textbox, textarea.k-textbox {
+    border-color: rgba(0, 0, 0, 0.08);
+}
+
+.k-combobox .k-select, .k-numerictextbox .k-select, .k-datetimepicker .k-select, .k-dropdown-wrap.k-state-default, .k-datetimepicker.k-state-default {
+    background-color: #fff;
+    background-image: none;
+}
+
+.k-combobox .k-select:hover, .k-combobox .k-state-hover .k-select, .k-dropdown .k-dropdown-wrap:hover, .k-numerictextbox .k-select:hover, .k-datetimepicker .k-select:hover, .k-dropdown-wrap.k-state-hover, .k-dropdown-wrap.k-state-focused, .k-dropdown-wrap.k-state-active {
+    background-color: #fff;
+    background-image: none;
+}
+
+.k-numerictextbox .k-numeric-wrap.k-state-hover .k-select, .k-numerictextbox .k-numeric-wrap.k-state-focused .k-select, .k-numerictextbox .k-numeric-wrap.k-state-active .k-select, .k-datetimepicker .k-state-hover .k-select {
+    background-color: #fff;
+    background-image: none;
+}
+
+/* Kendo UI - DateTimePicker */
+.k-calendar-view {
+    padding: 0 0;
+}
+
+/* Kendo UI - Checkbox */
+.k-checkbox-label::before, .k-radio-label::before {
+    width: 26px;
+    height: 26px;
+    text-align: left;
+}
+
+.k-checkbox-label::after {
+    width: 26px;
+    height: 26px;
+}
+
+.k-checkbox:checked + .k-checkbox-label::before {
+    color: #fff;
+}
+
+.k-checkbox:checked:focus + .k-checkbox-label::before {
+    box-shadow: 0 0 0 0;
+}
+
+.k-checkbox-label::before, .k-checkbox-label::after {
+    top: -4px;
+}
+
+/* Kendo UI - Buttons */
+button {
+    font-family: inherit;
+    font-size: inherit;
+    line-height: inherit;
+    overflow: visible;
+    margin: 0;
+    text-transform: none;
+    color: inherit;
+}
+
+button, html input[type=button], input[type=reset], input[type=submit] {
+    cursor: pointer;
+    -webkit-appearance: button;
+}
+
+button[disabled] {
+    cursor: default;
+}
+
+button::-moz-focus-inner {
+    padding: 0;
+    border: 0;
+}
+
+.buttonContainer {
+    display: inline-block;
+    text-align: center;
+}
+
+.buttonBordered {
+    line-height: 30px;
+    padding: 0 10px;
+    -webkit-transition-duration: 0.4s;
+    transition-duration: 0.4s;
+    text-align: center;
+    color: var(--main-color);
+    border: 2px solid var(--main-color);
+    border-radius: 4px 4px 4px 4px;
+    background-color: transparent;
+}
+
+.buttonBordered:hover {
+    color: white;
+    background-color: var(--main-color);
+}
+
+/* Kendo UI - Switch */
+/* The switch - the box around the slider */
+.k-switch-container, .k-switch {
+    width: 50px;
+}
+
+.k-switch-on .k-switch-handle {
+    left: calc(100% - 2em);
+}
+
+.k-switch-handle {
+    width: 2em;
+    height: 2em;
+    margin: 0;
+}
+
+.k-switch-label-off, k-switch-label-on {
+    display: none;
+}
+
+.k-switch:active, .k-switch:focus {
+    box-shadow: none;
+}
+
+/* Kendo UI - Grid Table */
+/* Round corners - Grid */
+.k-grid {
+    overflow: hidden;
+    -moz-border-radius: 6px;
+    -webkit-border-radius: 6px;
+    border-radius: 6px;
+}
+
+.k-grouping-header {
+    overflow: hidden;
+    -moz-border-radius: 6px 6px 0 0;
+    -webkit-border-radius: 6px 6px 0 0;
+    border-radius: 6px 6px 0 0;
+}
+
+.k-grid-pager {
+    overflow: hidden;
+    -moz-border-radius: 0 0 6px 6px;
+    -webkit-border-radius: 0 0 6px 6px;
+    border-radius: 0 0 6px 6px;
+}
+
+/* Kendo UI - Colors and spaces - Grid */
+td, th {
+    padding: 0;
+}
+
+.table-hover thead tr:hover th, .table-hover tbody tr:hover td {
+    background-color: #d1d119;
+}
+
+.k-grid tr:hover {
+    background-color: rgba(174, 202, 242, 0.2);
+    background-image: none;
+}
+
+.k-grid-header {
+    display: block;
+}
+
+.k-grid-header .k-header:last-child {
+    color: var(--main-danger-color);
+}
+
+.k-grid-header th {
+    color: var(--main-color);
+    background-color: #fff;
+}
+
+.k-grid-header .k-header > .k-link {
+    color: var(--main-color);
+}
+
+col.k-sorted, th.k-sorted, row.k-sorted, th.k-sorted {
+    background-color: rgba(174, 202, 242, 0.2);
+}
+
+th.k-sorted:hover, th.k-sorted:focus, th.k-sorted:active {
+    background-color: rgba(174, 202, 242, 0.2);
+}
+
+.avoid-k-button-style, .avoid-k-button-style:hover {
+    border: none;
+    background-color: transparent;
+    background-image: none;
+}
+
+td.k-command-cell {
+    text-align: center;
+}
+
+.k-command-cell > .k-button.avoid-k-button-style {
+    text-align: center;
+}
+
+/* Kendo UI - Write flag - Grid column*/
+.k-grid .k-i-check::before {
+    color: var(--main-color);
+}
+
+/* Kendo UI - Remove flag - Grid column */
+.k-grid-delete .k-i-close::before {
+    color: var(--main-danger-color);
+}
+
+/* Stilizzazione SPECIFICA */
+/* Page Sections, Rows, Columns */
 #pageContainer {
     height: 100vh;
     margin: 0;
@@ -91,24 +496,6 @@ body {
 
 #pageContent {
     height: calc(100vh - 68px);
-}
-
-.fixedPosition {
-    position: fixed;
-}
-
-.colonnaInteraBoxed {
-    float: left;
-    width: calc(96% - 2px);
-    margin-bottom: 6px;
-    padding: 3px 2%;
-}
-
-.colonnaMezziBoxed {
-    float: left;
-    width: calc(44% - 2px);
-    margin: 1%;
-    padding: 3px 2%;
 }
 
 /* Header */
@@ -222,28 +609,7 @@ body {
     margin-bottom: 20px;
 }
 
-/* Page Sections, Rows, Columns */
-.pageSection {
-    padding: 10px 10px 10px 10px;
-}
-
-.pageRow {
-    display: block;
-    width: 80%;
-    max-width: 1080px;
-    margin: 0 auto;
-    padding: 27px 0;
-    border-radius: 9px;
-    background-color: #fff;
-}
-
-.pageColumn {
-    max-width: 1000px;
-    margin: 0 auto;
-    padding: 0 35px 0 35px;
-}
-
-/* Select object section */
+/* Main page - Select object section */
 .selectObjectSection {
     padding: 15px 0;
     background-color: #004577;
@@ -265,7 +631,7 @@ body {
     margin-bottom: 10px;
 }
 
-/* Select object form */
+/* Main page - Select object form */
 .selectObjectSearchFieldsContainer {
     overflow: hidden;
     width: 98%;
@@ -317,7 +683,7 @@ body {
     background-color: #fff;
 }
 
-/* Grid object list section */
+/* Main page - Grid object list section */
 #objectsGridContainer {
     padding: 30px 15px 30px 15px;
     background-color: #ebeff5;
@@ -328,16 +694,8 @@ body {
     margin: 0 auto;
 }
 
+/* Window and Dialog popup*/
 /* Login dialog window */
-.k-dialog {
-    overflow: visible;
-}
-
-.loginField {
-    position: relative;
-    width: 80%;
-}
-
 .loginDialogIcon .k-window-title::before {
     background: url("../img/icons/lock_icon.png") no-repeat;
 }
@@ -346,7 +704,12 @@ body {
     width: 180px;
 }
 
-/* Information Window */
+.loginField {
+    position: relative;
+    width: 80%;
+}
+
+/* Information window */
 #informationWindow {
     padding: 0 0 0 0;
 }
@@ -359,13 +722,15 @@ body {
     width: 190px;
 }
 
-/* Scheda - bordata grigio in popup window */
+/* Information Window - Sheets */
 .sheetBoxedContainer {
     display: block;
     overflow: hidden;
+    margin-bottom: 6px;
+    padding: 3px 2%;
     text-align: center;
     border: 1px solid var(--grigiomedio);
-    border-radius: 4px 4px 4px 4px;
+    border-radius: 4px;
 }
 
 .k-window-content h3.sheetTitle {
@@ -375,12 +740,28 @@ body {
     color: var(--grigioscuro);
 }
 
-/* Kendo UI - Form input fields, combobox, datepickers - Stilizzazione base */
+.sheetBoxedContainer .buttonContainer {
+    width: 100%;
+    padding: 10px 0 10px 0;
+}
+
+.sheetBoxedColumnLeft {
+    float: left;
+    width: calc(44% - 2px);
+}
+
+.sheetBoxedColumnRight {
+    float: right;
+    width: calc(44% - 2px);
+}
+
+/* Information Window - Input fields */
 .informationFieldContainer {
     overflow: auto;
     margin-bottom: 7px;
 }
 
+/* Information Window - Input fields: Label style*/
 .informationFieldContainer .labelContainer {
     top: 0;
     right: 0;
@@ -414,213 +795,30 @@ body {
     vertical-align: middle;
 }
 
+/* Information Window - Input fields: Input style*/
 .informationFieldContainer .k-widget, .informationFieldContainer .k-textbox, .informationFieldContainer .k-combobox, .informationFieldContainer .k-dropdown-wrap {
     height: 31px;
 }
 
-.informationFieldContainer .k-widget.inputInline, .informationFieldContainer .k-textbox.inputInline, .informationFieldContainer .k-combobox.inputInline, .informationFieldContainer .k-dropdown-wrap.inputInline {
+.informationFieldContainer .inputCheckboxContainer {
+    line-height: 31px;
+    float: left;
+    text-align: left;
+}
+
+.informationFieldContainer .inputInline {
     float: left;
     width: 60%;
+    max-width: 60%;
     margin-left: 5px;
 }
 
-.informationFieldContainer .k-widget.inputMultiline, .informationFieldContainer .k-textbox.inputMultiline, .informationFieldContainer .k-combobox.inputMultiline, .informationFieldContainer .k-dropdown-wrap.inputMultiline {
+.informationFieldContainer .inputMultiline {
     width: 100%;
     margin-left: 0;
 }
 
-.sheetContainer .buttonContainer {
-    width: 100%;
-    padding: 10px 0 10px 0;
-}
-
-input {
-    border: none;
-}
-
-input[disabled] {
-    cursor: default;
-}
-
-input::-moz-focus-inner {
-    padding: 0;
-    border: 0;
-}
-
-input, optgroup, select, textarea {
-    font-family: inherit;
-    font-size: inherit;
-    line-height: inherit;
-    margin: 0;
-    color: inherit;
-}
-
-select {
-    text-transform: none;
-}
-
-.k-dropdown-wrap, .k-textbox {
-    border-radius: 3px;
-}
-
-.k-list-scroller {
-    color: #292b2c;
-    border-color: rgba(33, 37, 41, 0.125);
-    background-color: #fff;
-}
-
-.k-popup {
-    color: #333;
-    border-color: rgba(0, 0, 0, 0.08);
-    background-color: #fff;
-}
-
-/* Combobox Group - dropdown menu */
-.k-popup .k-list .k-item > .k-group::before {
-    display: none;
-    border-color: transparent;
-}
-
-.k-popup .k-list .k-item > .k-group {
-    text-transform: lowercase;
-    color: #fff;
-    border-radius: 3px;
-    background: var(--bluscuro-sfondo);
-}
-
-/* Combobox Group - group name top of list */
-.k-popup > .k-group-header {
-    color: #fff;
-    border-radius: 3px;
-    background: var(--main-color);
-}
-
-.k-popup .k-list > .k-item.k-first {
-    padding-top: 1em;
-}
-
-.k-popup .k-list > .k-state-hover.k-first {
-    padding-top: calc(1em - 1px);
-}
-
-.k-popup .k-list > .k-item.k-first > .k-group {
-    left: 0;
-    height: inherit;
-}
-
-.k-popup .k-list > .k-state-hover.k-first > .k-group {
-    top: -1px;
-    left: -1px;
-}
-
-/* Combobox */
-.k-combobox label {
-    font-size: inherit;
-    font-weight: normal;
-    line-height: 1.5;
-    display: inline-block;
-    margin-bottom: 0;
-    padding-top: calc(.375rem + 1px);
-    padding-bottom: calc(.375rem + 1px);
-}
-
-.k-combobox {
-    font-size: 14px;
-    float: left;
-    overflow: hidden;
-    align-items: center;
-    box-sizing: border-box;
-    width: 100%;
-    cursor: text;
-    vertical-align: text-top;
-    text-overflow: ellipsis;
-    border: none;
-    background: transparent;
-    -webkit-appearance: textfield;
-    -webkit-rtl-ordering: logical;
-}
-
-.k-combobox .k-state-hover .k-select .k-i-arrow-60-down::before {
-    color: var(--main-color-over);
-}
-
-.k-textbox::placeholder, .k-input::placeholder, .k-input.k-textbox::placeholder, .k-textarea::placeholder {
-    color: var(--grigioscuro) !important;
-}
-
-input.k-textbox, textarea.k-textbox {
-    border-color: rgba(0, 0, 0, 0.08);
-}
-
-.k-combobox .k-select, .k-numerictextbox .k-select, .k-datetimepicker .k-select, .k-dropdown-wrap.k-state-default, .k-datetimepicker.k-state-default {
-    background-color: #fff;
-    background-image: none;
-}
-
-.k-combobox .k-select:hover, .k-combobox .k-state-hover .k-select, .k-dropdown .k-dropdown-wrap:hover, .k-numerictextbox .k-select:hover, .k-datetimepicker .k-select:hover, .k-dropdown-wrap.k-state-hover, .k-dropdown-wrap.k-state-focused, .k-dropdown-wrap.k-state-active {
-    background-color: #fff;
-    background-image: none;
-}
-
-.k-numerictextbox .k-numeric-wrap.k-state-hover .k-select, .k-numerictextbox .k-numeric-wrap.k-state-focused .k-select, .k-numerictextbox .k-numeric-wrap.k-state-active .k-select, .k-datetimepicker .k-state-hover .k-select {
-    background-color: #fff;
-    background-image: none;
-}
-
-/* DateTimePicker */
-.k-calendar-view {
-    padding: 0 0;
-}
-
-/* Kendo UI - Buttons - Stilizzazione BASE */
-button {
-    font-family: inherit;
-    font-size: inherit;
-    line-height: inherit;
-    overflow: visible;
-    margin: 0;
-    text-transform: none;
-    color: inherit;
-}
-
-button, html input[type=button], input[type=reset], input[type=submit] {
-    cursor: pointer;
-    -webkit-appearance: button;
-}
-
-button[disabled] {
-    cursor: default;
-}
-
-button::-moz-focus-inner {
-    padding: 0;
-    border: 0;
-}
-
-.buttonContainer {
-    display: inline-block;
-    text-align: center;
-}
-
-.buttonBordered {
-    line-height: 30px;
-    padding: 0 10px;
-    -webkit-transition-duration: 0.4s;
-    transition-duration: 0.4s;
-    text-align: center;
-    color: var(--main-color);
-    border: 2px solid var(--main-color);
-    border-radius: 4px 4px 4px 4px;
-    background-color: transparent;
-}
-
-.buttonBordered:hover {
-    color: white;
-    background-color: var(--main-color);
-}
-
-/* Read only - write Switch - Stilizzazione base*/
-/* The switch - the box around the slider */
+/* Read only - write Switch */
 .readOnlySwitchContainer {
     position: absolute;
     z-index: 1000;
@@ -628,178 +826,11 @@ button::-moz-focus-inner {
     right: 20px;
 }
 
-.k-switch-container, .k-switch {
-    width: 50px;
-}
-
-.k-switch-on .k-switch-handle {
-    left: calc(100% - 2em);
-}
-
-.k-switch-handle {
-    width: 2em;
-    height: 2em;
-    margin: 0;
-}
-
-.k-switch-label-off, k-switch-label-on {
-    display: none;
-}
-
-.k-switch:active, .k-switch:focus {
-    box-shadow: none;
-}
-
 .readOnlySwitchLabel {
     line-height: 25px;
     display: inline-block;
     vertical-align: middle;
     color: var(--main-color);
-}
-
-/* Kendo UI - Grid Table - Stilizzazione BASE */
-/* Round corners - Grid */
-.k-grid {
-    overflow: hidden;
-    -moz-border-radius: 6px;
-    -webkit-border-radius: 6px;
-    border-radius: 6px;
-}
-
-.k-grouping-header {
-    overflow: hidden;
-    -moz-border-radius: 6px 6px 0 0;
-    -webkit-border-radius: 6px 6px 0 0;
-    border-radius: 6px 6px 0 0;
-}
-
-.k-grid-pager {
-    overflow: hidden;
-    -moz-border-radius: 0 0 6px 6px;
-    -webkit-border-radius: 0 0 6px 6px;
-    border-radius: 0 0 6px 6px;
-}
-
-/* Colors and spaces - Grid */
-td, th {
-    padding: 0;
-}
-
-.table-hover thead tr:hover th, .table-hover tbody tr:hover td {
-    background-color: #d1d119;
-}
-
-.k-grid tr:hover {
-    background-color: rgba(174, 202, 242, 0.2);
-    background-image: none;
-}
-
-.k-grid-header {
-    display: block;
-}
-
-.k-grid-header .k-header:last-child {
-    color: var(--main-danger-color);
-}
-
-.k-grid-header th {
-    color: var(--main-color);
-    background-color: #fff;
-}
-
-.k-grid-header .k-header > .k-link {
-    color: var(--main-color);
-}
-
-col.k-sorted, th.k-sorted, row.k-sorted, th.k-sorted {
-    background-color: rgba(174, 202, 242, 0.2);
-}
-
-th.k-sorted:hover, th.k-sorted:focus, th.k-sorted:active {
-    background-color: rgba(174, 202, 242, 0.2);
-}
-
-/* Write Grid column - stilizzazione write flag in grid column*/
-.k-grid .k-i-check::before {
-    color: var(--main-color);
-}
-
-/* Remove Grid column - stilizzazione command remove in grid column */
-.k-grid-delete .k-i-close::before {
-    color: var(--main-danger-color);
-}
-
-.avoid-k-button-style {
-    border: none;
-    background-color: transparent;
-    background-image: none;
-}
-
-.k-button.avoid-k-button-style:hover {
-    border: none;
-    background-color: transparent;
-    background-image: none;
-}
-
-td.k-command-cell {
-    text-align: center;
-}
-
-.k-command-cell > .k-button.avoid-k-button-style {
-    text-align: center;
-}
-
-/* Kendo UI - Dialog window e Popup window- Stilizzazione base */
-.k-window, .k-dialog {
-    background-color: #fff;
-    box-shadow: 0 0 3px 3px #dbdbdb;
-}
-
-.k-window-content {
-    padding: 0 16px 16px 16px;
-}
-
-.k-window-content form div {
-    padding: 0 20px 20px 20px;
-}
-
-.k-window-content h3 {
-    margin-top: 0;
-}
-
-.k-header {
-    background-color: transparent;
-    background-image: none;
-}
-
-.k-widget.windowTitle {
-    font-size: 14px;
-    line-height: 1.72857;
-}
-
-.windowIcon .k-window-title::before {
-    display: inline-block;
-    width: 35px;
-    height: 35px;
-    content: "";
-    vertical-align: middle;
-}
-
-.k-window-titlebar, .k-dialog-titlebar {
-    position: relative;
-    top: -15px;
-    left: 15px;
-    padding: 2px 5px;
-    color: #fff;
-    border-color: inherit;
-    border-radius: 4px 4px 4px 4px;
-    background-color: var(--main-color);
-}
-
-.k-window-titlebar .k-window-action {
-    width: 35px;
-    height: 35px;
-    padding: 2px;
 }
 
 /* Media queries */

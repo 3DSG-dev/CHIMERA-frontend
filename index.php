@@ -232,40 +232,6 @@
                             <button id="saveInfoCategory" class="buttonBordered">SAVE</button>
                         </div>
                     </div>
-                    <div class="sheetBoxedContainer">
-                        <h3 class="sheetTitle">Prova informations</h3>
-                        <div class="informationFieldContainer ">
-                            <div class="labelContainer"><label for="selectNumber">Number</label></div>
-                            <input id="selectNumber" type="number" value="" min="0" max="100" step="1" />
-                        </div>
-                        <div class="informationFieldContainer">
-                            <div class="labelContainer"><label for="selectNumberDecimal">Number Decimal</label></div>
-                            <input id="selectNumberDecimal" type="number" value="" min="0" max="100" step="1" />
-                        </div>
-                        <div class="informationFieldContainer ">
-                            <div class="labelContainer"><label for="selectDropDown">Dropdown list</label></div>
-                            <input id="selectDropDown" />
-                        </div>
-                        <div class="informationFieldContainer">
-                            <div class="labelContainer"><label for="selectMultiSelect">Multiselect</label></div>
-                            <select id="selectMultiSelect"></select>
-                        </div>
-                        <div class="informationFieldContainer">
-                            <div class="labelContainer"><label for="selectDate">Data</label></div>
-                            <input id="selectDate">
-                        </div>
-                        <div class="informationFieldContainer">
-                            <div class="labelContainer"><label for="selectSwitch">switch checkbox</label></div>
-                            <input type="checkbox" id="selectSwitch" />
-                        </div>
-                        <div class="informationFieldContainer">
-                            <div class="labelContainer"><label for="provaGroupComboCategory">Category</label></div>
-                            <input id="provaGroupComboCategory" type="text">
-                        </div>
-                        <div class="buttonContainer">
-                            <button class="buttonBordered">SAVE</button>
-                        </div>
-                    </div>
                 </div>
                 <div id="informationVersionTab" class="informationWindowTabItem">
                     <div class="sheetBoxedContainer">
