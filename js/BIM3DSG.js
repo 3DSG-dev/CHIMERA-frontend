@@ -97,7 +97,7 @@ function ResizeInformationWindow() {
     var width = portingWidth - 10;
     var maxWidth = true;
     if (width > 555) {
-        width = width > 800 ? 745 : 500;
+        width = width > 815 ? 760 : 500;
         maxWidth = false;
     }
     var height = portingHeight - 30;
@@ -112,37 +112,71 @@ function ResizeInformationWindow() {
         right: maxWidth ? "auto" : 55,
         left: "auto"
     });
+
     ChangeInformationFieldsStyle();
 }
 
-function ChangeInformationFieldsStyle() {
-    function SwitchFieldStyle(addLabel, removeLabel, addInput, removeInput) {
-        if (!$("#infoCategoryContainer .labelContainer").hasClass(addLabel)) {
-            $(".informationFieldContainer .labelContainer").removeClass(removeLabel).addClass(addLabel);
-            $(".informationFieldContainer .k-textbox").removeClass(removeInput).addClass(addInput);
-            $(".informationFieldContainer .k-widget").removeClass(removeInput).addClass(addInput);
+function ChangeInformationFieldsStyle(recompute) {
+    /**
+     * @return {boolean}
+     */
+    function SwitchFieldStyle(recompute) {
+        /**
+         * @return {boolean}
+         */
+        function SwitchFieldStyleClass(addLabel, removeLabel, addInput, removeInput, recompute) {
+            if (!$("#infoCategoryContainer .labelContainer").hasClass(addLabel) || recompute === true) {
+                $(".informationFieldContainer .labelContainer").removeClass(removeLabel).addClass(addLabel);
+                $(".informationFieldContainer .k-textbox").removeClass(removeInput).addClass(addInput);
+                $(".informationFieldContainer .k-widget").removeClass(removeInput).addClass(addInput);
+                $(".informationFieldContainer .inputCheckboxContainer").removeClass(removeInput).addClass(addInput);
+
+                return true;
+            }
+        }
+
+        if ($("#informationObjectTab").width() > 710) {
+            return SwitchFieldStyleClass("labelInline", "labelMultiline", "inputInline", "inputMultiline", recompute);
+        }
+        else {
+            return SwitchFieldStyleClass("labelMultiline", "labelInline", "inputMultiline", "inputInline", recompute);
         }
     }
 
-    function SwitchBoxedStyle(addClass, removeClass) {
-        if (!$("#infoCategoryContainer").hasClass(addClass)) {
-            $(".informationWindowTabItem .sheetBoxedContainer").removeClass(removeClass).addClass(addClass);
+    function SwitchBoxedStyle(recompute) {
+        function SetTwoColumnsBoxedStyle(informationTab) {
+            var leftHeight = 0;
+            var rightHeight = 0;
+            $("#" + informationTab).children(".sheetBoxedContainer").each(function () {
+                var sheet = $(this);
+                var sheetHeight = sheet.outerHeight(true);
+                var addClass = "sheetBoxedColumnLeft";
+                if (rightHeight < leftHeight) {
+                    rightHeight += sheetHeight;
+                    addClass = "sheetBoxedColumnRight"
+                }
+                else {
+                    rightHeight -= leftHeight;
+                    leftHeight = sheetHeight;
+                }
+                sheet.removeClass("sheetBoxedColumnLeft sheetBoxedColumnRight").addClass(addClass);
+            })
+        }
+
+        if ($("#informationObjectTab").width() > 400) {
+            if (recompute === true || !$("#infoCategoryContainer").hasClass("sheetBoxedColumnRight")) {
+                SetTwoColumnsBoxedStyle("informationObjectTab");
+                SetTwoColumnsBoxedStyle("informationVersionTab");
+                SetTwoColumnsBoxedStyle("informationSubVersionTab");
+            }
+        }
+        else if ($("#infoCategoryContainer").hasClass("sheetBoxedColumnRight")) {
+            $(".informationWindowTabItem .sheetBoxedContainer").removeClass("sheetBoxedColumnLeft sheetBoxedColumnRight");
         }
     }
 
-    var informationWidth = $("#informationObjectTab").width();
-    if (informationWidth > 400) {
-        SwitchBoxedStyle("colonnaMezziBoxed", "colonnaInteraBoxed");
-    }
-    else {
-        SwitchBoxedStyle("colonnaInteraBoxed", "colonnaMezziBoxed");
-    }
-    if (informationWidth > 710) {
-        SwitchFieldStyle("labelInline", "labelMultiline", "inputInline", "inputMultiline");
-    }
-    else {
-        SwitchFieldStyle("labelMultiline", "labelInline", "inputMultiline", "inputInline");
-    }
+    var fieldStyleChanged = SwitchFieldStyle(recompute);
+    SwitchBoxedStyle(fieldStyleChanged || recompute);
 }
 
 function ChangeObjectsGridAlignment() {
@@ -405,29 +439,169 @@ function GetLocaleDate(data) {
 }
 
 function SetDynamicInformationFields() {
-    UpdateCategoryList();
-    ResetInformation();
-}
+    function UpdateCategoryList() {
+        $.ajax({
+            url: './php/getCategoryList.php',
+            dataType: "json",
+            success: function (resultData) {
+                var categoryCombo = $("#infoCategory").data("kendoComboBox");
+                categoryCombo.setDataSource(resultData["categoryList"]);
+                categoryCombo.dataSource.group({field: "GruppoCategoria"});
+            },
+            error: function (jqXHR, textStatus, errorThrown) {
+                console.log(textStatus, errorThrown);
+                alert("Unexpected error during the update of the category list!");
+            }
+        });
+    }
 
-function UpdateCategoryList() {
-    $.ajax({
-        url: 'php/getCategoryList.php',
-        dataType: "json",
-        success: function (resultData) {
-            var categoryCombo = $("#infoCategory").data("kendoComboBox");
-            categoryCombo.setDataSource(resultData["categoryList"]);
-            categoryCombo.dataSource.group({field: "GruppoCategoria"});
-            categoryCombo.value(null);
-        },
-        error: function (jqXHR, textStatus, errorThrown) {
-            console.log(textStatus, errorThrown);
-            alert("Unexpected error during the update of the category list!");
+    function CreateDynamicInformationFields() {
+        var children = $("#informationObjectTab").children();
+        children.splice(0, 2);
+        children.each(function () {
+            this.remove();
+        });
+
+        function CreateInformationFieldSingleTab(fieldsList, destinationTab) {
+            function OpenCurrentSheet(currentScheda, titolo) {
+                var html = "";
+                if (currentScheda !== -1) {
+                    html += '                    <div class="sheetBoxedContainer">\n';
+                    html += '                        <h3 class="sheetTitle">' + titolo + '</h3>\n';
+                }
+                return html;
+            }
+
+            function CloseCurrentSheet(currentScheda) {
+                var html = "";
+                if (currentScheda !== -1) {
+                    html += '                        <div class="buttonContainer">\n';
+                    html += '                            <button id="saveInfoObject-' + currentScheda + '" class="buttonBordered" disabled>SAVE</button>\n';
+                    html += '                        </div>\n';
+                    html += "                    </div>\n";
+                }
+                return html;
+            }
+
+            function AddField(field) {
+                var html = "";
+                if (field["IsTitle"] === "t") {
+                    html += '                        <h4 class="sheetSubTitle">' + field["Campo"] + '</h4>\n';
+                }
+                else if (field["IsSeparator"] === "t") {
+                    html += '                        <hr class="k-separator">\n';
+                }
+                else {
+                    html += '                        <div class="informationFieldContainer">\n';
+                    html += '                            <div class="labelContainer"><label for="' + destinationTab + '_' + field["Codice"] + '">' + field["Campo"] + '</label></div>\n';
+                    if (field["IsBool"] === "t") {
+                        html += '';
+                    }
+                    else if (field["IsTimestamp"] === "t") {
+                        html += '                            <input data-tipoCampo="timestamp" data-codiceCampo="' + field["Codice"] + '" id="' + destinationTab + '_' + field["Codice"] + '" readonly>\n';
+                    }
+                    else if (field["IsInt"] === "t") {
+                        html += '                            <input data-tipoCampo="int" data-codiceCampo="' + field["Codice"] + '" id="' + destinationTab + '_' + field["Codice"] + '" type="number" step="1" readonly>\n';
+                    }
+                    else if (field["IsReal"] === "t") {
+                        html += '                            <input data-tipoCampo="real" data-codiceCampo="' + field["Codice"] + '" id="' + destinationTab + '_' + field["Codice"] + '" type="number" step="0.01" readonly>\n';
+                    }
+                    else if (field["IsCombo"] === "t") {
+                        html += '                            <input data-tipoCampo="combo" data-codiceCampo="' + field["Codice"] + '" id="' + destinationTab + '_' + field["Codice"] + '" readonly>\n';
+                    }
+                    else if (field["IsMultiCombo"] === "t") {
+                        html += '                            <input data-tipoCampo="multicombo" data-codiceCampo="' + field["Codice"] + '" id="' + destinationTab + '_' + field["Codice"] + '" readonly>\n';
+                    }
+                    else {
+                        field["Height"] = field["Height"] / 22;
+                        if (field["Height"] > 1) {
+                            html += '                            <textarea data-tipoCampo="text" data-codiceCampo="' + field["Codice"] + '" id="' + destinationTab + '_' + field["Codice"] + '" style="height: ' + field["Height"] * 31 + 'px" type="text" class="k-textbox" readonly/></textarea>\n';
+                        }
+                        else {
+                            html += '                            <input data-tipoCampo="text" data-codiceCampo="' + field["Codice"] + '" id="' + destinationTab + '_' + field["Codice"] + '" type="text" class="k-textbox" readonly/>\n';
+                        }
+                    }
+                    html += '                        </div>\n';
+                }
+
+                return html;
+            }
+
+            function InitializeFieldKendoComponents(destinationTab) {
+                $("#" + destinationTab).find("input").each(function (i, inputField) {
+                    var tipoCampo = inputField.dataset["tipocampo"];
+                    if (tipoCampo === "timestamp") {
+                        $(inputField).kendoDateTimePicker({
+                            timeFormat: "HH:mm",
+                            format: "dd/MM/yy HH:mm",
+                            parseFormats: ["dd/MM/yy hh:mm", "dd/MM/yy HH:mm", "dd/MM/yy", "HH:mm"],
+                        });
+                    }
+                    else if (tipoCampo === "int") {
+                        $(inputField).kendoNumericTextBox({
+                            decimals: 0,
+                            restrictDecimals: true,
+                            format: "0"
+                        });
+                    }
+                    else if (tipoCampo === "real") {
+                        $(inputField).kendoNumericTextBox();
+                    }
+                    else if (tipoCampo === "combo") {
+                        $(inputField).kendoDropDownList({
+                            dataTextField: "text",
+                            dataValueField: "value"
+                        });
+                    }
+                    else if (tipoCampo === "multicombo") {
+                        /*$(inputField).kendoMultiSelect({
+                            autoClose: false
+                        }).data("kendoMultiSelect");*/
+                    }
+                });
+            }
+
+            var html = "";
+            var currentScheda = -1;
+            $.each(fieldsList, function (key, field) {
+                if (currentScheda !== field["CodiceTitolo"]) {
+                    html += CloseCurrentSheet(currentScheda);
+                    currentScheda = field["CodiceTitolo"];
+                    html += OpenCurrentSheet(currentScheda, field["Titolo"]);
+                }
+                html += AddField(field);
+            });
+
+            html += CloseCurrentSheet(currentScheda);
+            $("#" + destinationTab).append(html);
+
+            InitializeFieldKendoComponents(destinationTab);
         }
-    });
+
+        $.ajax({
+            url: './php/getInformationFields.php',
+            dataType: "json",
+            success: function (resultData) {
+                CreateInformationFieldSingleTab(resultData["SchedeOggetto"], "informationObjectTab");
+
+                ChangeInformationFieldsStyle(true);
+            },
+            error: function (jqXHR, textStatus, errorThrown) {
+                console.log(textStatus, errorThrown);
+                alert("Unexpected error while creating dynamic object information fields!");
+            }
+        });
+    }
+
+    ResetInformation();
+
+    UpdateCategoryList();
+
+    CreateDynamicInformationFields();
 }
 
 function ResetInformation() {
-    $("#informationWindowTabControl").find("input").each(function (i, elem) {
+    $("#informationWindowTabControl").find("input, textarea").each(function (i, elem) {
         elem.value = null;
     });
 
@@ -479,7 +653,7 @@ function UpdateInformation(codiceVersione, readonly) {
         }
 
         $.ajax({
-            url: 'php/getBaseInformation.php',
+            url: './php/getBaseInformation.php',
             dataType: "json",
             data: {
                 codiceVersione: codiceVersione
@@ -528,17 +702,64 @@ function UpdateInformation(codiceVersione, readonly) {
         });
     }
 
-    UpdateBaseInformation(codiceVersione);
-    $("#informationReadOnlySwitch").data("kendoSwitch").check(readonly === "f");
+    function UpdateDynamicInformation(codiceVersione) {
+        function UpdateObjectInformation() {
+            $.ajax({
+                url: './php/getDynamicInformation.php',
+                dataType: "json",
+                data: {
+                    codiceVersione: codiceVersione
+                },
+                success: function (resultData) {
+                    SetFieldValue(resultData["SchedeOggetto"], "informationObjectTab");
+                },
+                error: function (jqXHR, textStatus, errorThrown) {
+                    console.log(textStatus, errorThrown);
+                    alert("Unexpected error while loading dynamic information!");
+                }
+            });
+        }
 
-    $("#saveInfoCategory").unbind("click", ChangeCategory).bind("click", ChangeCategory);
+        UpdateObjectInformation();
+    }
+
+    function SetWriteMode(writeMode) {
+        $("#informationWindowTabControl").find("input, textarea").each(function (i, inputField) {
+            if (inputField.dataset["tipocampo"]) {
+                if (writeMode) {
+                    inputField.removeAttribute("readonly");
+                }
+                else {
+                    inputField.setAttribute("readonly", true);
+                }
+            }
+        });
+        $("#informationWindowTabControl").find("button").each(function (i, saveButton) {
+            if (writeMode) {
+                saveButton.removeAttribute("disabled");
+            }
+            else {
+                saveButton.setAttribute("disabled", true);
+            }
+        });
+    }
+
+    ResetInformation();
+    UpdateBaseInformation(codiceVersione);
+    UpdateDynamicInformation(codiceVersione);
+
+    var writeMode = readonly === "f";
+    $("#informationReadOnlySwitch").data("kendoSwitch").check(writeMode);
+    SetWriteMode(writeMode);
+
+    $("#saveInfoCategory").bind("click", ChangeCategory);
 }
 
 function ChangeCategory() {
     if ($("#informationReadOnlySwitch").data("kendoSwitch").check()) {
         var categoryCombo = $("#infoCategory").data("kendoComboBox");
         $.ajax({
-            url: 'php/setCategory.php',
+            url: './php/setCategory.php',
             dataType: "json",
             data: {
                 codiceOggetto: $("#infoCodiceOggetto").val(),
@@ -599,7 +820,7 @@ function InitializeComponents() {
 
         function UpdateSearchFormCombobox(senderId) {
             $.ajax({
-                url: 'php/getListLayersAndName.php',
+                url: './php/getListLayersAndName.php',
                 dataType: "json",
                 data: {
                     senderId: senderId,
@@ -693,11 +914,20 @@ function InitializeComponents() {
     }
 
     function SetInformationWindow() {
+        function InformationWindow_OnResize() {
+            ChangeInformationFieldsStyle();
+        }
+
+        function InformationWindowTabControl_OnShow() {
+            ChangeInformationFieldsStyle(true);
+        }
+
         function SetInformationTabControl() {
             $("#informationWindowTabControl").kendoTabStrip({
                 animation: {
                     open: {effects: "fadeIn"}
-                }
+                },
+                show: InformationWindowTabControl_OnShow
             });
         }
 
@@ -729,70 +959,12 @@ function InitializeComponents() {
                 }).data("kendoComboBox");
             }
 
-            function SetInformationWindowProvaCard() {
-
-                // create NumericTextBox from input HTML element
-                $("#selectNumber").kendoNumericTextBox();
-                $("#selectNumberDecimal").kendoNumericTextBox({
-                    format: "# Kg",
-                    decimals: 3
-                });
-
-                // create Timepicker from div HTML element
-                $("#selectDate").kendoDateTimePicker({
-                    timeFormat: "HH:mm",
-                    format: "dd/MM/yy HH:mm",
-                    parseFormats: ["dd/MM/yy hh:mm", "dd/MM/yy HH:mm", "dd/MM/yy", "HH:mm"],
-                    value: new Date(),
-                    dateInput: true
-                });
-
-                // create Dropdownlist from div HTML element
-                var data = [
-                    {text: "Black", value: "1"},
-                    {text: "Orange", value: "2"},
-                    {text: "Grey", value: "3"}
-                ];
-
-                $("#selectDropDown").kendoDropDownList({
-                    dataTextField: "text",
-                    dataValueField: "value",
-                    dataSource: data
-                });
-
-                $("#selectMultiSelect").kendoMultiSelect({
-                    autoClose: false
-                }).data("kendoMultiSelect");
-
-                $("#selectSwitch").kendoSwitch({
-                    messages: {
-                        checked: "YES",
-                        unchecked: "NO"
-                    }
-                });
-
-                $("#provaGroupComboCategory").kendoComboBox({
-                    dataTextField: "ContactName",
-                    dataValueField: "CustomerID",
-                    fixedGroupTemplate: "#=data#",
-                    groupTemplate: "#: data #",
-                    height: 400,
-                    dataSource: {
-                        type: "odata",
-                        transport: {
-                            read: "https://demos.telerik.com/kendo-ui/service/Northwind.svc/Customers"
-                        },
-                        group: {field: "Country"}
-                    }
-                });
-            }
-
             SetInformationCategorySheet();
-            SetInformationWindowProvaCard();
         }
 
         var informationWindow = $("#informationWindow");
         informationWindow.removeClass("fixedPosition");
+
         informationWindow.kendoWindow({
             title: "Information",
             minWidth: 350,
@@ -801,7 +973,7 @@ function InitializeComponents() {
             resizable: true,
             open: Windows_OnOpen,
             close: Windows_OnClose,
-            resize: ChangeInformationFieldsStyle
+            resize: InformationWindow_OnResize
         }).data("kendoWindow");
 
         informationWindow.parents(".k-widget").addClass("windowTitle windowIcon informationWindowTitle informationWindowIcon");
