@@ -307,15 +307,15 @@ input.k-textbox, textarea.k-textbox {
 }
 
 /* Kendo UI - Checkbox */
-.k-checkbox-label::before, .k-radio-label::before {
-    width: 26px;
-    height: 26px;
-    text-align: left;
+.k-checkbox-label::before, .k-checkbox-label::after {
+    top: -4px;
+    width: 20px;
+    height: 20px;
 }
 
-.k-checkbox-label::after {
-    width: 26px;
-    height: 26px;
+.k-checkbox-label::before {
+    text-align: left;
+    border-color: var(--grigiomedio);
 }
 
 .k-checkbox:checked + .k-checkbox-label::before {
@@ -326,8 +326,11 @@ input.k-textbox, textarea.k-textbox {
     box-shadow: 0 0 0 0;
 }
 
-.k-checkbox-label::before, .k-checkbox-label::after {
-    top: -4px;
+.k-checkbox:indeterminate + .k-checkbox-label::after {
+    top: 0;
+    left: 4px;
+    width: 12px;
+    height: 12px;
 }
 
 /* Kendo UI - Buttons */
