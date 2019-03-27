@@ -428,7 +428,14 @@ function RemoveFromYourList(codiceVersione) {
  * @return {string}
  */
 function GetLocaleDateTime(data) {
-    return data != null ? new Date(Date.parse(data.replace(" ", "T").substring(0, data.length - 3))).toLocaleString() : "";
+    return data != null ? GetDateTime(data).toLocaleString() : "";
+}
+
+/**
+ * @return {string}
+ */
+function GetDateTime(data) {
+    return data != null ? new Date(Date.parse(data.replace(" ", "T").substring(0, data.length - 3))) : "";
 }
 
 /**
@@ -463,6 +470,9 @@ function SetDynamicInformationFields() {
         });
 
         function CreateInformationFieldSingleTab(fieldsList, destinationTab) {
+            /**
+             * @return {string}
+             */
             function OpenCurrentSheet(currentScheda, titolo) {
                 var html = "";
                 if (currentScheda !== -1) {
@@ -472,6 +482,9 @@ function SetDynamicInformationFields() {
                 return html;
             }
 
+            /**
+             * @return {string}
+             */
             function CloseCurrentSheet(currentScheda) {
                 var html = "";
                 if (currentScheda !== -1) {
@@ -483,6 +496,9 @@ function SetDynamicInformationFields() {
                 return html;
             }
 
+            /**
+             * @return {string}
+             */
             function AddField(field) {
                 var html = "";
                 if (field["IsTitle"] === "t") {
@@ -491,31 +507,35 @@ function SetDynamicInformationFields() {
                 else if (field["IsSeparator"] === "t") {
                     html += '                        <hr class="k-separator">\n';
                 }
+                else if (field["IsBool"] === "t") {
+                    html += '                        <div class="informationFieldContainer">\n';
+                    html += '                            <div class="labelContainer"><label>' + field["Campo"] + '</label></div>\n';
+                    html += '                            <label class="k-checkbox-label" for="' + destinationTab + '_' + field["Codice"] + '"></label>\n';
+                    html += '                            <input data-tipoCampo="bool" data-codiceCampo="' + field["Codice"] + '" id="' + destinationTab + '_' + field["Codice"] + '" type="checkbox" class="k-checkbox" />\n';
+                    html += '                        </div>\n';
+                }
                 else {
                     html += '                        <div class="informationFieldContainer">\n';
                     html += '                            <div class="labelContainer"><label for="' + destinationTab + '_' + field["Codice"] + '">' + field["Campo"] + '</label></div>\n';
-                    if (field["IsBool"] === "t") {
-                        html += '';
-                    }
-                    else if (field["IsTimestamp"] === "t") {
-                        html += '                            <input data-tipoCampo="timestamp" data-codiceCampo="' + field["Codice"] + '" id="' + destinationTab + '_' + field["Codice"] + '" readonly>\n';
+                    if (field["IsTimestamp"] === "t") {
+                        html += '                            <input data-tipoCampo="timestamp" data-codiceCampo="' + field["Codice"] + '" id="' + destinationTab + '_' + field["Codice"] + '">\n';
                     }
                     else if (field["IsInt"] === "t") {
-                        html += '                            <input data-tipoCampo="int" data-codiceCampo="' + field["Codice"] + '" id="' + destinationTab + '_' + field["Codice"] + '" type="number" step="1" readonly>\n';
+                        html += '                            <input data-tipoCampo="int" data-codiceCampo="' + field["Codice"] + '" id="' + destinationTab + '_' + field["Codice"] + '" type="number">\n';
                     }
                     else if (field["IsReal"] === "t") {
-                        html += '                            <input data-tipoCampo="real" data-codiceCampo="' + field["Codice"] + '" id="' + destinationTab + '_' + field["Codice"] + '" type="number" step="0.01" readonly>\n';
+                        html += '                            <input data-tipoCampo="real" data-codiceCampo="' + field["Codice"] + '" id="' + destinationTab + '_' + field["Codice"] + '" type="number">\n';
                     }
                     else if (field["IsCombo"] === "t") {
-                        html += '                            <input data-tipoCampo="combo" data-codiceCampo="' + field["Codice"] + '" id="' + destinationTab + '_' + field["Codice"] + '" readonly>\n';
+                        html += '                            <input data-tipoCampo="combo" data-codiceCampo="' + field["Codice"] + '" id="' + destinationTab + '_' + field["Codice"] + '">\n';
                     }
                     else if (field["IsMultiCombo"] === "t") {
-                        html += '                            <input data-tipoCampo="multicombo" data-codiceCampo="' + field["Codice"] + '" id="' + destinationTab + '_' + field["Codice"] + '" readonly>\n';
+                        html += '                            <input data-tipoCampo="multicombo" data-codiceCampo="' + field["Codice"] + '" id="' + destinationTab + '_' + field["Codice"] + '">\n';
                     }
                     else {
                         field["Height"] = field["Height"] / 22;
                         if (field["Height"] > 1) {
-                            html += '                            <textarea data-tipoCampo="text" data-codiceCampo="' + field["Codice"] + '" id="' + destinationTab + '_' + field["Codice"] + '" style="height: ' + field["Height"] * 31 + 'px" type="text" class="k-textbox" readonly/></textarea>\n';
+                            html += '                            <textarea data-tipoCampo="text" data-codiceCampo="' + field["Codice"] + '" id="' + destinationTab + '_' + field["Codice"] + '" style="height: ' + field["Height"] * 31 + 'px" type="text" class="k-textbox" readonly></textarea>\n';
                         }
                         else {
                             html += '                            <input data-tipoCampo="text" data-codiceCampo="' + field["Codice"] + '" id="' + destinationTab + '_' + field["Codice"] + '" type="text" class="k-textbox" readonly/>\n';
@@ -530,33 +550,46 @@ function SetDynamicInformationFields() {
             function InitializeFieldKendoComponents(destinationTab) {
                 $("#" + destinationTab).find("input").each(function (i, inputField) {
                     var tipoCampo = inputField.dataset["tipocampo"];
-                    if (tipoCampo === "timestamp") {
-                        $(inputField).kendoDateTimePicker({
-                            timeFormat: "HH:mm",
-                            format: "dd/MM/yy HH:mm",
-                            parseFormats: ["dd/MM/yy hh:mm", "dd/MM/yy HH:mm", "dd/MM/yy", "HH:mm"],
-                        });
-                    }
-                    else if (tipoCampo === "int") {
-                        $(inputField).kendoNumericTextBox({
-                            decimals: 0,
-                            restrictDecimals: true,
-                            format: "0"
-                        });
-                    }
-                    else if (tipoCampo === "real") {
-                        $(inputField).kendoNumericTextBox();
-                    }
-                    else if (tipoCampo === "combo") {
-                        $(inputField).kendoDropDownList({
-                            dataTextField: "text",
-                            dataValueField: "value"
-                        });
-                    }
-                    else if (tipoCampo === "multicombo") {
-                        /*$(inputField).kendoMultiSelect({
-                            autoClose: false
-                        }).data("kendoMultiSelect");*/
+                    var inputFieldSel = $(inputField);
+                    switch (tipoCampo) {
+                        case "timestamp":
+                            inputFieldSel.kendoDateTimePicker({
+                                timeFormat: "HH:mm",
+                                format: "dd/MM/yy HH:mm",
+                                parseFormats: ["dd/MM/yy hh:mm:ss", "dd/MM/yy HH:mm:ss", "dd/MM/yy hh:mm", "dd/MM/yy HH:mm", "dd/MM/yy", "HH:mm"]
+                            });
+                            inputFieldSel.data("kendoDateTimePicker").readonly();
+                            break;
+                        case "int":
+                            inputFieldSel.kendoNumericTextBox({
+                                decimals: 0,
+                                restrictDecimals: true,
+                                step: 1,
+                                format: "0"
+                            });
+                            inputFieldSel.data("kendoNumericTextBox").readonly();
+                            break;
+                        case "real":
+                            inputFieldSel.kendoNumericTextBox({
+                                decimals: 13,
+                                step: 0.001,
+                                format: "0.#########"
+                            });
+                            inputFieldSel.data("kendoNumericTextBox").readonly();
+                            break;
+                        case "combo":
+                            inputFieldSel.kendoDropDownList({
+                                dataTextField: "text",
+                                dataValueField: "value"
+                            });
+                            inputFieldSel.data("kendoDropDownList").readonly();
+                            break;
+                        case "multicombo":
+                            /*inputFieldSel.kendoMultiSelect({
+                                autoClose: false
+                            }).data("kendoMultiSelect").readOnly();
+                            inputFieldSel.data("kendoMultiSelect").readonly();*/
+                            break;
                     }
                 });
             }
@@ -703,38 +736,109 @@ function UpdateInformation(codiceVersione, readonly) {
     }
 
     function UpdateDynamicInformation(codiceVersione) {
-        function UpdateObjectInformation() {
-            $.ajax({
-                url: './php/getDynamicInformation.php',
-                dataType: "json",
-                data: {
-                    codiceVersione: codiceVersione
-                },
-                success: function (resultData) {
-                    SetFieldValue(resultData["SchedeOggetto"], "informationObjectTab");
-                },
-                error: function (jqXHR, textStatus, errorThrown) {
-                    console.log(textStatus, errorThrown);
-                    alert("Unexpected error while loading dynamic information!");
+        function SetFieldValue(valueList, destinationTab) {
+            $.each(valueList, function (key, value) {
+                var fieldControl = $("#" + destinationTab + "_" + value["CodiceCampo"]);
+                var tipoCampo = fieldControl[0].dataset["tipocampo"];
+                switch (tipoCampo) {
+                    case "text":
+                        fieldControl.val(value["TextValue"]);
+                        break;
+                    case "bool":
+                        //fieldControl.checked = value["TextValue"] === "t";
+                        break;
+                    case "timestamp":
+                        fieldControl.data("kendoDateTimePicker").value(GetDateTime(value["TimestampValue"]));
+                        break;
+                    case "int":
+                        fieldControl.data("kendoNumericTextBox").value(value["IntValue"]);
+                        break;
+                    case "real":
+                        fieldControl.data("kendoNumericTextBox").value(value["RealValue"]);
+                        break;
                 }
             });
         }
 
-        UpdateObjectInformation();
+        $.ajax({
+            url: './php/getDynamicInformation.php',
+            dataType: "json",
+            data: {
+                codiceVersione: codiceVersione
+            },
+            success: function (resultData) {
+                SetFieldValue(resultData["InformazioniOggetto"], "informationObjectTab");
+            },
+            error: function (jqXHR, textStatus, errorThrown) {
+                console.log(textStatus, errorThrown);
+                alert("Unexpected error while loading dynamic information!");
+            }
+        });
     }
 
     function SetWriteMode(writeMode) {
-        $("#informationWindowTabControl").find("input, textarea").each(function (i, inputField) {
+        function SetWrite(inputField) {
+            var tipoCampo = inputField.dataset["tipocampo"];
+            switch (tipoCampo) {
+                case "text":
+                    inputField.removeAttribute("readonly");
+                    break;
+                case "timestamp":
+                    $(inputField).data("kendoDateTimePicker").readonly(false);
+                    break;
+                case "int":
+                    $(inputField).data("kendoNumericTextBox").readonly(false);
+                    break;
+                case "real":
+                    $(inputField).data("kendoNumericTextBox").readonly(false);
+                    break;
+                case "combo":
+                    $(inputField).data("kendoDropDownList").readonly(false);
+                    break;
+                case "multicombo":
+                    //$(inputField).data("kendoMultiSelect").readonly(false);
+                    break;
+            }
+        }
+
+        function SetRead(inputField) {
+            var tipoCampo = inputField.dataset["tipocampo"];
+            switch (tipoCampo) {
+                case "text":
+                case "bool":
+                    inputField.setAttribute("readonly", true);
+                    break;
+                case "timestamp":
+                    $(inputField).data("kendoDateTimePicker").readonly();
+                    break;
+                case "int":
+                    $(inputField).data("kendoNumericTextBox").readonly();
+                    break;
+                case "real":
+                    $(inputField).data("kendoNumericTextBox").readonly();
+                    break;
+                case "combo":
+                    $(inputField).data("kendoDropDownList").readonly();
+                    break;
+                case "multicombo":
+                    //$(inputField).data("kendoMultiSelect").readonly();
+                    break;
+            }
+        }
+
+        var informationWindowTabControl = $("#informationWindowTabControl");
+        informationWindowTabControl.find("input, textarea").each(function (i, inputField) {
             if (inputField.dataset["tipocampo"]) {
                 if (writeMode) {
-                    inputField.removeAttribute("readonly");
+                    SetWrite(inputField);
                 }
                 else {
+                    SetRead(inputField);
                     inputField.setAttribute("readonly", true);
                 }
             }
         });
-        $("#informationWindowTabControl").find("button").each(function (i, saveButton) {
+        informationWindowTabControl.find("button").each(function (i, saveButton) {
             if (writeMode) {
                 saveButton.removeAttribute("disabled");
             }
