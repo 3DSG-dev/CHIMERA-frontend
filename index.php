@@ -166,7 +166,7 @@
                     <li>Subversion information</li>
                 </ul>
 
-                <div id="informationObjectTab" class="informationWindowTabItem">
+                <div id="informationObjectTab" data-ref="Oggetti" class="informationWindowTabItem">
                     <div class="sheetBoxedContainer">
                         <h3 class="sheetTitle">Main information</h3>
                         <div class="informationFieldContainer">
@@ -233,7 +233,7 @@
                         </div>
                     </div>
                 </div>
-                <div id="informationVersionTab" class="informationWindowTabItem">
+                <div id="informationVersionTab" data-ref="OggettiVersion" class="informationWindowTabItem">
                     <div class="sheetBoxedContainer">
                         <h3 class="sheetTitle">Internal information</h3>
                         <div class="informationFieldContainer">
