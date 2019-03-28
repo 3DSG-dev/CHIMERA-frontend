@@ -442,22 +442,21 @@ function SetDynamicInformationFields() {
     }
 
     function CreateDynamicInformationFields() {
-        var children = $("#informationObjectTab").children();
-        children.splice(0, 2);
-        children.each(function () {
-            this.remove();
-        });
+        function DeleteDynamicInformationFields() {
+            $("#informationWindowTabControl").find("div.sheetBoxedContainer").each(function (i, elem) {
+                if (elem.dataset["codice"] > 0) {
+                    $(elem).remove();
+                }
+            });
+        }
 
         function CreateInformationFieldSingleTab(fieldsList, destinationTab) {
             /**
              * @return {string}
              */
-            function OpenCurrentSheet(currentScheda, titolo) {
-                var html = "";
-                if (currentScheda !== -1) {
-                    html += '                    <div class="sheetBoxedContainer">\n';
-                    html += '                        <h3 class="sheetTitle">' + titolo + '</h3>\n';
-                }
+            function OpenCurrentSheet(codiceTitolo, titolo) {
+                var html = '                    <div data-codice="' + codiceTitolo + '" class="sheetBoxedContainer ">\n';
+                html += '                        <h3 class="sheetTitle">' + titolo + '</h3>\n';
                 return html;
             }
 
@@ -571,7 +570,7 @@ function SetDynamicInformationFields() {
                                     codiceCampo: inputField.dataset["codice"]
                                 },
                                 success: function (resultData) {
-                                    inputFieldKendo.setDataSource(resultData["comboValueList"]);
+                                    inputFieldKendo.setDataSource(resultData);
                                 },
                                 error: function (jqXHR, textStatus, errorThrown) {
                                     console.log(textStatus, errorThrown);
@@ -595,7 +594,7 @@ function SetDynamicInformationFields() {
                 if (currentScheda !== field["CodiceTitolo"]) {
                     html += CloseCurrentSheet(currentScheda);
                     currentScheda = field["CodiceTitolo"];
-                    html += OpenCurrentSheet(currentScheda, field["Titolo"]);
+                    html += OpenCurrentSheet(field["CodiceTitolo"], field["Titolo"]);
                 }
                 html += AddField(field);
             });
@@ -606,6 +605,8 @@ function SetDynamicInformationFields() {
 
             InitializeFieldKendoComponents(destinationTabSel);
         }
+
+        DeleteDynamicInformationFields();
 
         $.ajax({
             url: './php/getInformationFields.php',
@@ -644,6 +645,43 @@ function ResetInformation() {
 
 function UpdateInformation(codiceVersione, readonly) {
     function UpdateBaseInformation(codiceVersione) {
+        function ShowInformationSheet(codiceCategoria) {
+            function HideAllInformationSheet() {
+                $("#informationWindowTabControl").find("div.sheetBoxedContainer").each(function (i, elem) {
+                    if (elem.dataset["codice"] > 0) {
+                        $(elem).addClass("hidden");
+                    }
+                });
+            }
+
+            function SetVisibleInformationSheet(sheetList, destinationTab) {
+                $("#" + destinationTab).find("div.sheetBoxedContainer").each(function (i, elem) {
+                    if (elem.dataset["codice"] > 0 && sheetList.some(item => item["CodiceScheda"] === elem.dataset["codice"])) {
+                        $(elem).removeClass("hidden");
+                    }
+                });
+            }
+
+            HideAllInformationSheet();
+
+            if (codiceCategoria > 0) {
+                $.ajax({
+                    url: './php/getVisibleInformationSheet.php',
+                    dataType: "json",
+                    data: {
+                        codiceCategoria: codiceCategoria
+                    },
+                    success: function (resultData) {
+                        SetVisibleInformationSheet(resultData["SchedeVisibiliOggetto"], "informationObjectTab");
+                    },
+                    error: function (jqXHR, textStatus, errorThrown) {
+                        console.log(textStatus, errorThrown);
+                        alert("Unexpected error while loading visible information sheet!");
+                    }
+                });
+            }
+        }
+
         /**
          * @return {string}
          */
@@ -707,7 +745,10 @@ function UpdateInformation(codiceVersione, readonly) {
                 $("#infoCantiereEliminazioneInizio").val(GetLocaleDate(resultData["EliminazioneDataInizio"]));
                 $("#infoCantiereEliminazioneFine").val(GetLocaleDate(resultData["EliminazioneDataFine"]));
 
+                //TODO se si riassegna lo stesso valore non lo prende: perché?
+                $("#infoCategory").data("kendoComboBox").value(-1);
                 $("#infoCategory").data("kendoComboBox").value(resultData["Categoria"]);
+                ShowInformationSheet(resultData["Categoria"]);
 
                 $("#infoCodiceOggetto").val(resultData["CodiceOggetto"]);
                 $("#infoCodiceVersione").val(resultData["CodiceVersione"]);
