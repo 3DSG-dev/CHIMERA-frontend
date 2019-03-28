@@ -106,6 +106,10 @@ body {
     padding: 0 35px 0 35px;
 }
 
+.hidden {
+    display: none !important;
+}
+
 .fixedPosition {
     position: fixed;
 }
