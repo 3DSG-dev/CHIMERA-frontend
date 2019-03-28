@@ -455,7 +455,7 @@ function SetDynamicInformationFields() {
              * @return {string}
              */
             function OpenCurrentSheet(codiceTitolo, titolo) {
-                var html = '                    <div data-codice="' + codiceTitolo + '" class="sheetBoxedContainer ">\n';
+                var html = '                    <div data-codice="' + codiceTitolo + '" class="sheetBoxedContainer hidden">\n';
                 html += '                        <h3 class="sheetTitle">' + titolo + '</h3>\n';
                 return html;
             }
@@ -508,7 +508,7 @@ function SetDynamicInformationFields() {
                         html += '                            <input data-tipo="combo" data-codice="' + field["Codice"] + '" id="' + destinationTab + '_' + field["Codice"] + '">\n';
                     }
                     else if (field["IsMultiCombo"] === "t") {
-                        html += '                            <input data-tipo="multicombo" data-codice="' + field["Codice"] + '" id="' + destinationTab + '_' + field["Codice"] + '">\n';
+                        html += '                            <select data-tipo="multicombo" data-codice="' + field["Codice"] + '" id="' + destinationTab + '_' + field["Codice"] + '"></select>\n';
                     }
                     else {
                         field["Height"] = field["Height"] / 22;
@@ -526,7 +526,7 @@ function SetDynamicInformationFields() {
             }
 
             function InitializeFieldKendoComponents(destinationTabSel) {
-                destinationTabSel.find("input").each(function (i, inputField) {
+                destinationTabSel.find("input, select").each(function (i, inputField) {
                     var tipoCampo = inputField.dataset["tipo"];
                     var inputFieldSel = $(inputField);
                     switch (tipoCampo) {
@@ -579,10 +579,10 @@ function SetDynamicInformationFields() {
                             });
                             break;
                         case "multicombo":
-                            /*inputFieldSel.kendoMultiSelect({
+                            inputFieldSel.kendoMultiSelect({
                                 autoClose: false
-                            }).data("kendoMultiSelect").readOnly();
-                            inputFieldSel.data("kendoMultiSelect").readonly();*/
+                            }).data("kendoMultiSelect");
+                            inputFieldSel.data("kendoMultiSelect").readonly();
                             break;
                     }
                 });
@@ -631,9 +631,12 @@ function SetDynamicInformationFields() {
 }
 
 function ResetInformation() {
-    $("#informationWindowTabControl").find("input, textarea").each(function (i, elem) {
+    $("#informationWindowTabControl").find("input, textarea, select").each(function (i, elem) {
         if (elem.dataset["tipo"] === "combo") {
             $(elem).data("kendoDropDownList").value(-1);
+        }
+        else if (elem.dataset["tipo"] === "multicombo") {
+            $(elem).data("kendoMultiSelect").value(-1);
         }
         else {
             elem.value = null;
@@ -841,7 +844,7 @@ function UpdateInformation(codiceVersione, readonly) {
                     $(inputField).data("kendoDropDownList").readonly(false);
                     break;
                 case "multicombo":
-                    //$(inputField).data("kendoMultiSelect").readonly(false);
+                    $(inputField).data("kendoMultiSelect").readonly(false);
                     break;
             }
         }
@@ -866,13 +869,13 @@ function UpdateInformation(codiceVersione, readonly) {
                     $(inputField).data("kendoDropDownList").readonly();
                     break;
                 case "multicombo":
-                    //$(inputField).data("kendoMultiSelect").readonly();
+                    $(inputField).data("kendoMultiSelect").readonly();
                     break;
             }
         }
 
         var informationWindowTabControl = $("#informationWindowTabControl");
-        informationWindowTabControl.find("input, textarea").each(function (i, inputField) {
+        informationWindowTabControl.find("input, textarea, select").each(function (i, inputField) {
             if (inputField.dataset["tipo"]) {
                 if (writeMode) {
                     SetWrite(inputField);
