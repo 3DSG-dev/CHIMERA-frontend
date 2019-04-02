@@ -1,11 +1,15 @@
-/* Stilizzazione GENERICA - Tema base */
+/* Stilizzazione GENERICA - Tema base -------------------------------------------- */
 :root {
     --main-color: #547ab0;
     --main-color-over: #1a498c;
     --bluchiaro-sfondo: #ebeff5;
+    --bluchiaro-testi: #2c9cf7;
     --bluchiaro-hovered-background: #d4e8f9;
     --blumedio-selected-background: #1984c8;
     --bluscuro-sfondo: #004577;
+    --azzurrino-sfondo-over: rgba(174, 202, 242, 0.2);
+    --azzurrino-sfondo-selected-over: rgba(174, 202, 242, 0.7);
+    --grigioscuroforte-testo: #333;
     --grigioscuro: #9c9d9e;
     --grigiomedio: #ccc;
     --grigiochiaro: #f6f6f6;
@@ -19,13 +23,13 @@
     --warning: #ffc107;
     --danger: #dc3545;
     --dark: #343a40;
+    --padding-objectsearchfields: 8px;
+    --padding-informationfields: 8px;
 }
 
 h1, h2, h3, h4 {
-    font-family: inherit;
     font-weight: 500;
-    line-height: 1.1;
-    color: inherit;
+    line-height: 1.1rem;
 }
 
 h1 {
@@ -75,7 +79,7 @@ html, body {
     line-height: 1.42857143;
     height: 100vh;
     margin: 0;
-    color: #333;
+    color: var(--grigioscuroforte-testo);
     background-color: var(--bluchiaro-sfondo);
     -ms-text-size-adjust: 100%;
     -webkit-text-size-adjust: 100%;
@@ -85,33 +89,35 @@ body {
     overflow: hidden;
 }
 
-/* Page Sections, Rows, Columns - Tema base*/
-.pageSection {
-    padding: 10px 10px 10px 10px;
+/* Buttons - Tema base */
+button {
+    font-family: inherit;
+    font-size: inherit;
+    overflow: visible;
+    margin: 0;
+    text-transform: none;
 }
 
-.pageRow {
-    display: block;
-    width: 80%;
-    max-width: 1080px;
-    margin: 0 auto;
-    padding: 27px 0;
-    border-radius: 9px;
+button, input[type=button], input[type=reset], input[type=submit] {
+    cursor: pointer;
+    -webkit-appearance: button;
+}
+
+button:disabled, button[disabled], button[disabled]:hover {
+    cursor: not-allowed;
+    pointer-events: none;
+    color: #a0a0a0;
+    border-color: #a0a0a0;
     background-color: #fff;
 }
 
-.pageColumn {
-    max-width: 1000px;
-    margin: 0 auto;
-    padding: 0 35px 0 35px;
+button::-moz-focus-inner {
+    padding: 0;
+    border: 0;
 }
 
-.hidden {
-    display: none !important;
-}
-
-.fixedPosition {
-    position: fixed;
+.k-primary:focus:active:not(.k-state-disabled):not([disabled]) {
+    box-shadow: 0 0 2px 1px var(--main-color);
 }
 
 /* Kendo UI - Window and Dialog popup */
@@ -158,20 +164,20 @@ body {
     padding: 2px;
 }
 
-.windowIcon .k-window-title::before {
-    display: inline-block;
-    width: 35px;
-    height: 35px;
-    content: "";
-    vertical-align: middle;
+/* Kendo UI - Tabstrip in popup windows - top */
+.k-tabstrip:focus {
+    box-shadow: none;
 }
 
-.k-widget.windowTitle {
-    font-size: 14px;
-    line-height: 1.72857;
+.k-window-content .k-tabstrip > .k-tabstrip-items .k-item .k-link {
+    font-size: 16px;
 }
 
-/* Kendo UI - Form input fields, combobox, datepickers */
+.k-tabstrip-items .k-item.k-first {
+    border-left-color: transparent;
+}
+
+/* Form input fields, combobox, datepickers - Tema base */
 input {
     border: none;
 }
@@ -197,20 +203,61 @@ select {
     text-transform: none;
 }
 
-.k-dropdown-wrap, .k-textbox {
-    border-radius: 3px;
+/* Kendo UI - Input, Combobox, DateTimePicker, Textarea, numericTextBox ecc... - stili in comune */
+.k-autocomplete, .k-combobox .k-dropdown-wrap, .k-datepicker .k-picker-wrap, .k-timepicker .k-picker-wrap, .k-datetimepicker .k-picker-wrap, .k-dateinput .k-dateinput-wrap, .k-textbox, .k-input.k-textbox, .k-textarea, .k-multiselect-wrap, .k-numerictextbox .k-numeric-wrap, .k-dropdown-wrap .k-select, .k-state-default > .k-select, .k-list-container .k-nodata .k-button, .k-dropdown .k-dropdown-wrap, .k-dropdowntree .k-dropdown-wrap, .k-button, .k-button-group.k-state-disabled .k-button:not(.k-state-active), .k-button-group .k-state-disabled:not(.k-state-active), .k-toolbar .k-split-button .k-button, .k-spreadsheet-filter, .k-pivot-toolbar .k-button, .k-fieldselector .k-list li.k-item, .k-colorpicker .k-picker-wrap, .k-combobox .k-select, .k-datepicker .k-select, .k-timepicker .k-select, .k-datetimepicker .k-select, .k-dateinput .k-select, .k-editor .k-editor-toolbar-wrap a.k-tool, .k-ct-popup .k-editor-toolbar a.k-tool, .k-numerictextbox .k-select, .k-switch-handle, .k-handle, .k-gantt-views li, .k-scheduler-navigation .k-nav-today, .k-scheduler-navigation .k-nav-prev, .k-scheduler-navigation .k-nav-next, .k-scheduler-views li, .k-scheduler-footer li {
+    border-color: var(--grigiomedio);
 }
 
-.k-list-scroller {
-    color: #292b2c;
-    border-color: rgba(33, 37, 41, 0.125);
+.k-combobox .k-select, .k-numerictextbox .k-select, .k-datetimepicker .k-select, .k-dropdown-wrap.k-state-default, .k-datetimepicker.k-state-default, .k-combobox .k-select:hover, .k-combobox .k-state-hover .k-select, .k-dropdown .k-dropdown-wrap:hover, .k-numerictextbox .k-select:hover, .k-datetimepicker .k-select:hover, .k-dropdown-wrap.k-state-hover, .k-dropdown-wrap.k-state-focused, .k-dropdown-wrap.k-state-active, .k-numerictextbox .k-numeric-wrap.k-state-hover .k-select, .k-numerictextbox .k-numeric-wrap.k-state-focused .k-select, .k-numerictextbox .k-numeric-wrap.k-state-active .k-select, .k-datetimepicker .k-state-hover .k-select {
     background-color: #fff;
+    background-image: none;
 }
 
+.k-dateinput-wrap .k-input, .k-dropdown-wrap .k-input, .k-picker-wrap .k-input, .k-multiselect-wrap .k-input, .k-numeric-wrap .k-input {
+    padding: 4px 4px;
+}
+
+textarea.k-textbox {
+    padding: 4px 10px;
+}
+
+.k-input::placeholder, .k-textbox::placeholder, .k-textarea::placeholder {
+    color: var(--grigioscuro) !important;
+}
+
+/* Kendo UI - Textbox */
+.k-textbox {
+    border-color: var(--grigiomedio);
+}
+
+/* Kendo UI - Multiselect (multicombo) */
+.k-multiselect:after {
+    font-family: 'WebComponentsIcons';
+    font-size: 16px;
+    position: absolute;
+    top: 10%;
+    right: 7px;
+    content: "\e006";
+    cursor: pointer;
+}
+
+/* Kendo UI - Dropdown menu */
 .k-popup {
-    color: #333;
-    border-color: rgba(0, 0, 0, 0.08);
+    color: var(--grigioscuroforte-testo);
+    border-color: var(--grigiomedio);
     background-color: #fff;
+}
+
+/* Kendo UI - Combobox */
+.k-combobox {
+    font-size: 14px;
+    width: 100%;
+    cursor: text;
+    vertical-align: text-top;
+}
+
+.k-combobox .k-state-hover .k-select .k-i-arrow-60-down::before {
+    color: var(--main-color-over);
 }
 
 /* Kendo UI - Combobox Group - dropdown menu */
@@ -251,63 +298,18 @@ select {
     left: -1px;
 }
 
-/* Kendo UI - Combobox */
-.k-combobox label {
-    font-size: inherit;
-    font-weight: normal;
-    line-height: 1.5;
-    display: inline-block;
-    margin-bottom: 0;
-    padding-top: calc(.375rem + 1px);
-    padding-bottom: calc(.375rem + 1px);
-}
-
-.k-combobox {
-    font-size: 14px;
-    float: left;
-    overflow: hidden;
-    align-items: center;
-    box-sizing: border-box;
-    width: 100%;
-    cursor: text;
-    vertical-align: text-top;
-    text-overflow: ellipsis;
-    border: none;
-    background: transparent;
-    -webkit-appearance: textfield;
-    -webkit-rtl-ordering: logical;
-}
-
-.k-combobox .k-state-hover .k-select .k-i-arrow-60-down::before {
-    color: var(--main-color-over);
-}
-
-.k-textbox::placeholder, .k-input::placeholder, .k-input.k-textbox::placeholder, .k-textarea::placeholder {
-    color: var(--grigioscuro) !important;
-}
-
-input.k-textbox, textarea.k-textbox {
-    border-color: rgba(0, 0, 0, 0.08);
-}
-
-.k-combobox .k-select, .k-numerictextbox .k-select, .k-datetimepicker .k-select, .k-dropdown-wrap.k-state-default, .k-datetimepicker.k-state-default {
-    background-color: #fff;
-    background-image: none;
-}
-
-.k-combobox .k-select:hover, .k-combobox .k-state-hover .k-select, .k-dropdown .k-dropdown-wrap:hover, .k-numerictextbox .k-select:hover, .k-datetimepicker .k-select:hover, .k-dropdown-wrap.k-state-hover, .k-dropdown-wrap.k-state-focused, .k-dropdown-wrap.k-state-active {
-    background-color: #fff;
-    background-image: none;
-}
-
-.k-numerictextbox .k-numeric-wrap.k-state-hover .k-select, .k-numerictextbox .k-numeric-wrap.k-state-focused .k-select, .k-numerictextbox .k-numeric-wrap.k-state-active .k-select, .k-datetimepicker .k-state-hover .k-select {
-    background-color: #fff;
-    background-image: none;
-}
-
 /* Kendo UI - DateTimePicker */
 .k-calendar-view {
     padding: 0 0;
+}
+
+.k-calendar .k-today .k-link {
+    color: var(--main-color);
+    box-shadow: inset 0 0 0 1px var(--main-color);
+}
+
+.k-calendar td.k-state-focused .k-link {
+    box-shadow: inset 0 0 0 1px var(--main-color);
 }
 
 /* Kendo UI - Checkbox */
@@ -337,57 +339,15 @@ input.k-textbox, textarea.k-textbox {
     height: 12px;
 }
 
-/* Kendo UI - Buttons */
-button {
-    font-family: inherit;
-    font-size: inherit;
-    line-height: inherit;
-    overflow: visible;
-    margin: 0;
-    text-transform: none;
-    color: inherit;
-}
-
-button, html input[type=button], input[type=reset], input[type=submit] {
-    cursor: pointer;
-    -webkit-appearance: button;
-}
-
-button[disabled] {
-    cursor: default;
-}
-
-button::-moz-focus-inner {
-    padding: 0;
-    border: 0;
-}
-
-.buttonContainer {
-    display: inline-block;
-    text-align: center;
-}
-
-.buttonBordered {
-    line-height: 30px;
-    padding: 0 10px;
-    -webkit-transition-duration: 0.4s;
-    transition-duration: 0.4s;
-    text-align: center;
-    color: var(--main-color);
-    border: 2px solid var(--main-color);
-    border-radius: 4px 4px 4px 4px;
-    background-color: transparent;
-}
-
-.buttonBordered:hover {
-    color: white;
-    background-color: var(--main-color);
-}
-
 /* Kendo UI - Switch */
 /* The switch - the box around the slider */
 .k-switch-container, .k-switch {
     width: 50px;
+    border-color: var(--grigiomedio);
+}
+
+.k-switch-on .k-switch-container, .k-switch-off .k-switch-container, .k-switch-off:hover .k-switch-container {
+    border-color: var(--grigiomedio);
 }
 
 .k-switch-on .k-switch-handle {
@@ -406,6 +366,13 @@ button::-moz-focus-inner {
 
 .k-switch:active, .k-switch:focus {
     box-shadow: none;
+}
+
+.k-switch-on .k-switch-handle, .k-switch-on.k-state-hover .k-switch-handle, .k-switch-on:hover .k-switch-handle, .k-switch-on.k-state-focused .k-switch-handle, .k-switch-on:focus .k-switch-handle {
+    color: var(--main-color);
+    border-color: var(--main-color);
+    background-color: var(--main-color);
+    background-image: none;
 }
 
 /* Kendo UI - Grid Table */
@@ -436,15 +403,6 @@ td, th {
     padding: 0;
 }
 
-.table-hover thead tr:hover th, .table-hover tbody tr:hover td {
-    background-color: #d1d119;
-}
-
-.k-grid tr:hover {
-    background-color: rgba(174, 202, 242, 0.2);
-    background-image: none;
-}
-
 .k-grid-header {
     display: block;
 }
@@ -462,12 +420,22 @@ td, th {
     color: var(--main-color);
 }
 
-col.k-sorted, th.k-sorted, row.k-sorted, th.k-sorted {
-    background-color: rgba(174, 202, 242, 0.2);
+col.k-sorted, row.k-sorted, th.k-sorted, th.k-sorted:hover, th.k-sorted:focus, th.k-sorted:active {
+    background-color: var(--azzurrino-sfondo-over);
 }
 
-th.k-sorted:hover, th.k-sorted:focus, th.k-sorted:active {
-    background-color: rgba(174, 202, 242, 0.2);
+.table-hover thead tr:hover th, .table-hover tbody tr:hover td {
+    background-color: #d1d119;
+}
+
+.k-grid tr:hover {
+    background-color: var(--azzurrino-sfondo-over);
+    background-image: none;
+}
+
+.k-grid td.k-state-selected:hover, .k-grid tr.k-state-selected:hover {
+    background-color: var(--azzurrino-sfondo-selected-over);
+    background-image: none;
 }
 
 .avoid-k-button-style, .avoid-k-button-style:hover {
@@ -494,7 +462,94 @@ td.k-command-cell {
     color: var(--main-danger-color);
 }
 
-/* Stilizzazione SPECIFICA */
+/* Kendo UI - Your list - Grid column*/
+.k-grid .k-i-minus, .k-grid .k-i-plus {
+    color: var(--main-color);
+}
+
+/* Kendo UI - Separator generico */
+.k-separator {
+    border-color: var(--grigiomedio);
+}
+
+/* Stilizzazione Layout base - Tema BIM3DSG ------------------------------------------- */
+/* Page Sections, Rows, Columns - Tema BIM3DSG */
+.pageSection {
+    padding: 10px 10px 10px 10px;
+}
+
+.pageRow {
+    display: block;
+    width: 80%;
+    max-width: 1080px;
+    margin: 0 auto;
+    padding: 27px 0;
+    border-radius: 9px;
+    background-color: #fff;
+}
+
+.pageColumn {
+    max-width: 1000px;
+    margin: 0 auto;
+    padding: 0 35px 0 35px;
+}
+
+/* Window and Dialog: Icon + Title - Tema BIM3DSG */
+.windowIcon .k-window-title::before {
+    display: inline-block;
+    width: 35px;
+    height: 35px;
+    content: "";
+    vertical-align: middle;
+}
+
+.k-widget.windowTitle {
+    font-size: 14px;
+    line-height: 1.72857;
+}
+
+/* Windows popup: Container boxed - Tema BIM3DSG */
+.boxedContainer {
+    display: block;
+    overflow: hidden;
+    box-sizing: border-box;
+    padding: 3px 7px;
+    text-align: center;
+    border: 1px solid var(--grigiomedio);
+    border-radius: 4px;
+}
+
+.boxedContainer h3 {
+    font-size: 13px;
+    font-weight: bold;
+    margin-top: 8px;
+    text-transform: uppercase;
+    color: var(--main-color);
+}
+
+.boxedContainer h4 {
+    font-size: 12px;
+    font-weight: bold;
+    margin-top: 5px;
+    color: var(--main-color);
+}
+
+.boxedContainer .buttonContainer {
+    width: 100%;
+    padding: 10px 0 10px 0;
+}
+
+/* Nascondi senza lasciare niente: margini, padding o traccia dell'elemento nascosto - Tema BIM3DSG*/
+.hidden {
+    display: none !important;
+}
+
+/* Posizione fissa relativa al viewport: in the same place even if the page is scrolled - Tema BIM3DSG*/
+.fixedPosition {
+    position: fixed;
+}
+
+/* Stilizzazione SPECIFICA ------------------------------------------------------- */
 /* Page Sections, Rows, Columns */
 #pageContainer {
     height: 100vh;
@@ -513,7 +568,7 @@ td.k-command-cell {
     background-color: #fff;
 }
 
-.loghi {
+.logoContainer {
     display: none;
     margin: 4px 8px;
 }
@@ -551,11 +606,34 @@ td.k-command-cell {
     background-size: cover;
 }
 
-#logoutButton {
+#logoutLinkContainer {
     float: right;
     width: 2.5rem;
     height: 68px;
     margin: 20px 25px 0 0;
+}
+
+/* Buttons */
+.buttonContainer {
+    display: inline-block;
+    text-align: center;
+}
+
+.buttonBordered {
+    line-height: 30px;
+    padding: 0 10px;
+    -webkit-transition-duration: 0.4s;
+    transition-duration: 0.4s;
+    text-align: center;
+    color: var(--main-color);
+    border: 2px solid var(--main-color);
+    border-radius: 4px 4px 4px 4px;
+    background-color: transparent;
+}
+
+.buttonBordered:hover {
+    color: white;
+    background-color: var(--main-color);
 }
 
 /* Sidebar */
@@ -573,7 +651,7 @@ td.k-command-cell {
 }
 
 .sideToolbarItem {
-    margin: 2px 0 2px 0;
+    margin: 2px 0;
     padding: 2px 0 3px 0;
 }
 
@@ -598,11 +676,11 @@ td.k-command-cell {
     background-color: #7590c6;
 }
 
-.sideToolbarButton.mode3dBtn {
+#mode3DButton {
     background-color: #f79e45;
 }
 
-.sideToolbarButton.mode3dBtn:hover, .sideToolbarButton.mode3dBtn:focus {
+#mode3DButton:hover, #mode3DButton:focus {
     background-color: #fcac5d;
 }
 
@@ -617,23 +695,23 @@ td.k-command-cell {
 }
 
 /* Main page - Select object section */
-.selectObjectSection {
+#selectObjectContainer {
     padding: 15px 0;
-    background-color: #004577;
+    background-color: var(--bluscuro-sfondo);
 }
 
-.selectObjectRow {
-    padding: 0 0;
+#selectObjectRow {
+    padding: 0;
 }
 
-.selectObjectColumn {
+#selectObjectColumn {
     margin-right: 0;
     margin-left: 0;
     padding: 10px 40px 5px 40px;
     border-radius: 0 0 9px 9px;
 }
 
-.selectObjectColumn h2 {
+#selectObjectColumn h2 {
     margin-top: 5px;
     margin-bottom: 10px;
 }
@@ -641,10 +719,10 @@ td.k-command-cell {
 /* Main page - Select object form */
 .selectObjectSearchFieldsContainer {
     overflow: hidden;
-    width: 98%;
+    width: calc(100% - 2 * (var(--padding-objectsearchfields)));
     max-width: 1000px;
     margin: 0 auto;
-    padding: 10px 0 15px 0;
+    padding: 10px var(--padding-objectsearchfields) 15px var(--padding-objectsearchfields);
     border-radius: 12px 12px 12px 0;
     background-color: #d4e8f9;
 }
@@ -653,19 +731,25 @@ td.k-command-cell {
     border-color: #d4e8f9;
 }
 
+.selectObjectComboContainer {
+    float: left;
+    width: calc(33.3% - 2 * (var(--padding-objectsearchfields)));
+    padding: 3px var(--padding-objectsearchfields);
+}
+
 .selectObjectComboContainer label {
     height: 31px;
 }
 
 .selectObjectButtonsContainer {
     overflow: hidden;
-    width: 98%;
+    width: 100%;
     max-width: 1000px;
     min-height: 60px;
     margin: 0 auto;
 }
 
-#searchObjectButton {
+#searchObjectBtnContainer {
     float: left;
     width: 33%;
     min-height: 35px;
@@ -674,15 +758,15 @@ td.k-command-cell {
     background-color: #d4e8f9;
 }
 
-#searchObjectButton .buttonBordered {
+#searchObjectBtnContainer .buttonBordered {
     background: rgba(255, 255, 255, 0.2);
 }
 
-#searchObjectButton .buttonBordered:hover {
+#searchObjectBtnContainer .buttonBordered:hover {
     background-color: var(--main-color);
 }
 
-#loadUserListButton {
+#loadUserListBtnContainer {
     float: left;
     width: 56%;
     min-height: 35px;
@@ -718,7 +802,7 @@ td.k-command-cell {
 
 /* Information window */
 #informationWindow {
-    padding: 0 0 0 0;
+    padding: 0;
 }
 
 .informationWindowIcon .k-window-title::before {
@@ -729,37 +813,21 @@ td.k-command-cell {
     width: 190px;
 }
 
-/* Information Window - Sheets */
-.sheetBoxedContainer {
-    display: block;
-    overflow: hidden;
-    margin-bottom: 6px;
-    padding: 3px 2%;
-    text-align: center;
-    border: 1px solid var(--grigiomedio);
-    border-radius: 4px;
+.k-tabstrip > .informationWindowTabItem.k-content {
+    padding: 8px 0;
 }
 
-.k-window-content h3.sheetTitle {
-    font-size: 14px;
-    font-weight: normal;
-    margin-top: 5px;
-    color: var(--grigioscuro);
-}
-
-.sheetBoxedContainer .buttonContainer {
-    width: 100%;
-    padding: 10px 0 10px 0;
-}
-
-.sheetBoxedColumnLeft {
+/* Information Window - Columns */
+.informationColumnLeft {
     float: left;
-    width: calc(44% - 2px);
+    width: calc(50% - 2 * (var(--padding-informationfields)));
+    margin: 0 var(--padding-informationfields) 6px var(--padding-informationfields);
 }
 
-.sheetBoxedColumnRight {
+.informationColumnRight {
     float: right;
-    width: calc(44% - 2px);
+    width: calc(50% - var(--padding-informationfields));
+    margin: 0 var(--padding-informationfields) 6px 0;
 }
 
 /* Information Window - Input fields */
@@ -822,13 +890,13 @@ td.k-command-cell {
 
 .informationFieldContainer .inputMultiline {
     width: 100%;
+    max-width: 100%;
     margin-left: 0;
 }
 
 /* Read only - write Switch */
 .readOnlySwitchContainer {
     position: absolute;
-    z-index: 1000;
     top: 6px;
     right: 20px;
 }
@@ -855,6 +923,11 @@ td.k-command-cell {
     #logoutButton {
         margin-right: 0;
     }
+
+    .selectObjectComboContainer {
+        width: calc(50% - 2 * (var(--padding-objectsearchfields)));
+        padding: 0 var(--padding-objectsearchfields);
+    }
 }
 
 @media screen and (max-width: 992px) {
@@ -869,7 +942,7 @@ td.k-command-cell {
 }
 
 @media screen and (max-width: 576px) {
-    .selectObjectColumn {
+    #selectObjectColumn {
         padding: 10px 30px 5px 30px;
     }
 
@@ -877,12 +950,8 @@ td.k-command-cell {
         border-radius: 12px 12px 0 0;
     }
 
-    #searchObjectButton {
+    #searchObjectBtnContainer, #loadUserListBtnContainer {
         width: 100%;
-    }
-
-    #loadUserListButton {
-        width: 100%
     }
 }
 
@@ -891,7 +960,10 @@ td.k-command-cell {
 }
 
 @media screen and (max-width: 450px) {
-
+    .selectObjectComboContainer {
+        width: calc(96% - 2 * (var(--padding-objectsearchfields)));
+        padding: 0 var(--padding-objectsearchfields);
+    }
 }
 
 @media screen and (max-width: 390px) {
