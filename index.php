@@ -22,7 +22,6 @@
         <link href="./libs/KendoUI/styles/kendo.default.mobile.min.css" rel="stylesheet" type="text/css" />
         <script src="./libs/KendoUI/kendo.all.min.js"></script>
         <link rel="stylesheet" type="text/css" href="./css/KendoUI.css" />
-        <link rel="stylesheet" type="text/css" href="./css/KendoUIBootstrap.css" />
 
         <!--suppress JSUnusedLocalSymbols -->
         <script>
@@ -42,31 +41,31 @@
     <body>
         <div id="pageContainer">
             <div id="headerContainer">
-                <div id="logo3DSurveySmall" class="loghi">
+                <div id="logo3DSurveySmall" class="logoContainer">
                     <a href="http://www.sitech-3dsurvey.polimi.it" target="_blank">
-                        <img src="img/loghi/logo_3dsurvey_tiny.png" alt="Logo 3D Survey Group">
+                        <img src="./img/loghi/logo_3dsurvey_tiny.png" alt="Logo 3D Survey Group">
                     </a>
                 </div>
-                <div id="logo3DSurveyLarge" class="loghi">
+                <div id="logo3DSurveyLarge" class="logoContainer">
                     <a href="http://www.sitech-3dsurvey.polimi.it" target="_blank">
-                        <img src="img/loghi/logo_3dsurvey_full.png" alt="Logo 3D Survey Group">
+                        <img src="./img/loghi/logo_3dsurvey_full.png" alt="Logo 3D Survey Group">
                     </a>
                 </div>
-                <div id="logoPolimiSmall" class="loghi">
+                <div id="logoPolimiSmall" class="logoContainer">
                     <a href="http://www.polimi.it" target="_blank">
-                        <img src="img/loghi/logo_polimi_tiny.png" alt="Logo Politecnico di Milano">
+                        <img src="./img/loghi/logo_polimi_tiny.png" alt="Logo Politecnico di Milano">
                     </a>
                 </div>
-                <div id="logoPolimiLarge" class="loghi">
+                <div id="logoPolimiLarge" class="logoContainer">
                     <a href="http://www.polimi.it" target="_blank">
-                        <img src="img/loghi/logo_polimi_full.png" alt="Logo Politecnico di Milano">
+                        <img src="./img/loghi/logo_polimi_full.png" alt="Logo Politecnico di Milano">
                     </a>
                 </div>
 
                 <?php
                     if (isset($_SESSION['validUser'])) {
                         echo '
-                            <div id="logoutButton">
+                            <div id="logoutLinkContainer">
                                 <a href="php/logout.php" title="Logout ' . $_SESSION['validUserName'] . '"><img src="./img/icons/lock_icon_grey.png" alt="logout"></a>
                             </div>
                             <div id="userContainer">
@@ -79,43 +78,41 @@
             </div>
 
             <div id="pageContent">
-                <div class="pageSection selectObjectSection">
-                    <div class="pageRow selectObjectRow">
-                        <div class="pageColumn selectObjectColumn">
+                <div id="selectObjectContainer" class="pageSection">
+                    <div id="selectObjectRow" class="pageRow">
+                        <div id="selectObjectColumn" class="pageColumn">
                             <h2>Select object to edit</h2>
-
                             <div class="selectObjectSearchFieldsContainer">
-                                <div class="selectObjectComboContainer col-md-4 col-sm-6 col-xs-12">
+                                <div class="selectObjectComboContainer">
                                     <label for="selectLayer0"><?php echo $_SESSION["layer0Label"]; ?></label>
                                     <input id="selectLayer0" type="text" />
                                 </div>
-                                <div class="selectObjectComboContainer col-md-4 col-sm-6 col-xs-12">
+                                <div class="selectObjectComboContainer">
                                     <label for="selectLayer1"><?php echo $_SESSION["layer1Label"]; ?></label>
                                     <input id="selectLayer1" type="text">
                                 </div>
-                                <div class="selectObjectComboContainer col-md-4 col-sm-6 col-xs-12">
+                                <div class="selectObjectComboContainer">
                                     <label for="selectLayer2"><?php echo $_SESSION["layer2Label"]; ?></label>
                                     <input id="selectLayer2" type="text">
                                 </div>
-                                <div class="selectObjectComboContainer col-md-4 col-sm-6 col-xs-12">
+                                <div class="selectObjectComboContainer">
                                     <label for="selectLayer3"><?php echo $_SESSION["layer3Label"]; ?></label>
                                     <input id="selectLayer3" type="text">
                                 </div>
-                                <div class="selectObjectComboContainer col-md-4 col-sm-6 col-xs-12">
+                                <div class="selectObjectComboContainer">
                                     <label for="selectName"><?php echo $_SESSION["nomeLabel"]; ?></label>
                                     <input id="selectName" type="text">
                                 </div>
-                                <div class="selectObjectComboContainer col-md-4 col-sm-6 col-xs-12">
+                                <div class="selectObjectComboContainer">
                                     <label for="selectVersione"><?php echo $_SESSION["versionLabel"]; ?></label>
                                     <input id="selectVersione" type="text">
                                 </div>
                             </div>
-
                             <div class="selectObjectButtonsContainer">
-                                <div id="searchObjectButton" class="buttonContainer">
+                                <div id="searchObjectBtnContainer" class="buttonContainer">
                                     <button onclick="SearchObjects()" class="buttonBordered">SEARCH</button>
                                 </div>
-                                <div id="loadUserListButton" class="buttonContainer">
+                                <div id="loadUserListBtnContainer" class="buttonContainer">
                                     or
                                     <button onclick="LoadUserListObjectGrid()" class="buttonBordered">USE YOUR LIST</button>
                                 </div>
@@ -123,7 +120,6 @@
                         </div>
                     </div>
                 </div>
-
                 <div id="objectsGridContainer" class="pageSection">
                     <div id="objectsGrid"></div>
                 </div>
@@ -132,19 +128,19 @@
             <div id="sideToolbarContainer">
                 <div id="sideToolbarList" class="k-widget k-listview k-selectable">
                     <div class="sideToolbarItem">
-                        <span class="sideToolbarButton mode3dBtn" title="Go to 3D mode">
-                            <img src="img/icons/3d_icon.png" alt="3D Mode">
+                        <span id="mode3DButton" class="sideToolbarButton" title="Go to 3D mode">
+                            <img src="./img/icons/3d_icon.png" alt="3D Mode">
                         </span>
                     </div>
                     <div class="sideToolbarSeparator"></div>
                     <div class="sideToolbarItem">
                         <span class="sideToolbarButton" title="Delete list">
-                            <img src="img/icons/deleteList_icon.png" alt="Delete list">
+                            <img src="./img/icons/deleteList_icon.png" alt="Delete list">
                         </span>
                     </div>
                     <div class="sideToolbarItem">
                         <span id="informationButton" class="sideToolbarButton" title="Information">
-                            <img src="img/icons/information_icon49x49.png" alt="Information">
+                            <img src="./img/icons/information_icon49x49.png" alt="Information">
                         </span>
                     </div>
                 </div>
@@ -167,8 +163,8 @@
                 </ul>
 
                 <div id="informationObjectTab" data-ref="Oggetti" class="informationWindowTabItem">
-                    <div class="sheetBoxedContainer">
-                        <h3 class="sheetTitle">Main information</h3>
+                    <div class="boxedContainer">
+                        <h3>Main information</h3>
                         <div class="informationFieldContainer">
                             <div class="labelContainer"><label for="infoLayer0"><?php echo $_SESSION["layer0Label"]; ?></label></div>
                             <input id="infoLayer0" type="text" class="k-textbox" readonly />
@@ -222,8 +218,8 @@
                             <input id="infoCantiereEliminazioneFine" type="text" class="k-textbox" readonly />
                         </div>
                     </div>
-                    <div id="infoCategoryContainer" class="sheetBoxedContainer">
-                        <h3 class="sheetTitle">Category</h3>
+                    <div id="infoCategoryContainer" class="boxedContainer">
+                        <h3>Category</h3>
                         <div class="informationFieldContainer">
                             <div class="labelContainer"><label for="infoCategory">Category</label></div>
                             <input id="infoCategory" type="text">
@@ -234,8 +230,8 @@
                     </div>
                 </div>
                 <div id="informationVersionTab" data-ref="OggettiVersion" class="informationWindowTabItem">
-                    <div class="sheetBoxedContainer">
-                        <h3 class="sheetTitle">Internal information</h3>
+                    <div class="boxedContainer">
+                        <h3>Internal information</h3>
                         <div class="informationFieldContainer">
                             <div class="labelContainer"><label for="infoCodiceOggetto">Codice Oggetto</label></div>
                             <input id="infoCodiceOggetto" type="text" class="k-textbox" readonly />
@@ -273,8 +269,8 @@
                             <input id="infoLock" type="text" class="k-textbox" readonly />
                         </div>
                     </div>
-                    <div class="sheetBoxedContainer">
-                        <h3 class="sheetTitle">Model information</h3>
+                    <div class="boxedContainer">
+                        <h3>Model information</h3>
                         <div class="informationFieldContainer">
                             <div class="labelContainer"><label for="infoCodiceModello2">Codice Modello</label></div>
                             <input id="infoCodiceModello2" type="text" class="k-textbox" readonly />

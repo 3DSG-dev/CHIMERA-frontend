@@ -20,7 +20,7 @@ $(window).on("resize", function () {
 function ResizeHeaderLoghi() {
     var spazioPerLoghi = $(window).width();
     if (_validUser) {
-        spazioPerLoghi -= $("#userContainer").outerWidth() + $("#logoutButton").outerWidth();
+        spazioPerLoghi -= $("#userContainer").outerWidth() + $("#logoutLinkContainer").outerWidth();
     }
 
     if (spazioPerLoghi <= 160) {
@@ -57,7 +57,7 @@ function ResizeHeaderLoghi() {
 
 function ResizeComponents() {
     function ResizeObjectsGridContainer() {
-        var availableSpace = $(window).height() - $("#headerContainer").outerHeight() - $(".selectObjectSection").outerHeight();
+        var availableSpace = $(window).height() - $("#headerContainer").outerHeight() - $("#selectObjectContainer").outerHeight();
         if (availableSpace < 200) {
             availableSpace = 200;
         }
@@ -147,31 +147,31 @@ function ChangeInformationFieldsStyle(recompute) {
         function SetTwoColumnsBoxedStyle(informationTab) {
             var leftHeight = 0;
             var rightHeight = 0;
-            $("#" + informationTab).children(".sheetBoxedContainer").each(function () {
+            $("#" + informationTab).children(".boxedContainer").each(function () {
                 var sheet = $(this);
                 var sheetHeight = sheet.outerHeight(true);
-                var addClass = "sheetBoxedColumnLeft";
+                var addClass = "informationColumnLeft";
                 if (rightHeight < leftHeight) {
                     rightHeight += sheetHeight;
-                    addClass = "sheetBoxedColumnRight"
+                    addClass = "informationColumnRight"
                 }
                 else {
                     rightHeight -= leftHeight;
                     leftHeight = sheetHeight;
                 }
-                sheet.removeClass("sheetBoxedColumnLeft sheetBoxedColumnRight").addClass(addClass);
+                sheet.removeClass("informationColumnLeft informationColumnRight").addClass(addClass);
             })
         }
 
         if ($("#informationObjectTab").width() > 400) {
-            if (recompute === true || !$("#infoCategoryContainer").hasClass("sheetBoxedColumnRight")) {
+            if (recompute === true || !$("#infoCategoryContainer").hasClass("informationColumnRight")) {
                 SetTwoColumnsBoxedStyle("informationObjectTab");
                 SetTwoColumnsBoxedStyle("informationVersionTab");
                 SetTwoColumnsBoxedStyle("informationSubVersionTab");
             }
         }
-        else if ($("#infoCategoryContainer").hasClass("sheetBoxedColumnRight")) {
-            $(".informationWindowTabItem .sheetBoxedContainer").removeClass("sheetBoxedColumnLeft sheetBoxedColumnRight");
+        else if ($("#infoCategoryContainer").hasClass("informationColumnRight")) {
+            $(".informationWindowTabItem .boxedContainer").removeClass("informationColumnLeft informationColumnRight");
         }
     }
 
@@ -443,7 +443,7 @@ function SetDynamicInformationFields() {
 
     function CreateDynamicInformationFields() {
         function DeleteDynamicInformationFields() {
-            $("#informationWindowTabControl").find("div.sheetBoxedContainer").each(function (i, elem) {
+            $("#informationWindowTabControl").find("div.boxedContainer").each(function (i, elem) {
                 if (elem.dataset["codice"] > 0) {
                     $(elem).remove();
                 }
@@ -455,8 +455,8 @@ function SetDynamicInformationFields() {
              * @return {string}
              */
             function OpenCurrentSheet(codiceTitolo, titolo) {
-                var html = '                    <div data-codice="' + codiceTitolo + '" class="sheetBoxedContainer hidden">\n';
-                html += '                        <h3 class="sheetTitle">' + titolo + '</h3>\n';
+                var html = '                    <div data-codice="' + codiceTitolo + '" class="boxedContainer hidden">\n';
+                html += '                        <h3>' + titolo + '</h3>\n';
                 return html;
             }
 
@@ -480,16 +480,18 @@ function SetDynamicInformationFields() {
             function AddField(field) {
                 var html = "";
                 if (field["IsTitle"] === "t") {
-                    html += '                        <h4 class="sheetSubTitle">' + field["Campo"] + '</h4>\n';
+                    html += '                        <h4>' + field["Campo"] + '</h4>\n';
                 }
                 else if (field["IsSeparator"] === "t") {
                     html += '                        <hr class="k-separator">\n';
                 }
                 else if (field["IsBool"] === "t") {
                     html += '                        <div class="informationFieldContainer">\n';
-                    html += '                            <div class="labelContainer"><label>' + field["Campo"] + '</label></div>\n';
-                    html += '                            <label class="k-checkbox-label" for="' + destinationTab + '_' + field["Codice"] + '"></label>\n';
-                    html += '                            <input data-tipo="bool" data-codice="' + field["Codice"] + '" id="' + destinationTab + '_' + field["Codice"] + '" type="checkbox" class="k-checkbox" />\n';
+                    html += '                            <div class="labelContainer">' + field["Campo"] + '</div>\n';
+                    html += '                            <div class="inputCheckboxContainer">\n';
+                    html += '                               <input data-tipo="bool" data-codice="' + field["Codice"] + '" id="' + destinationTab + '_' + field["Codice"] + '" type="checkbox" class="k-checkbox" />\n';
+                    html += '                               <label class="k-checkbox-label" for="' + destinationTab + '_' + field["Codice"] + '"></label>\n';
+                    html += '                            </div>\n';
                     html += '                        </div>\n';
                 }
                 else {
@@ -632,11 +634,17 @@ function SetDynamicInformationFields() {
 
 function ResetInformation() {
     $("#informationWindowTabControl").find("input, textarea, select").each(function (i, elem) {
-        if (elem.dataset["tipo"] === "combo") {
-            $(elem).data("kendoDropDownList").value(-1);
+        if (elem.dataset["role"] === "dropdownlist") {
+            $(elem).data("kendoDropDownList").value(null);
         }
-        else if (elem.dataset["tipo"] === "multicombo") {
-            $(elem).data("kendoMultiSelect").value(-1);
+        else if (elem.dataset["role"] === "multiselect") {
+            $(elem).data("kendoMultiSelect").value(null);
+        }
+        else if (elem.dataset["role"] === "combobox") {
+            $(elem).data("kendoComboBox").value(null);
+        }
+        else if (elem.dataset["tipo"] === "bool") {
+            $(elem).prop("checked", false);
         }
         else {
             elem.value = null;
@@ -650,7 +658,7 @@ function UpdateInformation(codiceVersione, readonly) {
     function UpdateBaseInformation(codiceVersione) {
         function ShowInformationSheet(codiceCategoria) {
             function HideAllInformationSheet() {
-                $("#informationWindowTabControl").find("div.sheetBoxedContainer").each(function (i, elem) {
+                $("#informationWindowTabControl").find("div.boxedContainer").each(function (i, elem) {
                     if (elem.dataset["codice"] > 0) {
                         $(elem).addClass("hidden");
                     }
@@ -658,7 +666,7 @@ function UpdateInformation(codiceVersione, readonly) {
             }
 
             function SetVisibleInformationSheet(sheetList, destinationTab) {
-                $("#" + destinationTab).find("div.sheetBoxedContainer").each(function (i, elem) {
+                $("#" + destinationTab).find("div.boxedContainer").each(function (i, elem) {
                     if (elem.dataset["codice"] > 0 && sheetList.some(item => item["CodiceScheda"] === elem.dataset["codice"])) {
                         $(elem).removeClass("hidden");
                     }
@@ -748,8 +756,6 @@ function UpdateInformation(codiceVersione, readonly) {
                 $("#infoCantiereEliminazioneInizio").val(GetLocaleDate(resultData["EliminazioneDataInizio"]));
                 $("#infoCantiereEliminazioneFine").val(GetLocaleDate(resultData["EliminazioneDataFine"]));
 
-                //TODO se si riassegna lo stesso valore non lo prende: perché?
-                $("#infoCategory").data("kendoComboBox").value(-1);
                 $("#infoCategory").data("kendoComboBox").value(resultData["Categoria"]);
                 ShowInformationSheet(resultData["Categoria"]);
 
