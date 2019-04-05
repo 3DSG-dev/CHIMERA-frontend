@@ -9,8 +9,7 @@
         $rowArray[] = $row;
     }
 
-    header("Content-type: application/json");
-    echo "{\"categoryList\":" . json_encode($rowArray) . "}";
+    echo json_encode($rowArray);
 
     include("./defaultEnd.php");
 ?>
