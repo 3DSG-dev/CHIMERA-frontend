@@ -3,7 +3,6 @@
 
     $codiceVersione = isset($_GET['codiceVersione']) ? $_GET['codiceVersione'] : null;
     $user = isset($_GET['user']) ? $_GET['user'] : null;
-    $rw = isset($_GET['rw']) ? $_GET['rw'] : null;
 
     $SQL = "SELECT deleteimportobject($codiceVersione, '" . $_SESSION['validUserName'] . "')";
 

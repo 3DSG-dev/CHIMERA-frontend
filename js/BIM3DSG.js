@@ -147,9 +147,9 @@ function ChangeInformationFieldsStyle(recompute) {
         function SetTwoColumnsBoxedStyle(informationTab) {
             var leftHeight = 0;
             var rightHeight = 0;
-            $("#" + informationTab).children(".boxedContainer").each(function () {
-                var sheet = $(this);
-                var sheetHeight = sheet.outerHeight(true);
+            $(informationTab).children(".boxedContainer").each(function (i, sheet) {
+                var sheetSel = $(sheet);
+                var sheetHeight = sheetSel.outerHeight(true);
                 var addClass = "informationColumnLeft";
                 if (rightHeight < leftHeight) {
                     rightHeight += sheetHeight;
@@ -159,15 +159,15 @@ function ChangeInformationFieldsStyle(recompute) {
                     rightHeight -= leftHeight;
                     leftHeight = sheetHeight;
                 }
-                sheet.removeClass("informationColumnLeft informationColumnRight").addClass(addClass);
+                sheetSel.removeClass("informationColumnLeft informationColumnRight").addClass(addClass);
             })
         }
 
-        if ($("#informationObjectTab").width() > 400) {
+        if ($("#informationWindow").width() > 420) {
             if (recompute === true || !$("#infoCategoryContainer").hasClass("informationColumnRight")) {
-                SetTwoColumnsBoxedStyle("informationObjectTab");
-                SetTwoColumnsBoxedStyle("informationVersionTab");
-                SetTwoColumnsBoxedStyle("informationSubVersionTab");
+                SetTwoColumnsBoxedStyle("#informationObjectTab");
+                SetTwoColumnsBoxedStyle("#informationVersionTab");
+                SetTwoColumnsBoxedStyle("#informationSubVersionTab");
             }
         }
         else if ($("#infoCategoryContainer").hasClass("informationColumnRight")) {
@@ -454,7 +454,7 @@ function SetDynamicInformationFields() {
             /**
              * @return {string}
              */
-            function OpenCurrentSheet(codiceTitolo, titolo) {
+            function StartCurrentSheet(codiceTitolo, titolo) {
                 var html = '                    <div data-codice="' + codiceTitolo + '" class="boxedContainer hidden">\n';
                 html += '                        <h3>' + titolo + '</h3>\n';
                 return html;
@@ -467,7 +467,7 @@ function SetDynamicInformationFields() {
                 var html = "";
                 if (currentScheda !== -1) {
                     html += '                        <div class="buttonContainer">\n';
-                    html += '                            <button id="saveInfoObject-' + currentScheda + '" class="buttonBordered" disabled>SAVE</button>\n';
+                    html += '                            <button id="saveInfoObject-' + currentScheda + '" data-codice="' + currentScheda + '" class="buttonBordered" disabled>SAVE</button>\n';
                     html += '                        </div>\n';
                     html += "                    </div>\n";
                 }
@@ -529,9 +529,8 @@ function SetDynamicInformationFields() {
 
             function InitializeFieldKendoComponents(destinationTabSel) {
                 destinationTabSel.find("input, select").each(function (i, inputField) {
-                    var tipoCampo = inputField.dataset["tipo"];
                     var inputFieldSel = $(inputField);
-                    switch (tipoCampo) {
+                    switch (inputField.dataset["tipo"]) {
                         case "timestamp":
                             inputFieldSel.kendoDateTimePicker({
                                 timeFormat: "HH:mm",
@@ -590,13 +589,64 @@ function SetDynamicInformationFields() {
                 });
             }
 
+            function InitializeSaveButton(destinationTabSel) {
+                function SaveSheetInformation() {
+                    var sheet = $(this).parents(".boxedContainer");
+
+                    function SaveInformation(url, codiceCampo, valore) {
+                        $.ajax({
+                            url: url,
+                            dataType: "json",
+                            data: {
+                                codiceOggetto: $("#infoCodiceOggetto").val(),
+                                codiceCampo: codiceCampo,
+                                valore: valore
+                            },
+                            error: function (jqXHR, textStatus, errorThrown) {
+                                console.log(textStatus, errorThrown);
+                                alert("Unexpected error while saving objectInformation!");
+                            }
+                        });
+                    }
+
+                    sheet.find("input, textarea, select").each(function (i, inputField) {
+                        switch (inputField.dataset["tipo"]) {
+                            case "text":
+                                SaveInformation('./php/setObjectInformationText.php', inputField.dataset["codice"], inputField.value);
+                                break;
+                            case "bool":
+                                SaveInformation('./php/setObjectInformationOther.php', inputField.dataset["codice"], $(inputField).prop("checked"));
+                                break;
+                            case "timestamp":
+                                alert($(inputField).data("kendoDateTimePicker").value());
+                                break;
+                            case "int":
+                            case "real":
+                                SaveInformation('./php/setObjectInformationOther.php', inputField.dataset["codice"], $(inputField).data("kendoNumericTextBox").value());
+                                break;
+                            case "combo":
+                                SaveInformation('./php/setObjectInformationCombo.php', inputField.dataset["codice"], $(inputField).data("kendoDropDownList").value());
+                                break;
+                        }
+                    });
+
+                    alert("Save completed!")
+                }
+
+                destinationTabSel.find("button").each(function (i, button) {
+                    if (button.dataset["codice"] > 0) {
+                        $(button).unbind("click").bind("click", SaveSheetInformation)
+                    }
+                });
+            }
+
             var html = "";
             var currentScheda = -1;
             $.each(fieldsList, function (key, field) {
                 if (currentScheda !== field["CodiceTitolo"]) {
                     html += CloseCurrentSheet(currentScheda);
                     currentScheda = field["CodiceTitolo"];
-                    html += OpenCurrentSheet(field["CodiceTitolo"], field["Titolo"]);
+                    html += StartCurrentSheet(field["CodiceTitolo"], field["Titolo"]);
                 }
                 html += AddField(field);
             });
@@ -606,6 +656,8 @@ function SetDynamicInformationFields() {
             destinationTabSel.append(html);
 
             InitializeFieldKendoComponents(destinationTabSel);
+
+            InitializeSaveButton(destinationTabSel)
         }
 
         DeleteDynamicInformationFields();
@@ -789,26 +841,25 @@ function UpdateInformation(codiceVersione, readonly) {
     function UpdateDynamicInformation(codiceVersione) {
         function SetFieldValue(valueList, destinationTab) {
             $.each(valueList, function (key, value) {
-                var fieldControl = $("#" + destinationTab + "_" + value["CodiceCampo"]);
-                var tipoCampo = fieldControl[0].dataset["tipo"];
-                switch (tipoCampo) {
+                var inputField = $("#" + destinationTab + "_" + value["CodiceCampo"]);
+                switch (inputField[0].dataset["tipo"]) {
                     case "text":
-                        fieldControl.val(value["TextValue"]);
+                        inputField.val(value["TextValue"]);
                         break;
                     case "bool":
-                        fieldControl.prop("checked", value["BoolValue"] === "t");
+                        inputField.prop("checked", value["BoolValue"] === "t");
                         break;
                     case "timestamp":
-                        fieldControl.data("kendoDateTimePicker").value(GetDateTime(value["TimestampValue"]));
+                        inputField.data("kendoDateTimePicker").value(GetDateTime(value["TimestampValue"]));
                         break;
                     case "int":
-                        fieldControl.data("kendoNumericTextBox").value(value["IntValue"]);
+                        inputField.data("kendoNumericTextBox").value(value["IntValue"]);
                         break;
                     case "real":
-                        fieldControl.data("kendoNumericTextBox").value(value["RealValue"]);
+                        inputField.data("kendoNumericTextBox").value(value["RealValue"]);
                         break;
                     case "combo":
-                        fieldControl.data("kendoDropDownList").value(value["ComboValue"]);
+                        inputField.data("kendoDropDownList").value(value["ComboValue"]);
                         break;
                 }
             });
@@ -832,8 +883,7 @@ function UpdateInformation(codiceVersione, readonly) {
 
     function SetWriteMode(writeMode) {
         function SetWrite(inputField) {
-            var tipoCampo = inputField.dataset["tipo"];
-            switch (tipoCampo) {
+            switch (inputField.dataset["tipo"]) {
                 case "text":
                     inputField.removeAttribute("readonly");
                     break;
@@ -856,8 +906,7 @@ function UpdateInformation(codiceVersione, readonly) {
         }
 
         function SetRead(inputField) {
-            var tipoCampo = inputField.dataset["tipo"];
-            switch (tipoCampo) {
+            switch (inputField.dataset["tipo"]) {
                 case "text":
                 case "bool":
                     inputField.setAttribute("readonly", true);
@@ -924,6 +973,7 @@ function ChangeCategory() {
                 codiceCategoria: categoryCombo.select() !== -1 ? categoryCombo.value() : "null"
             },
             success: function () {
+                UpdateInformation($("#infoCodiceVersione").val(), "f");
                 alert("Category changed");
             },
             error: function (jqXHR, textStatus, errorThrown) {
