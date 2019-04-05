@@ -618,7 +618,7 @@ function SetDynamicInformationFields() {
                                 SaveInformation('./php/setObjectInformationOther.php', inputField.dataset["codice"], $(inputField).prop("checked"));
                                 break;
                             case "timestamp":
-                                alert($(inputField).data("kendoDateTimePicker").value());
+                                SaveInformation('./php/setObjectInformationTimestamp.php', inputField.dataset["codice"], $(inputField).data("kendoDateTimePicker").value().toLocaleString('it-it'));
                                 break;
                             case "int":
                             case "real":
