@@ -127,6 +127,7 @@ function ChangeInformationFieldsStyle(recompute) {
         function SwitchFieldStyleClass(addLabel, removeLabel, addInput, removeInput, recompute) {
             if (!$("#infoCategoryContainer .labelContainer").hasClass(addLabel) || recompute === true) {
                 $(".informationFieldContainer .labelContainer").removeClass(removeLabel).addClass(addLabel);
+                $(".informationFieldContainer .labelCheckboxContainer").removeClass(removeLabel).addClass(addLabel);
                 $(".informationFieldContainer .k-textbox").removeClass(removeInput).addClass(addInput);
                 $(".informationFieldContainer .k-widget").removeClass(removeInput).addClass(addInput);
                 $(".informationFieldContainer .inputCheckboxContainer").removeClass(removeInput).addClass(addInput);
@@ -152,7 +153,7 @@ function ChangeInformationFieldsStyle(recompute) {
                 var addClass = "informationColumnLeft";
                 if (rightHeight < leftHeight) {
                     rightHeight += sheetHeight;
-                    addClass = "informationColumnRight"
+                    addClass = "informationColumnRight";
                 }
                 else {
                     rightHeight -= leftHeight;
@@ -166,7 +167,9 @@ function ChangeInformationFieldsStyle(recompute) {
             if (recompute === true || !$("#infoCategoryContainer").hasClass("informationColumnRight")) {
                 SetTwoColumnsBoxedStyle("#informationObjectTab");
                 SetTwoColumnsBoxedStyle("#informationVersionTab");
-                SetTwoColumnsBoxedStyle("#informationSubVersionTab");
+                $("#informationSubVersionTab").find(".subVersionTabPanelItem").each(function (i, panelItem) {
+                    SetTwoColumnsBoxedStyle(panelItem);
+                })
             }
         }
         else if ($("#infoCategoryContainer").hasClass("informationColumnRight")) {
@@ -488,7 +491,7 @@ function SetDynamicInformationFields() {
                     }
                     else if (field["IsBool"] === "t") {
                         html += '                        <div class="informationFieldContainer">\n';
-                        html += '                            <div class="labelContainer">' + field["Campo"] + '</div>\n';
+                        html += '                            <div class="labelContainer labelCheckboxContainer">' + field["Campo"] + '</div>\n';
                         html += '                            <div class="inputCheckboxContainer">\n';
                         html += '                               <input data-tipo="bool" data-codice="' + field["Codice"] + '" data-role="checkboxinfo" id="' + destinationTab + '_' + field["Codice"] + '" type="checkbox" class="k-checkbox" />\n';
                         html += '                               <label class="k-checkbox-label" for="' + destinationTab + '_' + field["Codice"] + '"></label>\n';
@@ -560,8 +563,13 @@ function SetDynamicInformationFields() {
                     });
                 }
 
+                function SortKendoMultiSelectValue() {
+                    this.value(this.value().sort());
+                }
+
                 destinationTabSel.find("input, select").each(function (i, inputField) {
                     var inputFieldSel = $(inputField);
+                    var inputFieldKendo;
                     switch (inputField.dataset["tipo"]) {
                         case "timestamp":
                             inputFieldSel.kendoDateTimePicker({
@@ -591,17 +599,22 @@ function SetDynamicInformationFields() {
                         case "combo":
                             inputFieldSel.kendoDropDownList({
                                 dataTextField: "Value",
-                                dataValueField: "Codice"
+                                dataValueField: "Codice",
                             });
-                            var inputFieldKendo = inputFieldSel.data("kendoDropDownList");
+                            inputFieldKendo = inputFieldSel.data("kendoDropDownList");
                             inputFieldKendo.readonly();
                             FillComboValues(inputFieldKendo, destinationTabSel[0].dataset["ref"], inputField.dataset["codice"]);
                             break;
                         case "multicombo":
                             inputFieldSel.kendoMultiSelect({
+                                dataTextField: "Value",
+                                dataValueField: "Codice",
+                                change: SortKendoMultiSelectValue,
                                 autoClose: false
                             });
-                            inputFieldSel.data("kendoMultiSelect").readonly();
+                            inputFieldKendo = inputFieldSel.data("kendoMultiSelect");
+                            inputFieldKendo.readonly();
+                            FillComboValues(inputFieldKendo, destinationTabSel[0].dataset["ref"], inputField.dataset["codice"]);
                             break;
                     }
                 });
@@ -662,7 +675,7 @@ function ResetInformation() {
                     break;
                 case "checkboxinfo" :
                     $(inputField).prop("checked", false);
-                    $("label[for='" + inputField.id + "']").unbind("click", KendoCheckBoxReadOnly).bind("click", KendoCheckBoxReadOnly);
+                    $("label[for='" + inputField.id + "']").unbind("click", KendoCheckBoxReadOnly_PreventClick).bind("click", KendoCheckBoxReadOnly_PreventClick);
                     break;
                 case "textinfo" :
                     inputField.value = null;
@@ -841,6 +854,9 @@ function UpdateInformation(codiceVersione, readonly) {
                     case "combo":
                         inputField.data("kendoDropDownList").value(value["ComboValue"]);
                         break;
+                    case "multicombo":
+                        inputField.data("kendoMultiSelect").value(value["MultiComboValue"].split("_"));
+                        break;
                 }
             });
         }
@@ -881,7 +897,7 @@ function UpdateInformation(codiceVersione, readonly) {
                         $(inputField).data("kendoDateTimePicker").readonly(false);
                         break;
                     case "checkboxinfo" :
-                        $("label[for='" + inputField.id + "']").unbind("click", KendoCheckBoxReadOnly);
+                        $("label[for='" + inputField.id + "']").unbind("click", KendoCheckBoxReadOnly_PreventClick);
                         break;
                     case "textinfo" :
                         inputField.removeAttribute("readonly");
@@ -950,6 +966,9 @@ function SaveSheetInformation() {
                     break;
                 case "combo":
                     SaveInformation('./php/setObjectInformationCombo.php', inputField.dataset["codice"], $(inputField).data("kendoDropDownList").value());
+                    break;
+                case "multicombo":
+                    SaveInformation('./php/setObjectInformationMultiCombo.php', inputField.dataset["codice"], $(inputField).data("kendoMultiSelect").value().join("_"));
                     break;
             }
         });
@@ -1233,6 +1252,6 @@ function GetLocaleDate(data) {
     return data != null ? GetDateTime(data).toLocaleDateString() : "";
 }
 
-function KendoCheckBoxReadOnly(event) {
+function KendoCheckBoxReadOnly_PreventClick(event) {
     event.preventDefault();
 }
