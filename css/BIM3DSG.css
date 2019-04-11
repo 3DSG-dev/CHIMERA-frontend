@@ -1002,6 +1002,7 @@ td.k-command-cell {
 .noDataFoundAddNewItem {
     font-size: 14px;
     font-weight: normal;
+    margin: -10px 0px 20px;
     text-align: left;
     text-transform: lowercase;
     color: #333;

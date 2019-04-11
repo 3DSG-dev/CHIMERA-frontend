@@ -481,7 +481,7 @@ function SetDynamicInformationFields() {
                 /**
                  * @return {string}
                  */
-                function AddField(field) {
+                function AddField(destinationTab, field) {
                     var html = "";
                     if (field["IsTitle"] === "t") {
                         html += '                        <h4>' + field["Campo"] + '</h4>\n';
@@ -511,10 +511,10 @@ function SetDynamicInformationFields() {
                             html += '                            <input data-tipo="real" data-codice="' + field["Codice"] + '" id="' + destinationTab + '_' + field["Codice"] + '" type="number">\n';
                         }
                         else if (field["IsCombo"] === "t") {
-                            html += '                            <input data-tipo="combo" data-codice="' + field["Codice"] + '" id="' + destinationTab + '_' + field["Codice"] + '">\n';
+                            html += '                            <select data-tipo="combo" data-codice="' + field["Codice"] + '" data-destination="' + destinationTab + '" id="' + destinationTab + '_' + field["Codice"] + '"></select>\n';
                         }
                         else if (field["IsMultiCombo"] === "t") {
-                            html += '                            <select data-tipo="multicombo" data-codice="' + field["Codice"] + '" id="' + destinationTab + '_' + field["Codice"] + '"></select>\n';
+                            html += '                            <select data-tipo="multicombo" data-codice="' + field["Codice"] + '" data-destination="' + destinationTab + '" id="' + destinationTab + '_' + field["Codice"] + '"></select>\n';
                         }
                         else {
                             field["Height"] = field["Height"] / 22;
@@ -538,33 +538,26 @@ function SetDynamicInformationFields() {
                         currentSheet = field["CodiceTitolo"];
                         html += StartSheet(field["CodiceTitolo"], field["Titolo"]);
                     }
-                    html += AddField(field);
+                    html += AddField(destinationTab, field);
                 });
                 html += CloseSheet();
                 return html;
             }
 
             function InitializeFieldKendoComponents(destinationTabSel) {
-                function FillComboValues(inputFieldKendo, dbReference, codiceCampo) {
-                    $.ajax({
-                        url: './php/getFieldComboValue.php',
-                        dataType: "json",
-                        data: {
-                            dbReference: dbReference,
-                            codiceCampo: codiceCampo
-                        },
-                        success: function (resultData) {
-                            inputFieldKendo.setDataSource(resultData);
-                        },
-                        error: function (jqXHR, textStatus, errorThrown) {
-                            console.log(textStatus, errorThrown);
-                            alert("Unexpected error during the update of the combobox fields!");
-                        }
-                    });
-                }
-
                 function SortKendoMultiSelectValue() {
                     this.value(this.value().sort());
+                }
+
+                /**
+                 * @return {string}
+                 */
+                function AddComboValueHtml(event) {
+                    var html = '                            <div class="noDataFoundAddNewItem">\n';
+                    html += '                                No matching value found: do you want to add <b>' + event.instance.input[0].value + '</b>?\n';
+                    html += '                            </div>\n';
+                    html += '                            <button class="buttonBordered" onclick="AddNewComboValue(\'' + event.instance.element[0].id + '\', \'' + event.instance.input[0].value + '\')">Add new value</button>\n';
+                    return html;
                 }
 
                 destinationTabSel.find("input, select").each(function (i, inputField) {
@@ -575,7 +568,7 @@ function SetDynamicInformationFields() {
                             inputFieldSel.kendoDateTimePicker({
                                 timeFormat: "HH:mm",
                                 format: "dd/MM/yy HH:mm",
-                                parseFormats: ["dd/MM/yy hh:mm:ss", "dd/MM/yy HH:mm:ss", "dd/MM/yy hh:mm", "dd/MM/yy HH:mm", "dd/MM/yy", "HH:mm"]
+                                parseFormats: ["dd/MM/yyyy HH:mm:ss", "dd/MM/yy HH:mm:ss", "dd/MM/yyyy HH:mm", "dd/MM/yy HH:mm", "dd/MM/yyyy", "dd/MM/yy", "HH:mm"]
                             });
                             inputFieldSel.data("kendoDateTimePicker").readonly();
                             break;
@@ -597,11 +590,13 @@ function SetDynamicInformationFields() {
                             inputFieldSel.data("kendoNumericTextBox").readonly();
                             break;
                         case "combo":
-                            inputFieldSel.kendoDropDownList({
+                            inputFieldSel.kendoComboBox({
                                 dataTextField: "Value",
                                 dataValueField: "Codice",
+                                filter: "contains",
+                                noDataTemplate: AddComboValueHtml
                             });
-                            inputFieldKendo = inputFieldSel.data("kendoDropDownList");
+                            inputFieldKendo = inputFieldSel.data("kendoComboBox");
                             inputFieldKendo.readonly();
                             FillComboValues(inputFieldKendo, destinationTabSel[0].dataset["ref"], inputField.dataset["codice"]);
                             break;
@@ -609,6 +604,8 @@ function SetDynamicInformationFields() {
                             inputFieldSel.kendoMultiSelect({
                                 dataTextField: "Value",
                                 dataValueField: "Codice",
+                                filter: "contains",
+                                noDataTemplate: AddComboValueHtml,
                                 change: SortKendoMultiSelectValue,
                                 autoClose: false
                             });
@@ -852,7 +849,7 @@ function UpdateInformation(codiceVersione, readonly) {
                         inputField.data("kendoNumericTextBox").value(value["RealValue"]);
                         break;
                     case "combo":
-                        inputField.data("kendoDropDownList").value(value["ComboValue"]);
+                        inputField.data("kendoComboBox").value(value["ComboValue"]);
                         break;
                     case "multicombo":
                         inputField.data("kendoMultiSelect").value(value["MultiComboValue"].split("_"));
@@ -965,7 +962,7 @@ function SaveSheetInformation() {
                     SaveInformation('./php/setObjectInformationOther.php', inputField.dataset["codice"], $(inputField).data("kendoNumericTextBox").value());
                     break;
                 case "combo":
-                    SaveInformation('./php/setObjectInformationCombo.php', inputField.dataset["codice"], $(inputField).data("kendoDropDownList").value());
+                    SaveInformation('./php/setObjectInformationCombo.php', inputField.dataset["codice"], $(inputField).data("kendoComboBox").value());
                     break;
                 case "multicombo":
                     SaveInformation('./php/setObjectInformationMultiCombo.php', inputField.dataset["codice"], $(inputField).data("kendoMultiSelect").value().join("_"));
@@ -1002,6 +999,48 @@ function ChangeCategory() {
     else {
         alert("Can't change category in read only mode!");
     }
+}
+
+function FillComboValues(inputFieldKendo, dbReference, codiceCampo) {
+    $.ajax({
+        url: './php/getFieldComboValue.php',
+        dataType: "json",
+        data: {
+            dbReference: dbReference,
+            codiceCampo: codiceCampo
+        },
+        success: function (resultData) {
+            inputFieldKendo.setDataSource(resultData);
+        },
+        error: function (jqXHR, textStatus, errorThrown) {
+            console.log(textStatus, errorThrown);
+            alert("Unexpected error during the update of the combobox fields!");
+        }
+    });
+}
+
+function AddNewComboValue(inputId, addValue) {
+    var inputSel = $("#" + inputId);
+    var dbReference = $("#" + inputSel[0].dataset["destination"])[0].dataset["ref"];
+    var codiceCampo = inputSel[0].dataset["codice"];
+    $.ajax({
+        url: './php/addInformationComboValue.php',
+        dataType: "json",
+        data: {
+            dbReference: dbReference,
+            codiceCampo: codiceCampo,
+            addValue: addValue
+        },
+        success: function () {
+            var inputFieldKendo = inputSel[0].dataset["tipo"] === "combo" ? inputSel.data("kendoComboBox") : inputSel.data("kendoMultiSelect");
+            FillComboValues(inputFieldKendo, dbReference, codiceCampo);
+        },
+        error: function (jqXHR, textStatus, errorThrown) {
+            console.log(textStatus, errorThrown);
+            alert("Unexpected error during the update of the combobox fields!");
+        }
+    });
+
 }
 
 // Components
