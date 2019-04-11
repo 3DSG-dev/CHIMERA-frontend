@@ -553,10 +553,11 @@ function SetDynamicInformationFields() {
                  * @return {string}
                  */
                 function AddComboValueHtml(event) {
-                    var html = '                            <div class="noDataFoundAddNewItem">\n';
-                    html += '                                No matching value found: do you want to add <b>' + event.instance.input[0].value + '</b>?\n';
-                    html += '                            </div>\n';
-                    html += '                            <button class="buttonBordered" onclick="AddNewComboValue(\'' + event.instance.element[0].id + '\', \'' + event.instance.input[0].value + '\')">Add new value</button>\n';
+                    var value = event.instance.input[0].value;
+                    var html = "";
+                    if (value) {
+                        html += '                            <button class="buttonBordered" onclick="AddNewComboValue(\'' + event.instance.element[0].id + '\', \'' + value + '\')">Add new value<br><b>' + value + '</b></button>\n';
+                    }
                     return html;
                 }
 
@@ -594,7 +595,7 @@ function SetDynamicInformationFields() {
                                 dataTextField: "Value",
                                 dataValueField: "Codice",
                                 filter: "contains",
-                                noDataTemplate: AddComboValueHtml
+                                footerTemplate: AddComboValueHtml
                             });
                             inputFieldKendo = inputFieldSel.data("kendoComboBox");
                             inputFieldKendo.readonly();
@@ -605,7 +606,7 @@ function SetDynamicInformationFields() {
                                 dataTextField: "Value",
                                 dataValueField: "Codice",
                                 filter: "contains",
-                                noDataTemplate: AddComboValueHtml,
+                                footerTemplate: AddComboValueHtml,
                                 change: SortKendoMultiSelectValue,
                                 autoClose: false
                             });
