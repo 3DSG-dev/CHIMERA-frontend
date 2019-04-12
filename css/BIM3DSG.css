@@ -288,6 +288,19 @@ textarea.k-textbox {
     color: var(--grigioscuro) !important;
 }
 
+.k-list-container .k-nodata {
+    font-weight: normal;
+    height: 35px;
+    min-height: 35px;
+    color: var(--grigioscuro);
+}
+
+/* Footer di tutti i Dropdown menu (select, multiselect ecc..) nel caso si scriva il testo a mano nell'input field senza sceglierlo dalla lista*/
+.k-popup .k-footer {
+    margin: 6px 0;
+    text-align: center;
+}
+
 /* Kendo UI - Textbox */
 .k-textbox {
     border-color: var(--grigiomedio);
@@ -298,13 +311,22 @@ textarea.k-textbox {
     position: relative;
 }
 
+.k-multiselect-wrap .k-input {
+    min-width: 10px;
+    padding: 4px 0;
+}
+
+.k-multiselect-wrap .k-button .k-select {
+    margin-left: 0;
+}
+
 .k-multiselect-wrap:hover .k-clear-value, .k-multiselect-wrap.k-state-hover .k-clear-value, .k-state-hover > .k-multiselect-wrap .k-clear-value, .k-multiselect-wrap.k-state-focused .k-clear-value, .k-state-focused > .k-multiselect-wrap .k-clear-value, .k-multiselect-wrap:hover .k-clear-value {
     top: 10%;
     right: 23px;
 }
 
 .k-multiselect-clearable .k-multiselect-wrap {
-    padding-right: 3em;
+    padding-right: 2.6em;
 }
 
 .k-multiselect:after {
@@ -315,6 +337,10 @@ textarea.k-textbox {
     right: 7px;
     content: "\e006";
     cursor: pointer;
+}
+
+.k-listbox .k-item, .k-popup .k-list .k-item {
+    margin-top: 1px;
 }
 
 /* Kendo UI - Dropdown menu */
@@ -349,17 +375,46 @@ textarea.k-textbox {
     background: var(--bluscuro-sfondo);
 }
 
-/* Kendo UI - Combobox Group - group name top of list */
-.k-popup > .k-group-header {
-    display: none !important;
-}
-
 .k-list .k-item:focus, .k-list .k-item.k-state-focused {
-    box-shadow: inset 0 0 0 0px rgba(0, 0, 0, 0);
+    box-shadow: inset 0 0 0 0 rgba(0, 0, 0, 0);
 }
 
 .k-draghandle.k-state-selected:hover, .k-state-selected {
     background-image: none, linear-gradient(to bottom, rgba(255, 255, 255, 0) 0, rgba(255, 255, 255, 0) 0%);
+}
+
+/* Kendo UI - Combobox Group - group name top of list that change on scroll*/
+.k-popup > .k-group-header {
+    height: 1.5em;
+    text-transform: none;
+    border: none;
+    border-radius: 4px;
+    background: var(--bluscuro-sfondo);
+    box-shadow: none;
+}
+
+/* Kendo UI - Combobox Group - group name top of every list */
+.k-list > .k-item.k-first > .k-group {
+    left: 0;
+    height: 1.5em;
+    text-align: right;
+    text-transform: none;
+}
+
+.k-list > .k-state-hover.k-first > .k-group {
+    height: 1.5em;
+    text-align: right;
+    text-transform: none;
+    background: var(--bluscuro-sfondo);
+}
+
+/* Kendo UI - Combobox Group - list item after group name */
+.k-list > .k-item.k-first {
+    padding-top: 1em;
+}
+
+.k-list > .k-state-hover.k-first {
+    padding-top: 1em;
 }
 
 /* Kendo UI - DateTimePicker */
@@ -403,6 +458,16 @@ textarea.k-textbox {
     height: 12px;
 }
 
+/* Kendo UI - Tooltip: k-invalid-msg - warning field error */
+span.k-widget.k-tooltip-validation {
+    display: block;
+    margin: 0;
+    color: red;
+    border: 0;
+    background: none;
+    box-shadow: none;
+}
+
 /* Kendo UI - Switch */
 /* The switch - the box around the slider */
 .k-switch-container, .k-switch {
@@ -437,17 +502,6 @@ textarea.k-textbox {
     border-color: var(--main-color);
     background-color: var(--main-color);
     background-image: none;
-}
-
-/* Tooltip warning field error */
-span.k-widget.k-tooltip-validation {
-    margin: 0;
-    padding: 0;
-    text-align: center;
-    color: red;
-    border: 0;
-    background: none;
-    box-shadow: none;
 }
 
 /* Kendo UI - Grid Table */
@@ -588,6 +642,7 @@ td.k-command-cell {
     display: block;
     overflow: hidden;
     box-sizing: border-box;
+    margin-bottom: 6px;
     padding: 3px 7px;
     text-align: center;
     border: 1px solid var(--grigiomedio);
@@ -695,8 +750,8 @@ td.k-command-cell {
 }
 
 .buttonBordered {
-    line-height: 30px;
-    padding: 0 10px;
+    line-height: 17px;
+    padding: 6px 10px;
     -webkit-transition-duration: 0.4s;
     transition-duration: 0.4s;
     text-align: center;
@@ -897,13 +952,15 @@ td.k-command-cell {
 .informationColumnLeft {
     float: left;
     width: calc(50% - 2 * (var(--padding-informationfields)));
-    margin: 0 var(--padding-informationfields) 6px var(--padding-informationfields);
+    margin-right: var(--padding-informationfields);
+    margin-left: var(--padding-informationfields);
 }
 
 .informationColumnRight {
     float: right;
     width: calc(50% - var(--padding-informationfields));
-    margin: 0 var(--padding-informationfields) 6px 0;
+    margin-right: var(--padding-informationfields);
+    margin-left: 0;
 }
 
 /* Information Window - Input fields */
@@ -998,14 +1055,24 @@ td.k-command-cell {
     text-align: left;
 }
 
-/* Dropdown, Multiselect: you can add new item directly from the input field */
-.noDataFoundAddNewItem {
-    font-size: 14px;
-    font-weight: normal;
-    margin: -10px 0px 20px;
+/* Tooltip warning input error */
+span.k-widget.k-tooltip-validation.inputInline {
+    float: left;
+    width: 60%;
+    min-width: 60%;
+    max-width: 60%;
+    margin-left: calc(33% + 5px);
     text-align: left;
-    text-transform: lowercase;
-    color: #333;
+    color: darkmagenta;
+}
+
+span.k-widget.k-tooltip-validation.inputMultiline {
+    float: left;
+    width: 100%;
+    max-width: 100%;
+    margin-left: 0;
+    text-align: left;
+    color: blue;
 }
 
 /* Read only - write Switch */
