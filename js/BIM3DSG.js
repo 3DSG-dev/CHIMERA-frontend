@@ -131,6 +131,7 @@ function ChangeInformationFieldsStyle(recompute) {
                 $(".informationFieldContainer .k-textbox").removeClass(removeInput).addClass(addInput);
                 $(".informationFieldContainer .k-widget").removeClass(removeInput).addClass(addInput);
                 $(".informationFieldContainer .inputCheckboxContainer").removeClass(removeInput).addClass(addInput);
+                $(".informationFieldContainer span.k-widget.k-tooltip-validation").removeClass(removeInput).addClass(addInput);
                 return true;
             }
         }
@@ -504,7 +505,8 @@ function SetDynamicInformationFields() {
                         html += '                        <div class="informationFieldContainer">\n';
                         html += '                            <div class="labelContainer"><label for="' + destinationTab + '_' + field["Codice"] + '">' + field["Campo"] + '</label></div>\n';
                         if (field["IsTimestamp"] === "t") {
-                            html += '                            <input data-tipo="timestamp" data-codice="' + field["Codice"] + '" data-destination="' + destinationTab + '" id="' + destinationTab + '_' + field["Codice"] + '">\n';
+                            html += '                            <input data-tipo="timestamp" data-codice="' + field["Codice"] + '" data-destination="' + destinationTab + '" id="' + destinationTab + '_' + field["Codice"] + '" name="' + destinationTab + '_' + field["Codice"] + '">\n';
+                            html += '                            <span class="k-invalid-msg" data-for="' + destinationTab + '_' + field["Codice"] + '"></span>\n';
                         }
                         else if (field["IsInt"] === "t") {
                             html += '                            <input data-tipo="int" data-codice="' + field["Codice"] + '" data-destination="' + destinationTab + '" id="' + destinationTab + '_' + field["Codice"] + '" type="number">\n';
@@ -574,6 +576,16 @@ function SetDynamicInformationFields() {
                                 parseFormats: ["dd/MM/yyyy HH:mm:ss", "dd/MM/yy HH:mm:ss", "dd/MM/yyyy HH:mm", "dd/MM/yy HH:mm", "dd/MM/yyyy", "dd/MM/yy", "HH:mm"]
                             });
                             inputFieldSel.data("kendoDateTimePicker").readonly();
+                            inputFieldSel.parents("div.informationFieldContainer").kendoValidator({
+                                rules: {
+                                    datepicker: function (input) {
+                                        return !(input[0].dataset["role"] === "datetimepicker") || input[0].value === "" || input.data("kendoDateTimePicker").value();
+                                    }
+                                },
+                                messages: {
+                                    datepicker: "Please enter a valid date!"
+                                }
+                            });
                             break;
                         case "int":
                             inputFieldSel.kendoNumericTextBox({
