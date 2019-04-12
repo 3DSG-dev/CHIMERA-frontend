@@ -12,8 +12,15 @@
     while ($row = pg_fetch_array($result, null, PGSQL_ASSOC)) {
         $rowArray[] = $row;
     }
-
     echo '"SchedeVisibiliOggetto": ' . json_encode($rowArray);
+
+    $SQL = 'SELECT "CodiceScheda" FROM "OggettiVersion_CategorieSchede" WHERE "CodiceCategoria" = ' . $codiceCategoria;
+    $result = pg_query($dbConnection, $SQL) or die ("Error: $SQL");
+    $rowArray = array();
+    while ($row = pg_fetch_array($result, null, PGSQL_ASSOC)) {
+        $rowArray[] = $row;
+    }
+    echo ', "SchedeVisibiliVersione": ' . json_encode($rowArray);
 
     echo "}";
 
