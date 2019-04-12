@@ -432,7 +432,7 @@ function SetDynamicInformationFields() {
             url: './php/getCategoryList.php',
             dataType: "json",
             success: function (resultData) {
-                var categoryCombo = $("#infoCategory").data("kendoComboBox");
+                var categoryCombo = $("#infoCategory").data("kendoDropDownList");
                 categoryCombo.setDataSource(resultData);
                 categoryCombo.dataSource.group({field: "GruppoCategoria"});
             },
@@ -803,7 +803,7 @@ function UpdateInformation(codiceVersione, readonly) {
                 $("#infoCantiereEliminazioneInizio").val(GetLocaleDate(resultData["EliminazioneDataInizio"]));
                 $("#infoCantiereEliminazioneFine").val(GetLocaleDate(resultData["EliminazioneDataFine"]));
 
-                $("#infoCategory").data("kendoComboBox").value(resultData["Categoria"]);
+                $("#infoCategory").data("kendoDropDownList").value(resultData["Categoria"]);
                 ShowInformationSheets(resultData["Categoria"]);
 
                 $("#infoCodiceOggetto").val(resultData["CodiceOggetto"]);
@@ -1033,7 +1033,7 @@ function SaveSheetInformation() {
 
 function ChangeCategory() {
     if ($("#informationReadOnlySwitch").data("kendoSwitch").check()) {
-        var categoryCombo = $("#infoCategory").data("kendoComboBox");
+        var categoryCombo = $("#infoCategory").data("kendoDropDownList");
         $.ajax({
             url: './php/setCategory.php',
             dataType: "json",
@@ -1272,10 +1272,11 @@ function InitializeComponents() {
 
         function SetInformationDefaultSheets() {
             function SetInformationCategorySheet() {
-                $("#infoCategory").kendoComboBox({
+                $("#infoCategory").kendoDropDownList({
                     dataTextField: "Nome",
-                    dataValueField: "Codice"
-                }).data("kendoComboBox");
+                    dataValueField: "Codice",
+                    filter: "contains"
+                }).data("kendoDropDownList");
             }
 
             SetInformationCategorySheet();
