@@ -135,7 +135,7 @@ function ChangeInformationFieldsStyle(recompute) {
             }
         }
 
-        if ($("#informationObjectTab").width() > 710) {
+        if ($("#informationWindow").width() > 730) {
             return SwitchFieldStyleClass("labelInline", "labelMultiline", "inputInline", "inputMultiline", recompute);
         }
         else {
@@ -469,12 +469,14 @@ function SetDynamicInformationFields() {
                 /**
                  * @return {string}
                  */
-                function CloseSheet() {
+                function CloseSheet(currentSheet) {
                     var html = "";
-                    html += '                        <div class="buttonContainer">\n';
-                    html += '                            <button id="saveInfoObject-' + currentSheet + '" data-codice="' + currentSheet + '" class="buttonBordered" disabled>SAVE</button>\n';
-                    html += '                        </div>\n';
-                    html += "                    </div>\n";
+                    if (currentSheet !== -1) {
+                        html += '                        <div class="buttonContainer">\n';
+                        html += '                            <button id="saveInfoObject-' + currentSheet + '" data-codice="' + currentSheet + '" class="buttonBordered" disabled>SAVE</button>\n';
+                        html += '                        </div>\n';
+                        html += "                    </div>\n";
+                    }
                     return html;
                 }
 
@@ -493,7 +495,7 @@ function SetDynamicInformationFields() {
                         html += '                        <div class="informationFieldContainer">\n';
                         html += '                            <div class="labelContainer labelCheckboxContainer">' + field["Campo"] + '</div>\n';
                         html += '                            <div class="inputCheckboxContainer">\n';
-                        html += '                               <input data-tipo="bool" data-codice="' + field["Codice"] + '" data-role="checkboxinfo" id="' + destinationTab + '_' + field["Codice"] + '" type="checkbox" class="k-checkbox" />\n';
+                        html += '                               <input data-tipo="bool" data-codice="' + field["Codice"] + '" data-destination="' + destinationTab + '" id="' + destinationTab + '_' + field["Codice"] + '" data-role="checkboxinfo" type="checkbox" class="k-checkbox" />\n';
                         html += '                               <label class="k-checkbox-label" for="' + destinationTab + '_' + field["Codice"] + '"></label>\n';
                         html += '                            </div>\n';
                         html += '                        </div>\n';
@@ -502,13 +504,13 @@ function SetDynamicInformationFields() {
                         html += '                        <div class="informationFieldContainer">\n';
                         html += '                            <div class="labelContainer"><label for="' + destinationTab + '_' + field["Codice"] + '">' + field["Campo"] + '</label></div>\n';
                         if (field["IsTimestamp"] === "t") {
-                            html += '                            <input data-tipo="timestamp" data-codice="' + field["Codice"] + '" id="' + destinationTab + '_' + field["Codice"] + '">\n';
+                            html += '                            <input data-tipo="timestamp" data-codice="' + field["Codice"] + '" data-destination="' + destinationTab + '" id="' + destinationTab + '_' + field["Codice"] + '">\n';
                         }
                         else if (field["IsInt"] === "t") {
-                            html += '                            <input data-tipo="int" data-codice="' + field["Codice"] + '" id="' + destinationTab + '_' + field["Codice"] + '" type="number">\n';
+                            html += '                            <input data-tipo="int" data-codice="' + field["Codice"] + '" data-destination="' + destinationTab + '" id="' + destinationTab + '_' + field["Codice"] + '" type="number">\n';
                         }
                         else if (field["IsReal"] === "t") {
-                            html += '                            <input data-tipo="real" data-codice="' + field["Codice"] + '" id="' + destinationTab + '_' + field["Codice"] + '" type="number">\n';
+                            html += '                            <input data-tipo="real" data-codice="' + field["Codice"] + '" data-destination="' + destinationTab + '" id="' + destinationTab + '_' + field["Codice"] + '" type="number">\n';
                         }
                         else if (field["IsCombo"] === "t") {
                             html += '                            <select data-tipo="combo" data-codice="' + field["Codice"] + '" data-destination="' + destinationTab + '" id="' + destinationTab + '_' + field["Codice"] + '"></select>\n';
@@ -519,10 +521,10 @@ function SetDynamicInformationFields() {
                         else {
                             field["Height"] = field["Height"] / 22;
                             if (field["Height"] > 1) {
-                                html += '                            <textarea data-tipo="text" data-codice="' + field["Codice"] + '" data-role="textinfo" id="' + destinationTab + '_' + field["Codice"] + '" style="height: ' + field["Height"] * 31 + 'px" type="text" class="k-textbox" readonly></textarea>\n';
+                                html += '                            <textarea data-tipo="text" data-codice="' + field["Codice"] + '" data-role="textinfo" data-destination="' + destinationTab + '" id="' + destinationTab + '_' + field["Codice"] + '" style="height: ' + field["Height"] * 31 + 'px" type="text" class="k-textbox" readonly></textarea>\n';
                             }
                             else {
-                                html += '                            <input data-tipo="text" data-codice="' + field["Codice"] + '" data-role="textinfo" id="' + destinationTab + '_' + field["Codice"] + '" type="text" class="k-textbox" readonly/>\n';
+                                html += '                            <input data-tipo="text" data-codice="' + field["Codice"] + '" data-role="textinfo" data-destination="' + destinationTab + '" id="' + destinationTab + '_' + field["Codice"] + '" type="text" class="k-textbox" readonly/>\n';
                             }
                         }
                         html += '                        </div>\n';
@@ -534,13 +536,13 @@ function SetDynamicInformationFields() {
                 var currentSheet = -1;
                 $.each(fieldsList, function (key, field) {
                     if (currentSheet !== field["CodiceTitolo"]) {
-                        html += currentSheet !== -1 ? CloseSheet() : "";
+                        html += CloseSheet(currentSheet);
                         currentSheet = field["CodiceTitolo"];
                         html += StartSheet(field["CodiceTitolo"], field["Titolo"]);
                     }
                     html += AddField(destinationTab, field);
                 });
-                html += CloseSheet();
+                html += CloseSheet(currentSheet);
                 return html;
             }
 
@@ -630,6 +632,7 @@ function SetDynamicInformationFields() {
             dataType: "json",
             success: function (resultData) {
                 CreateInformationFieldSingleTab(resultData["SchedeOggetto"], "informationObjectTab");
+                CreateInformationFieldSingleTab(resultData["SchedeVersione"], "informationVersionTab");
 
                 ChangeInformationFieldsStyle(true);
             },
@@ -727,6 +730,7 @@ function UpdateInformation(codiceVersione, readonly) {
                     },
                     success: function (resultData) {
                         SetVisibleInformationSheet(resultData["SchedeVisibiliOggetto"], "informationObjectTab");
+                        SetVisibleInformationSheet(resultData["SchedeVisibiliVersione"], "informationVersionTab");
                     },
                     error: function (jqXHR, textStatus, errorThrown) {
                         console.log(textStatus, errorThrown);
@@ -867,6 +871,7 @@ function UpdateInformation(codiceVersione, readonly) {
             },
             success: function (resultData) {
                 SetFieldValue(resultData["InformazioniOggetto"], "informationObjectTab");
+                SetFieldValue(resultData["InformazioniVersione"], "informationVersionTab");
             },
             error: function (jqXHR, textStatus, errorThrown) {
                 console.log(textStatus, errorThrown);
@@ -947,26 +952,75 @@ function SaveSheetInformation() {
 
     if ($("#informationReadOnlySwitch").data("kendoSwitch").check()) {
         var sheet = $(this).parents(".boxedContainer");
+        var url;
         sheet.find("input, textarea, select").each(function (i, inputField) {
             switch (inputField.dataset["tipo"]) {
                 case "text":
-                    SaveInformation('./php/setObjectInformationText.php', inputField.dataset["codice"], inputField.value);
+                    switch (inputField.dataset["destination"]) {
+                        case "informationObjectTab" :
+                            url = './php/setObjectInformationText.php';
+                            break;
+                        case "informationVersionTab":
+                            url = './php/setObjectVersionInformationText.php';
+                            break;
+                    }
+                    SaveInformation(url, inputField.dataset["codice"], inputField.value);
                     break;
                 case "bool":
-                    SaveInformation('./php/setObjectInformationOther.php', inputField.dataset["codice"], $(inputField).prop("checked"));
+                    switch (inputField.dataset["destination"]) {
+                        case "informationObjectTab" :
+                            url = './php/setObjectInformationOther.php';
+                            break;
+                        case "informationVersionTab":
+                            url = './php/setObjectVersionInformationOther.php';
+                            break;
+                    }
+                    SaveInformation(url, inputField.dataset["codice"], $(inputField).prop("checked"));
                     break;
                 case "timestamp":
-                    SaveInformation('./php/setObjectInformationTimestamp.php', inputField.dataset["codice"], $(inputField).data("kendoDateTimePicker").value().toLocaleString('it-it'));
+                    switch (inputField.dataset["destination"]) {
+                        case "informationObjectTab" :
+                            url = './php/setObjectInformationTimestamp.php';
+                            break;
+                        case "informationVersionTab":
+                            url = './php/setObjectVersionInformationTimestamp.php';
+                            break;
+                    }
+                    SaveInformation(url, inputField.dataset["codice"], $(inputField).data("kendoDateTimePicker").value().toLocaleString('it-it'));
                     break;
                 case "int":
                 case "real":
-                    SaveInformation('./php/setObjectInformationOther.php', inputField.dataset["codice"], $(inputField).data("kendoNumericTextBox").value());
+                    switch (inputField.dataset["destination"]) {
+                        case "informationObjectTab" :
+                            url = './php/setObjectInformationOther.php';
+                            break;
+                        case "informationVersionTab":
+                            url = './php/setObjectVersionInformationOther.php';
+                            break;
+                    }
+                    SaveInformation(url, inputField.dataset["codice"], $(inputField).data("kendoNumericTextBox").value());
                     break;
                 case "combo":
-                    SaveInformation('./php/setObjectInformationCombo.php', inputField.dataset["codice"], $(inputField).data("kendoComboBox").value());
+                    switch (inputField.dataset["destination"]) {
+                        case "informationObjectTab" :
+                            url = './php/setObjectInformationCombo.php';
+                            break;
+                        case "informationVersionTab":
+                            url = './php/setObjectVersionInformationCombo.php';
+                            break;
+                    }
+                    SaveInformation(url, inputField.dataset["codice"], $(inputField).data("kendoComboBox").value());
                     break;
                 case "multicombo":
-                    SaveInformation('./php/setObjectInformationMultiCombo.php', inputField.dataset["codice"], $(inputField).data("kendoMultiSelect").value().join("_"));
+                    switch (inputField.dataset["destination"]) {
+                        case "informationObjectTab" :
+                            url = './php/setObjectInformationMultiCombo.php';
+                            break;
+                        case "informationVersionTab":
+                            url = './php/setObjectVersionInformationMultiCombo.php';
+                            break;
+                    }
+                    SaveInformation(url, inputField.dataset["codice"], $(inputField).data("kendoMultiSelect").value().join("_"));
                     break;
             }
         });
