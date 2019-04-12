@@ -1063,7 +1063,6 @@ span.k-widget.k-tooltip-validation.inputInline {
     max-width: 60%;
     margin-left: calc(33% + 5px);
     text-align: left;
-    color: darkmagenta;
 }
 
 span.k-widget.k-tooltip-validation.inputMultiline {
@@ -1072,7 +1071,19 @@ span.k-widget.k-tooltip-validation.inputMultiline {
     max-width: 100%;
     margin-left: 0;
     text-align: left;
-    color: blue;
+}
+
+/* Combobox - erase link button, in dropdown menu, foreach item */
+.k-combobox .k-popup .k-list .k-item {
+    position: relative;
+}
+
+.k-combobox .k-popup .k-list .k-item .buttonErase {
+    position: absolute;
+    top: 3px;
+    right: 3px;
+    text-align: right;
+    color: var(--main-danger-color);
 }
 
 /* Read only - write Switch */
