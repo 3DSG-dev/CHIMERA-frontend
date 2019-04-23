@@ -161,7 +161,6 @@
                     <li>Version information</li>
                     <li>Subversion information</li>
                 </ul>
-
                 <div id="informationObjectTab" data-ref="Oggetti" class="informationWindowTabItem">
                     <div class="boxedContainer">
                         <h3>Main information</h3>
@@ -292,20 +291,38 @@
                             <input id="infoUpdateOn" type="text" class="k-textbox" readonly />
                         </div>
                         <div class="informationFieldContainer">
-                            <div class="labelContainer"><label for="infoCenterX">Center x</label></div>
-                            <input id="infoCenterX" type="text" class="k-textbox" readonly />
-                        </div>
-                        <div class="informationFieldContainer">
-                            <div class="labelContainer"><label for="infoCenterY">Center y</label></div>
-                            <input id="infoCenterY" type="text" class="k-textbox" readonly />
-                        </div>
-                        <div class="informationFieldContainer">
-                            <div class="labelContainer"><label for="infoCenterZ">Center z</label></div>
-                            <input id="infoCenterZ" type="text" class="k-textbox" readonly />
-                        </div>
-                        <div class="informationFieldContainer">
                             <div class="labelContainer"><label for="infoRadius">Diagonal</label></div>
                             <input id="infoRadius" type="text" class="k-textbox" readonly />
+                        </div>
+                        <h4>Local coordinates</h4>
+                        <div class="informationFieldContainer">
+                            <div class="labelContainer"><label for="infoLocalCenterX">Center x</label></div>
+                            <input id="infoLocalCenterX" type="text" class="k-textbox" readonly />
+                        </div>
+                        <div class="informationFieldContainer">
+                            <div class="labelContainer"><label for="infoLocalCenterY">Center y</label></div>
+                            <input id="infoLocalCenterY" type="text" class="k-textbox" readonly />
+                        </div>
+                        <div class="informationFieldContainer">
+                            <div class="labelContainer"><label for="infoLocalCenterZ">Center z</label></div>
+                            <input id="infoLocalCenterZ" type="text" class="k-textbox" readonly />
+                        </div>
+                        <h4>World coordinates</h4>
+                        <div class="informationFieldContainer">
+                            <div class="labelContainer"><label for="infoSRS">SRS</label></div>
+                            <input id="infoSRS" type="text" class="k-textbox" readonly />
+                        </div>
+                        <div class="informationFieldContainer">
+                            <div class="labelContainer"><label for="infoWorldCenterX">Center x</label></div>
+                            <input id="infoWorldCenterX" type="text" class="k-textbox" readonly />
+                        </div>
+                        <div class="informationFieldContainer">
+                            <div class="labelContainer"><label for="infoWorldCenterY">Center y</label></div>
+                            <input id="infoWorldCenterY" type="text" class="k-textbox" readonly />
+                        </div>
+                        <div class="informationFieldContainer">
+                            <div class="labelContainer"><label for="infoWorldCenterZ">Center z</label></div>
+                            <input id="infoWorldCenterZ" type="text" class="k-textbox" readonly />
                         </div>
                     </div>
                 </div>

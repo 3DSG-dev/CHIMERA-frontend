@@ -833,10 +833,14 @@ function UpdateInformation(codiceVersione, readonly) {
                 $("#infoVolume").val(ParseVolumeValue(resultData["Volume"]));
                 $("#infoUpdateBy").val(resultData["UpdateModelliFullName"] != null ? resultData["UpdateModelliFullName"] : resultData["UpdateModelliUser"]);
                 $("#infoUpdateOn").val(GetLocaleDateTime(resultData["LastUpdate"]));
-                $("#infoCenterX").val(resultData["xc"] == null ? "Unknown" : parseFloat(resultData["xc"]).toFixed(2) + " m");
-                $("#infoCenterY").val(resultData["yc"] == null ? "Unknown" : parseFloat(resultData["yc"]).toFixed(2) + " m");
-                $("#infoCenterZ").val(resultData["zc"] == null ? "Unknown" : parseFloat(resultData["zc"]).toFixed(2) + " m");
-                $("#infoRadius").val(resultData["Radius"] == null ? "Unknown" : parseFloat(resultData["Radius"]).toFixed(2) + " m");
+                $("#infoRadius").val(resultData["Radius"] == null ? "Unknown" : parseFloat(resultData["Radius"]).toFixed(3) + " m");
+                $("#infoLocalCenterX").val(resultData["xc"] == null ? "Unknown" : parseFloat(resultData["xc"]).toFixed(3) + " m");
+                $("#infoLocalCenterY").val(resultData["yc"] == null ? "Unknown" : parseFloat(resultData["yc"]).toFixed(3) + " m");
+                $("#infoLocalCenterZ").val(resultData["zc"] == null ? "Unknown" : parseFloat(resultData["zc"]).toFixed(3) + " m");
+                $("#infoSRS").val(resultData["SRS"]);
+                $("#infoWorldCenterX").val(resultData["xc"] == null ? "Unknown" : (parseFloat(resultData["xc"]) - parseFloat(resultData["TranslationX"])).toFixed(3) + " m");
+                $("#infoWorldCenterY").val(resultData["yc"] == null ? "Unknown" : (parseFloat(resultData["yc"]) - parseFloat(resultData["TranslationY"])).toFixed(3) + " m");
+                $("#infoWorldCenterZ").val(resultData["zc"] == null ? "Unknown" : (parseFloat(resultData["zc"]) - parseFloat(resultData["TranslationZ"])).toFixed(3) + " m");
             },
             error: function (jqXHR, textStatus, errorThrown) {
                 console.log(textStatus, errorThrown);
