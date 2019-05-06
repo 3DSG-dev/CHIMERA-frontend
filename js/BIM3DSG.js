@@ -952,13 +952,65 @@ function UpdateInformation(codiceVersione, readonly) {
 }
 
 function SaveSheetInformation() {
-    function SaveInformation(url, codiceCampo, valore) {
+    function SaveInformation(inputField) {
+        var valore;
+        var url = "./php/setInformation";
+        switch (inputField.dataset["tipo"]) {
+            case "text":
+                url += 'Text.php';
+                valore = inputField.value;
+                break;
+            case "bool":
+                url += 'Other.php';
+                valore = $(inputField).prop("checked");
+                break;
+            case "timestamp":
+                url += 'Timestamp.php';
+                // noinspection JSCheckFunctionSignatures
+                valore = $(inputField).data("kendoDateTimePicker").value().toLocaleString('it-it');
+                break;
+            case "int":
+            case "real":
+                url += 'Other.php';
+                valore = $(inputField).data("kendoNumericTextBox").value();
+                break;
+            case "combo":
+                url += 'Combo.php';
+                valore = $(inputField).data("kendoComboBox").value();
+                break;
+            case "multicombo":
+                url += 'MultiCombo.php';
+                valore = $(inputField).data("kendoMultiSelect").value().join("_");
+                break;
+            default:
+                return;
+        }
+
+        var codice;
+        switch (inputField.dataset["destination"]) {
+            case "informationObjectTab" :
+                codice = $("#infoCodiceOggetto").val();
+                break;
+            case "informationVersionTab":
+                codice = $("#infoCodiceVersione").val();
+                break;
+            default:
+                return;
+        }
+
+        var dbReference = $("#" + inputField.dataset["destination"])[0].dataset["ref"];
+        //TODO: quando si dismette il vecchio sistema rinominare funzione nel DB e togliere l'IF seguente
+        if (dbReference === "OggettiVersion") {
+            dbReference = "OggettiVersioni";
+        }
+
         $.ajax({
             url: url,
             dataType: "json",
             data: {
-                codiceOggetto: $("#infoCodiceOggetto").val(),
-                codiceCampo: codiceCampo,
+                dbReference: dbReference,
+                codiceRiferimento: codice,
+                codiceCampo: inputField.dataset["codice"],
                 valore: valore
             },
             error: function (jqXHR, textStatus, errorThrown) {
@@ -970,77 +1022,8 @@ function SaveSheetInformation() {
 
     if ($("#informationReadOnlySwitch").data("kendoSwitch").check()) {
         var sheet = $(this).parents(".boxedContainer");
-        var url;
         sheet.find("input, textarea, select").each(function (i, inputField) {
-            switch (inputField.dataset["tipo"]) {
-                case "text":
-                    switch (inputField.dataset["destination"]) {
-                        case "informationObjectTab" :
-                            url = './php/setObjectInformationText.php';
-                            break;
-                        case "informationVersionTab":
-                            url = './php/setObjectVersionInformationText.php';
-                            break;
-                    }
-                    SaveInformation(url, inputField.dataset["codice"], inputField.value);
-                    break;
-                case "bool":
-                    switch (inputField.dataset["destination"]) {
-                        case "informationObjectTab" :
-                            url = './php/setObjectInformationOther.php';
-                            break;
-                        case "informationVersionTab":
-                            url = './php/setObjectVersionInformationOther.php';
-                            break;
-                    }
-                    SaveInformation(url, inputField.dataset["codice"], $(inputField).prop("checked"));
-                    break;
-                case "timestamp":
-                    switch (inputField.dataset["destination"]) {
-                        case "informationObjectTab" :
-                            url = './php/setObjectInformationTimestamp.php';
-                            break;
-                        case "informationVersionTab":
-                            url = './php/setObjectVersionInformationTimestamp.php';
-                            break;
-                    }
-                    SaveInformation(url, inputField.dataset["codice"], $(inputField).data("kendoDateTimePicker").value().toLocaleString('it-it'));
-                    break;
-                case "int":
-                case "real":
-                    switch (inputField.dataset["destination"]) {
-                        case "informationObjectTab" :
-                            url = './php/setObjectInformationOther.php';
-                            break;
-                        case "informationVersionTab":
-                            url = './php/setObjectVersionInformationOther.php';
-                            break;
-                    }
-                    SaveInformation(url, inputField.dataset["codice"], $(inputField).data("kendoNumericTextBox").value());
-                    break;
-                case "combo":
-                    switch (inputField.dataset["destination"]) {
-                        case "informationObjectTab" :
-                            url = './php/setObjectInformationCombo.php';
-                            break;
-                        case "informationVersionTab":
-                            url = './php/setObjectVersionInformationCombo.php';
-                            break;
-                    }
-                    SaveInformation(url, inputField.dataset["codice"], $(inputField).data("kendoComboBox").value());
-                    break;
-                case "multicombo":
-                    switch (inputField.dataset["destination"]) {
-                        case "informationObjectTab" :
-                            url = './php/setObjectInformationMultiCombo.php';
-                            break;
-                        case "informationVersionTab":
-                            url = './php/setObjectVersionInformationMultiCombo.php';
-                            break;
-                    }
-                    SaveInformation(url, inputField.dataset["codice"], $(inputField).data("kendoMultiSelect").value().join("_"));
-                    break;
-            }
+            SaveInformation(inputField);
         });
         alert("Save completed!")
     }
