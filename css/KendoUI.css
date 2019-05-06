@@ -1396,14 +1396,14 @@ kendo-sortable {
     display: inline-flex;
 }
 
-.k-multiselect-wrap:hover .k-clear-value,
+/*.k-multiselect-wrap:hover .k-clear-value,
 .k-multiselect-wrap.k-state-hover .k-clear-value,
 .k-state-hover > .k-multiselect-wrap .k-clear-value,
 .k-multiselect-wrap.k-state-focused .k-clear-value,
 .k-state-focused > .k-multiselect-wrap .k-clear-value,
 .k-multiselect-wrap:hover .k-clear-value {
     display: inline-flex;
-}
+}*/
 
 .k-dropdown-wrap .k-clear-value {
     right: calc(calc(8px + 1.42857em));

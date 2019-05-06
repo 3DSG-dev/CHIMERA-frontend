@@ -362,6 +362,11 @@ textarea.k-textbox {
     color: var(--main-color-over);
 }
 
+/* Kendo UI - Combobox - erase link button, in dropdown menu, foreach item */
+.k-popup li.k-item {
+    position: relative;
+}
+
 /* Kendo UI - Combobox Group - dropdown menu */
 .k-popup .k-list .k-item > .k-group::before {
     display: none;
@@ -652,7 +657,7 @@ td.k-command-cell {
 .boxedContainer h3 {
     font-size: 13px;
     font-weight: bold;
-    margin-top: 8px;
+    margin: 11px 0 6px 0;
     text-transform: uppercase;
     color: var(--main-color);
 }
@@ -660,7 +665,7 @@ td.k-command-cell {
 .boxedContainer h4 {
     font-size: 12px;
     font-weight: bold;
-    margin-top: 5px;
+    margin: 8px 0 6px 0;
     color: var(--main-color);
 }
 
@@ -1073,17 +1078,27 @@ span.k-widget.k-tooltip-validation.inputMultiline {
     text-align: left;
 }
 
-/* Combobox - erase link button, in dropdown menu, foreach item */
-.k-combobox .k-popup .k-list .k-item {
-    position: relative;
-}
-
-.k-combobox .k-popup .k-list .k-item .buttonErase {
+/* Combobox, Multiselect - Erase & Edit button-icon, in dropdown menu, foreach item */
+.k-popup .k-icon.buttonDropdownItemErase {
+    font-size: 12px;
     position: absolute;
-    top: 3px;
+    top: 7px;
     right: 3px;
     text-align: right;
     color: var(--main-danger-color);
+}
+
+.k-popup .k-icon.buttonDropdownItemEdit {
+    font-size: 12px;
+    position: absolute;
+    top: 7px;
+    right: 17px;
+    text-align: right;
+    color: var(--main-color);
+}
+
+.k-popup .k-item.k-state-selected .k-icon.buttonDropdownItemEdit {
+    color: #fff;
 }
 
 /* Read only - write Switch */
