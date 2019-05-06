@@ -609,6 +609,7 @@ function SetDynamicInformationFields() {
                                 dataTextField: "Value",
                                 dataValueField: "Codice",
                                 filter: "contains",
+                                template: '#:Value#<span class="k-icon k-i-edit buttonDropdownItemEdit" onclick=""></span><span class="k-icon k-i-close buttonDropdownItemErase" onclick=""></span>',
                                 footerTemplate: AddComboValueHtml
                             });
                             inputFieldKendo = inputFieldSel.data("kendoComboBox");
@@ -620,6 +621,7 @@ function SetDynamicInformationFields() {
                                 dataTextField: "Value",
                                 dataValueField: "Codice",
                                 filter: "contains",
+                                template: '#:Value#<span class="k-icon k-i-edit buttonDropdownItemEdit" onclick=""></span><span class="k-icon k-i-close buttonDropdownItemErase" onclick=""></span>',
                                 footerTemplate: AddComboValueHtml,
                                 change: SortKendoMultiSelectValue,
                                 autoClose: false
