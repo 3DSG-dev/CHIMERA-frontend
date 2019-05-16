@@ -330,5 +330,14 @@
                 </div>
             </div>
         </div>
+
+        <div id="changeComboValueDialog">
+            <form id="changeComboValueForm" method="post" action="javascript:void(0);">
+                <div class="dialogFormField">
+                    <label for="newValue">Insert the new value:</label>
+                    <input id="newValue" type="text" class="k-textbox" name="newValue" value="" placeholder="newValue">
+                </div>
+            </form>
+        </div>
     </body>
 </html>
