@@ -217,11 +217,11 @@ function Login() {
 
         var html;
         html = '<form id="loginForm" method="post" action="./">';
-        html += '   <div class="loginField">';
+        html += '   <div class="dialogFormField">';
         html += '       <label for="username">User:</label><br/>';
         html += '       <input id="username" type="text" name="username" value="" placeholder="username">';
         html += '   </div>';
-        html += '   <div class="loginField">';
+        html += '   <div class="dialogFormField">';
         html += '       <label for="password">Password:</label><br/>';
         html += '       <input id="password" type="password" name="password" value="" placeholder="password">';
         html += '   </div>';
@@ -609,7 +609,7 @@ function SetDynamicInformationFields() {
                                 dataTextField: "Value",
                                 dataValueField: "Codice",
                                 filter: "contains",
-                                template: '#:Value#<span class="k-icon k-i-edit buttonDropdownItemEdit" onclick=""></span><span class="k-icon k-i-close buttonDropdownItemErase" onclick=""></span>',
+                                template: '#:Value#<span class="k-icon k-i-edit buttonDropdownItemEdit" data-codice="#:Codice#" data-value="#:Value#" data-ref="' + inputField.id + '" onclick="ChangeComboValueDialogOpen(event)"></span><span class="k-icon k-i-delete buttonDropdownItemErase" onclick=""></span>',
                                 footerTemplate: AddComboValueHtml
                             });
                             inputFieldKendo = inputFieldSel.data("kendoComboBox");
@@ -621,7 +621,7 @@ function SetDynamicInformationFields() {
                                 dataTextField: "Value",
                                 dataValueField: "Codice",
                                 filter: "contains",
-                                template: '#:Value#<span class="k-icon k-i-edit buttonDropdownItemEdit" onclick=""></span><span class="k-icon k-i-close buttonDropdownItemErase" onclick=""></span>',
+                                template: '#:Value#<span class="k-icon k-i-edit buttonDropdownItemEdit" data-codice="#:Codice#" data-value="#:Value#" data-ref="' + inputField.id + '" onclick="ChangeComboValueDialogOpen(event)"></span><span class="k-icon k-i-delete buttonDropdownItemErase" onclick=""></span>',
                                 footerTemplate: AddComboValueHtml,
                                 change: SortKendoMultiSelectValue,
                                 autoClose: false
@@ -953,34 +953,34 @@ function UpdateInformation(codiceVersione, readonly) {
 
 function SaveSheetInformation() {
     function SaveInformation(inputField) {
-        var valore;
+        var value;
         var url = "./php/setInformation";
         switch (inputField.dataset["tipo"]) {
             case "text":
                 url += 'Text.php';
-                valore = inputField.value;
+                value = inputField.value;
                 break;
             case "bool":
                 url += 'Other.php';
-                valore = $(inputField).prop("checked");
+                value = $(inputField).prop("checked");
                 break;
             case "timestamp":
                 url += 'Timestamp.php';
                 // noinspection JSCheckFunctionSignatures
-                valore = $(inputField).data("kendoDateTimePicker").value().toLocaleString('it-it');
+                value = $(inputField).data("kendoDateTimePicker").value().toLocaleString('it-it');
                 break;
             case "int":
             case "real":
                 url += 'Other.php';
-                valore = $(inputField).data("kendoNumericTextBox").value();
+                value = $(inputField).data("kendoNumericTextBox").value();
                 break;
             case "combo":
                 url += 'Combo.php';
-                valore = $(inputField).data("kendoComboBox").value();
+                value = $(inputField).data("kendoComboBox").value();
                 break;
             case "multicombo":
                 url += 'MultiCombo.php';
-                valore = $(inputField).data("kendoMultiSelect").value().join("_");
+                value = $(inputField).data("kendoMultiSelect").value().join("_");
                 break;
             default:
                 return;
@@ -1011,7 +1011,7 @@ function SaveSheetInformation() {
                 dbReference: dbReference,
                 codiceRiferimento: codice,
                 codiceCampo: inputField.dataset["codice"],
-                valore: valore
+                valore: value
             },
             error: function (jqXHR, textStatus, errorThrown) {
                 console.log(textStatus, errorThrown);
@@ -1067,6 +1067,7 @@ function FillComboValues(inputFieldKendo, dbReference, codiceCampo) {
         },
         success: function (resultData) {
             inputFieldKendo.setDataSource(resultData);
+            RefreshKendoComboValue(inputFieldKendo);
         },
         error: function (jqXHR, textStatus, errorThrown) {
             console.log(textStatus, errorThrown);
@@ -1096,7 +1097,71 @@ function AddNewComboValue(inputId, addValue) {
             alert("Unexpected error during the update of the combobox fields!");
         }
     });
+}
 
+function ChangeComboValueDialogOpen(event) {
+    function InitializeRenameComboDialog(renameComboDialog) {
+        renameComboDialog.kendoDialog({
+            width: "320px",
+            title: "Rename combo value",
+            closable: true,
+            modal: true,
+            actions: [
+                {text: 'CANCEL', action: this.close()},
+                {text: 'RENAME', primary: true, action: ChangeComboValueDialog_OnSubmit}
+            ]
+        });
+
+        renameComboDialog.parents(".k-widget").addClass("windowTitle windowIcon renameComboDialogTitle renameComboDialogIcon");
+        $("#newValue").on("keyup", function (event) {
+            if (event.key === "Enter") {
+                ChangeComboValueDialog_OnSubmit();
+                renameComboDialog.data("kendoDialog").close();
+            }
+        });
+    }
+
+    function ChangeComboValueDialog_OnSubmit() {
+        var newValueInput = $("#newValue");
+        var inputSel = $("#" + newValueInput[0].dataset["ref"]);
+        var dbReference = $("#" + inputSel[0].dataset["destination"])[0].dataset["ref"];
+        var codiceCampo = inputSel[0].dataset["codice"];
+        $.ajax({
+            url: './php/changeInformationComboValue.php',
+            dataType: "json",
+            data: {
+                dbReference: dbReference,
+                codiceCombo: newValueInput[0].dataset["codice"],
+                newValue: newValueInput.val()
+            },
+            success: function () {
+                var inputFieldKendo = inputSel[0].dataset["tipo"] === "combo" ? inputSel.data("kendoComboBox") : inputSel.data("kendoMultiSelect");
+                FillComboValues(inputFieldKendo, dbReference, codiceCampo);
+            },
+            error: function (jqXHR, textStatus, errorThrown) {
+                console.log(textStatus, errorThrown);
+                alert("Unexpected error during the update of the combobox fields!");
+            }
+        });
+    }
+
+    event.preventDefault();
+
+    var renameComboDialog = $('#changeComboValueDialog');
+    var renameComboDialogKendo = renameComboDialog.data("kendoDialog");
+    if (renameComboDialogKendo) {
+        renameComboDialogKendo.open();
+    }
+    else {
+        InitializeRenameComboDialog(renameComboDialog);
+    }
+
+    var senderElement = event.srcElement;
+    // noinspection JSJQueryEfficiency
+    var newValueInput = $("#newValue");
+    newValueInput.val(senderElement.dataset["value"]);
+    newValueInput[0].dataset["codice"] = senderElement.dataset["codice"];
+    newValueInput[0].dataset["ref"] = senderElement.dataset["ref"];
 }
 
 // Components
@@ -1350,4 +1415,22 @@ function GetLocaleDate(data) {
 
 function KendoCheckBoxReadOnly_PreventClick(event) {
     event.preventDefault();
+}
+
+function RefreshKendoComboValue(inputFieldKendo) {
+    var tmpValue;
+    switch (inputFieldKendo.ns) {
+        case ".kendoComboBox":
+            tmpValue = inputFieldKendo.select();
+            inputFieldKendo.select(-1);
+            inputFieldKendo.refresh();
+            inputFieldKendo.select(tmpValue);
+            break;
+        case ".kendoMultiSelect":
+            tmpValue = inputFieldKendo.value();
+            inputFieldKendo.value(-1);
+            inputFieldKendo.refresh();
+            inputFieldKendo.value(tmpValue);
+            break;
+    }
 }

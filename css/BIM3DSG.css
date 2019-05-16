@@ -116,6 +116,11 @@ button::-moz-focus-inner {
     border: 0;
 }
 
+.k-button.k-state-focused, .k-button.k-state-focused.k-state-disabled, .k-button:focus, .k-button:focus:hover, .k-state-disabled .k-button.k-state-focused {
+    border-color: #a0a0a0;
+    box-shadow: 0 0 2px 1px #a0a0a0;
+}
+
 .k-primary:focus:active:not(.k-state-disabled):not([disabled]) {
     box-shadow: 0 0 2px 1px var(--main-color);
 }
@@ -131,11 +136,15 @@ button::-moz-focus-inner {
 }
 
 .k-window-content {
-    padding: 0 16px 16px 16px;
+    padding: 6px 12px;
 }
 
 .k-window-content form div {
-    padding: 0 20px 20px 20px;
+    padding: 6px 12px 20px 12px;
+}
+
+.k-dialog .k-content {
+    padding: 6px 12px;
 }
 
 .k-window-content h3 {
@@ -158,7 +167,8 @@ button::-moz-focus-inner {
     background-color: var(--main-color);
 }
 
-.k-window-titlebar .k-window-action {
+.k-window-titlebar .k-window-action, .k-dialog-titlebar .k-dialog-actions {
+    position: static;
     width: 35px;
     height: 35px;
     padding: 2px;
@@ -241,6 +251,10 @@ button::-moz-focus-inner {
 }
 
 /* Form input fields, combobox, datepickers - Tema base */
+label {
+    width: 90%;
+}
+
 input {
     border: none;
 }
@@ -269,6 +283,10 @@ select {
 /* Kendo UI - Input, Combobox, DateTimePicker, Textarea, numericTextBox ecc... - stili in comune */
 .k-autocomplete, .k-combobox .k-dropdown-wrap, .k-datepicker .k-picker-wrap, .k-timepicker .k-picker-wrap, .k-datetimepicker .k-picker-wrap, .k-dateinput .k-dateinput-wrap, .k-textbox, .k-input.k-textbox, .k-textarea, .k-multiselect-wrap, .k-numerictextbox .k-numeric-wrap, .k-dropdown-wrap .k-select, .k-state-default > .k-select, .k-list-container .k-nodata .k-button, .k-dropdown .k-dropdown-wrap, .k-dropdowntree .k-dropdown-wrap, .k-button, .k-button-group.k-state-disabled .k-button:not(.k-state-active), .k-button-group .k-state-disabled:not(.k-state-active), .k-toolbar .k-split-button .k-button, .k-spreadsheet-filter, .k-pivot-toolbar .k-button, .k-fieldselector .k-list li.k-item, .k-colorpicker .k-picker-wrap, .k-combobox .k-select, .k-datepicker .k-select, .k-timepicker .k-select, .k-datetimepicker .k-select, .k-dateinput .k-select, .k-editor .k-editor-toolbar-wrap a.k-tool, .k-ct-popup .k-editor-toolbar a.k-tool, .k-numerictextbox .k-select, .k-switch-handle, .k-handle, .k-gantt-views li, .k-scheduler-navigation .k-nav-today, .k-scheduler-navigation .k-nav-prev, .k-scheduler-navigation .k-nav-next, .k-scheduler-views li, .k-scheduler-footer li {
     border-color: var(--grigiomedio);
+}
+
+.k-autocomplete, .k-combobox .k-dropdown-wrap, .k-datepicker .k-picker-wrap, .k-timepicker .k-picker-wrap, .k-datetimepicker .k-picker-wrap, .k-dateinput .k-dateinput-wrap, .k-textbox, .k-input.k-textbox {
+    width: 100%;
 }
 
 .k-combobox .k-select, .k-numerictextbox .k-select, .k-datetimepicker .k-select, .k-dropdown-wrap.k-state-default, .k-datetimepicker.k-state-default, .k-combobox .k-select:hover, .k-combobox .k-state-hover .k-select, .k-dropdown .k-dropdown-wrap:hover, .k-numerictextbox .k-select:hover, .k-datetimepicker .k-select:hover, .k-dropdown-wrap.k-state-hover, .k-dropdown-wrap.k-state-focused, .k-dropdown-wrap.k-state-active, .k-numerictextbox .k-numeric-wrap.k-state-hover .k-select, .k-numerictextbox .k-numeric-wrap.k-state-focused .k-select, .k-numerictextbox .k-numeric-wrap.k-state-active .k-select, .k-datetimepicker .k-state-hover .k-select {
@@ -655,7 +673,7 @@ td.k-command-cell {
 }
 
 .boxedContainer h3 {
-    font-size: 13px;
+    font-size: 15px;
     font-weight: bold;
     margin: 11px 0 6px 0;
     text-transform: uppercase;
@@ -663,7 +681,7 @@ td.k-command-cell {
 }
 
 .boxedContainer h4 {
-    font-size: 12px;
+    font-size: 14px;
     font-weight: bold;
     margin: 8px 0 6px 0;
     color: var(--main-color);
@@ -682,6 +700,11 @@ td.k-command-cell {
 /* Posizione fissa relativa al viewport: in the same place even if the page is scrolled - Tema BIM3DSG*/
 .fixedPosition {
     position: fixed;
+}
+
+.dialogFormField {
+    position: relative;
+    width: 80%;
 }
 
 /* Stilizzazione SPECIFICA ------------------------------------------------------- */
@@ -934,6 +957,15 @@ td.k-command-cell {
 .loginField {
     position: relative;
     width: 80%;
+}
+
+/* Rename Combo dialog when edit dropdown icon is clicked on information window */
+.renameComboDialogIcon .k-window-title::before {
+    background: url("../img/icons/edit_icon_title.png") no-repeat;
+}
+
+.renameComboDialogTitle .k-window-titlebar {
+    width: 280px;
 }
 
 /* Information window */
