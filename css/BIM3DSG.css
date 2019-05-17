@@ -695,6 +695,7 @@ td.k-command-cell {
 /* Nascondi senza lasciare niente: margini, padding o traccia dell'elemento nascosto - Tema BIM3DSG*/
 .hidden {
     display: none !important;
+    margin: 0px !important;
 }
 
 /* Posizione fissa relativa al viewport: in the same place even if the page is scrolled - Tema BIM3DSG*/

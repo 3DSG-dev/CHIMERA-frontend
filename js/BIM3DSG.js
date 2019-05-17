@@ -745,6 +745,7 @@ function UpdateInformation(codiceVersione, readonly) {
                     success: function (resultData) {
                         SetVisibleInformationSheet(resultData["SchedeVisibiliOggetto"], "informationObjectTab");
                         SetVisibleInformationSheet(resultData["SchedeVisibiliVersione"], "informationVersionTab");
+                        ChangeInformationFieldsStyle(true);
                     },
                     error: function (jqXHR, textStatus, errorThrown) {
                         console.log(textStatus, errorThrown);
