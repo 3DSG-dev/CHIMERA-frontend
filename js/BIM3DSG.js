@@ -609,7 +609,7 @@ function SetDynamicInformationFields() {
                                 dataTextField: "Value",
                                 dataValueField: "Codice",
                                 filter: "contains",
-                                template: '#:Value#<span class="k-icon k-i-edit buttonDropdownItemEdit" data-codice="#:Codice#" data-value="#:Value#" data-ref="' + inputField.id + '" onclick="ChangeComboValueDialogOpen(event)"></span><span class="k-icon k-i-delete buttonDropdownItemErase" onclick=""></span>',
+                                template: '#:Value#<span class="k-icon k-i-edit buttonDropdownItemEdit" data-codice="#:Codice#" data-value="#:Value#" data-ref="' + inputField.id + '" onclick="ChangeComboValueDialogOpen(event)"></span><span class="k-icon k-i-delete buttonDropdownItemErase" data-codice="#:Codice#" data-value="#:Value#" data-ref="' + inputField.id + '" onclick="RemoveComboValue(event)"></span>',
                                 footerTemplate: AddComboValueHtml
                             });
                             inputFieldKendo = inputFieldSel.data("kendoComboBox");
@@ -621,7 +621,7 @@ function SetDynamicInformationFields() {
                                 dataTextField: "Value",
                                 dataValueField: "Codice",
                                 filter: "contains",
-                                template: '#:Value#<span class="k-icon k-i-edit buttonDropdownItemEdit" data-codice="#:Codice#" data-value="#:Value#" data-ref="' + inputField.id + '" onclick="ChangeComboValueDialogOpen(event)"></span><span class="k-icon k-i-delete buttonDropdownItemErase" onclick=""></span>',
+                                template: '#:Value#<span class="k-icon k-i-edit buttonDropdownItemEdit" data-codice="#:Codice#" data-value="#:Value#" data-ref="' + inputField.id + '" onclick="ChangeComboValueDialogOpen(event)"></span><span class="k-icon k-i-delete buttonDropdownItemErase" data-codice="#:Codice#" data-value="#:Value#" data-ref="' + inputField.id + '" onclick="RemoveComboValue(event)"></span>',
                                 footerTemplate: AddComboValueHtml,
                                 change: SortKendoMultiSelectValue,
                                 autoClose: false
@@ -1163,6 +1163,34 @@ function ChangeComboValueDialogOpen(event) {
     newValueInput.val(senderElement.dataset["value"]);
     newValueInput[0].dataset["codice"] = senderElement.dataset["codice"];
     newValueInput[0].dataset["ref"] = senderElement.dataset["ref"];
+}
+
+function RemoveComboValue(event) {
+    event.preventDefault();
+
+    var senderElement = event.srcElement;
+    kendo.confirm("Are you sure to delete <i>" + senderElement.dataset["value"] + "</i> value?<br><br>This value will be removed from all the objects and the operation can't be undone!")
+        .done(function () {
+            var inputSel = $("#" + senderElement.dataset["ref"]);
+            var dbReference = $("#" + inputSel[0].dataset["destination"])[0].dataset["ref"];
+            var codiceCampo = inputSel[0].dataset["codice"];
+            $.ajax({
+                url: './php/removeInformationComboValue.php',
+                dataType: "json",
+                data: {
+                    dbReference: dbReference,
+                    codiceCombo: senderElement.dataset["codice"]
+                },
+                success: function () {
+                    var inputFieldKendo = inputSel[0].dataset["tipo"] === "combo" ? inputSel.data("kendoComboBox") : inputSel.data("kendoMultiSelect");
+                    FillComboValues(inputFieldKendo, dbReference, codiceCampo);
+                },
+                error: function (jqXHR, textStatus, errorThrown) {
+                    console.log(textStatus, errorThrown);
+                    alert("Unexpected error during the update of the combobox fields!");
+                }
+            });
+        });
 }
 
 // Components
