@@ -287,7 +287,7 @@ function LoadUserListObjectGrid() {
         },
         error: function (jqXHR, textStatus, errorThrown) {
             console.log(textStatus, errorThrown);
-            alert("Unexpected error while loading import list!");
+            kendo.alert("Unexpected error while loading import list!");
         }
     });
 }
@@ -309,7 +309,7 @@ function SearchObjects() {
         },
         error: function (jqXHR, textStatus, errorThrown) {
             console.log(textStatus, errorThrown);
-            alert("Unexpected error while searching objects!");
+            kendo.alert("Unexpected error while searching objects!");
         }
     });
 }
@@ -347,13 +347,13 @@ function AddToYourList(codiceVersione, rw) {
                 if (resultData["addimportcodice"].substr(0, 10) === "ATTENZIONE") {
                     dataItem.set("readonly", "t");
                 }
-                alert(resultData["addimportcodice"]);
+                kendo.alert(resultData["addimportcodice"]);
             }
             UpdateInformation(dataItem["CodiceVersione"], dataItem["readonly"])
         },
         error: function (jqXHR, textStatus, errorThrown) {
             console.log(textStatus, errorThrown);
-            alert("Unexpected error while adding object to your list!");
+            kendo.alert("Unexpected error while adding object to your list!");
         }
     });
 }
@@ -386,21 +386,21 @@ function ChangeWriteMode(codiceVersione, rw) {
                             else {
                                 dataItem.set("readonly", null);
                             }
-                            alert(resultData2["addimportcodice"]);
+                            kendo.alert(resultData2["addimportcodice"]);
                         }
                         UpdateInformation(dataItem["CodiceVersione"], dataItem["readonly"])
                     },
                     error: function (jqXHR, textStatus, errorThrown) {
                         dataItem.set("readonly", null);
                         console.log(textStatus, errorThrown);
-                        alert("Unexpected error while adding object to your list!");
+                        kendo.alert("Unexpected error while adding object to your list!");
                     }
                 });
             }
         },
         error: function (jqXHR, textStatus, errorThrown) {
             console.log(textStatus, errorThrown);
-            alert("Unexpected error while removing object to your list!");
+            kendo.alert("Unexpected error while removing object to your list!");
         }
     });
 }
@@ -421,7 +421,7 @@ function RemoveFromYourList(codiceVersione) {
         },
         error: function (jqXHR, textStatus, errorThrown) {
             console.log(textStatus, errorThrown);
-            alert("Unexpected error while removing object to your list!");
+            kendo.alert("Unexpected error while removing object to your list!");
         }
     });
 }
@@ -439,7 +439,7 @@ function SetDynamicInformationFields() {
             },
             error: function (jqXHR, textStatus, errorThrown) {
                 console.log(textStatus, errorThrown);
-                alert("Unexpected error during the update of the category list!");
+                kendo.alert("Unexpected error during the update of the category list!");
             }
         });
     }
@@ -652,7 +652,7 @@ function SetDynamicInformationFields() {
             },
             error: function (jqXHR, textStatus, errorThrown) {
                 console.log(textStatus, errorThrown);
-                alert("Unexpected error while creating dynamic object information fields!");
+                kendo.alert("Unexpected error while creating dynamic object information fields!");
             }
         });
     }
@@ -749,7 +749,7 @@ function UpdateInformation(codiceVersione, readonly) {
                     },
                     error: function (jqXHR, textStatus, errorThrown) {
                         console.log(textStatus, errorThrown);
-                        alert("Unexpected error while loading visible information sheet!");
+                        kendo.alert("Unexpected error while loading visible information sheet!");
                     }
                 });
             }
@@ -847,7 +847,7 @@ function UpdateInformation(codiceVersione, readonly) {
             },
             error: function (jqXHR, textStatus, errorThrown) {
                 console.log(textStatus, errorThrown);
-                alert("Unexpected error while loading base information!");
+                kendo.alert("Unexpected error while loading base information!");
             }
         });
     }
@@ -894,7 +894,7 @@ function UpdateInformation(codiceVersione, readonly) {
             },
             error: function (jqXHR, textStatus, errorThrown) {
                 console.log(textStatus, errorThrown);
-                alert("Unexpected error while loading dynamic information!");
+                kendo.alert("Unexpected error while loading dynamic information!");
             }
         });
     }
@@ -1016,7 +1016,7 @@ function SaveSheetInformation() {
             },
             error: function (jqXHR, textStatus, errorThrown) {
                 console.log(textStatus, errorThrown);
-                alert("Unexpected error while saving objectInformation!");
+                kendo.alert("Unexpected error while saving objectInformation!");
             }
         });
     }
@@ -1026,10 +1026,10 @@ function SaveSheetInformation() {
         sheet.find("input, textarea, select").each(function (i, inputField) {
             SaveInformation(inputField);
         });
-        alert("Save completed!")
+        kendo.alert("Save completed!")
     }
     else {
-        alert("Can't save information in read only mode!");
+        kendo.alert("Can't save information in read only mode!");
     }
 }
 
@@ -1044,17 +1044,17 @@ function ChangeCategory() {
                 codiceCategoria: categoryCombo.select() !== -1 ? categoryCombo.value() : "null"
             },
             success: function () {
-                alert("Category changed");
+                kendo.alert("Category changed");
                 UpdateInformation($("#infoCodiceVersione").val(), "f");
             },
             error: function (jqXHR, textStatus, errorThrown) {
                 console.log(textStatus, errorThrown);
-                alert("Unexpected error while change object category!");
+                kendo.alert("Unexpected error while change object category!");
             }
         });
     }
     else {
-        alert("Can't change category in read only mode!");
+        kendo.alert("Can't change category in read only mode!");
     }
 }
 
@@ -1072,7 +1072,7 @@ function FillComboValues(inputFieldKendo, dbReference, codiceCampo) {
         },
         error: function (jqXHR, textStatus, errorThrown) {
             console.log(textStatus, errorThrown);
-            alert("Unexpected error during the update of the combobox fields!");
+            kendo.alert("Unexpected error during the update of the combobox fields!");
         }
     });
 }
@@ -1095,7 +1095,7 @@ function AddNewComboValue(inputId, addValue) {
         },
         error: function (jqXHR, textStatus, errorThrown) {
             console.log(textStatus, errorThrown);
-            alert("Unexpected error during the update of the combobox fields!");
+            kendo.alert("Unexpected error during the update of the combobox fields!");
         }
     });
 }
@@ -1141,7 +1141,7 @@ function ChangeComboValueDialogOpen(event) {
             },
             error: function (jqXHR, textStatus, errorThrown) {
                 console.log(textStatus, errorThrown);
-                alert("Unexpected error during the update of the combobox fields!");
+                kendo.alert("Unexpected error during the update of the combobox fields!");
             }
         });
     }
@@ -1187,7 +1187,7 @@ function RemoveComboValue(event) {
                 },
                 error: function (jqXHR, textStatus, errorThrown) {
                     console.log(textStatus, errorThrown);
-                    alert("Unexpected error during the update of the combobox fields!");
+                    kendo.alert("Unexpected error during the update of the combobox fields!");
                 }
             });
         });
@@ -1252,7 +1252,7 @@ function InitializeComponents() {
                 },
                 error: function (jqXHR, textStatus, errorThrown) {
                     console.log(textStatus, errorThrown);
-                    alert("Unexpected error during the update of the search fields!");
+                    kendo.alert("Unexpected error during the update of the search fields!");
                 }
             });
         }
