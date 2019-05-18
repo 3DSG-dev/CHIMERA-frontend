@@ -156,7 +156,7 @@ button::-moz-focus-inner {
     background-image: none;
 }
 
-.k-window-titlebar, .k-dialog-titlebar {
+.k-window-titlebar, .k-dialog-titlebar, .k-dialog.k-alert .k-dialog-titlebar, .k-dialog.k-confirm .k-dialog-titlebar, .k-dialog.k-prompt .k-dialog-titlebar {
     position: relative;
     top: -15px;
     left: 15px;
@@ -172,6 +172,64 @@ button::-moz-focus-inner {
     width: 35px;
     height: 35px;
     padding: 2px;
+}
+
+/* Kendo UI - Special Dialog popup: Error, Confirm, Prompt  */
+.k-alert .k-window-titlebar {
+    width: 110px;
+}
+
+.k-confirm .k-window-titlebar {
+    width: 130px;
+}
+
+.k-prompt .k-window-titlebar {
+    width: 150px;
+}
+
+.k-alert .k-window-titlebar .k-dialog-title {
+    visibility: hidden;
+}
+
+.k-confirm .k-window-titlebar .k-dialog-title {
+    visibility: collapse;
+}
+
+.k-confirm .k-window-title, .k-alert .k-window-title, .k-prompt .k-window-title {
+    display: inline-block;
+    width: 35px;
+    height: 35px;
+    content: "";
+    vertical-align: middle;
+}
+
+.k-confirm .k-window-titlebar::before {
+    content: 'Confirm';
+    background: url("../img/icons/confirm_icon_title.png") no-repeat;
+}
+
+.k-alert .k-window-titlebar::before {
+    content: 'Alert';
+    background: url("../img/icons/alert_icon_title.png") no-repeat;
+}
+
+.k-prompt .k-window-titlebar::before {
+    content: 'Input data';
+    background: url("../img/icons/prompt_icon_title.png") no-repeat;
+}
+
+.k-confirm .k-window-titlebar::before, .k-alert .k-window-titlebar::before, .k-prompt .k-window-titlebar::before {
+    font-size: 19px;
+    line-height: 35px;
+    text-indent: 3rem;
+}
+
+.k-confirm {
+    min-width: 170px;
+}
+
+.k-alert {
+    min-width: 145px;
 }
 
 /* Kendo UI - Tabstrip in popup windows - top */
@@ -695,7 +753,7 @@ td.k-command-cell {
 /* Nascondi senza lasciare niente: margini, padding o traccia dell'elemento nascosto - Tema BIM3DSG*/
 .hidden {
     display: none !important;
-    margin: 0px !important;
+    margin: 0 !important;
 }
 
 /* Posizione fissa relativa al viewport: in the same place even if the page is scrolled - Tema BIM3DSG*/
@@ -1091,6 +1149,15 @@ td.k-command-cell {
     width: 20px;
     max-width: 20px;
     text-align: left;
+}
+
+/* Info Dialog (alert, confirm, prompt dialog had a specific widget in kendo except for "info") */
+.infoDialogIcon .k-window-title::before {
+    background: url("../img/icons/infodialog_icon_title.png") no-repeat;
+}
+
+.infoDialogTitle .k-window-titlebar {
+    width: 130px;
 }
 
 /* Tooltip warning input error */
