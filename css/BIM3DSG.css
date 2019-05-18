@@ -195,6 +195,10 @@ button::-moz-focus-inner {
     visibility: collapse;
 }
 
+.k-prompt .k-window-titlebar .k-dialog-title {
+    visibility: hidden;
+}
+
 .k-confirm .k-window-title, .k-alert .k-window-title, .k-prompt .k-window-title {
     display: inline-block;
     width: 35px;
