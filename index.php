@@ -84,27 +84,27 @@
                             <h2>Select object to edit</h2>
                             <div class="selectObjectSearchFieldsContainer">
                                 <div class="selectObjectComboContainer">
-                                    <label for="selectLayer0"><?php echo $_SESSION["layer0Label"]; ?></label>
+                                    <label for="selectLayer0"><?php echo $_SESSION["layer0Label"]; ?> filter</label>
                                     <input id="selectLayer0" type="text" />
                                 </div>
                                 <div class="selectObjectComboContainer">
-                                    <label for="selectLayer1"><?php echo $_SESSION["layer1Label"]; ?></label>
+                                    <label for="selectLayer1"><?php echo $_SESSION["layer1Label"]; ?> filter</label>
                                     <input id="selectLayer1" type="text">
                                 </div>
                                 <div class="selectObjectComboContainer">
-                                    <label for="selectLayer2"><?php echo $_SESSION["layer2Label"]; ?></label>
+                                    <label for="selectLayer2"><?php echo $_SESSION["layer2Label"]; ?> filter</label>
                                     <input id="selectLayer2" type="text">
                                 </div>
                                 <div class="selectObjectComboContainer">
-                                    <label for="selectLayer3"><?php echo $_SESSION["layer3Label"]; ?></label>
+                                    <label for="selectLayer3"><?php echo $_SESSION["layer3Label"]; ?> filter</label>
                                     <input id="selectLayer3" type="text">
                                 </div>
                                 <div class="selectObjectComboContainer">
-                                    <label for="selectName"><?php echo $_SESSION["nomeLabel"]; ?></label>
+                                    <label for="selectName"><?php echo $_SESSION["nomeLabel"]; ?> filter</label>
                                     <input id="selectName" type="text">
                                 </div>
                                 <div class="selectObjectComboContainer">
-                                    <label for="selectVersione"><?php echo $_SESSION["versionLabel"]; ?></label>
+                                    <label for="selectVersione"><?php echo $_SESSION["versionLabel"]; ?> filter</label>
                                     <input id="selectVersione" type="text">
                                 </div>
                             </div>
