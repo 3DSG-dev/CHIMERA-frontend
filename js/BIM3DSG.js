@@ -1217,7 +1217,7 @@ function InitializeComponents() {
                 $("#select" + field).kendoComboBox({
                     filter: "contains",
                     suggest: true,
-                    placeholder: "Select " + label + "...",
+                    placeholder: "Select a value to apply the filter ...",
                     dataTextField: field,
                     dataValueField: field,
                     change: SearchFormCombobox_OnChange
@@ -1277,7 +1277,7 @@ function InitializeComponents() {
                     field: "readonly",
                     title: "Write",
                     width: 30,
-                    template: "#= readonly === 'f' ? '<span class=\"k-icon k-i-check\" onclick=\"ChangeWriteModeObjectGrid(event,$(this),false)\"></span>' : '<span class=\"k-icon\" onclick=\"ChangeWriteModeObjectGrid(event,$(this),true)\"></span>' #",
+                    template: "#= readonly === 'f' ? '<span class=\"k-icon k-i-check\" onclick=\"ChangeWriteModeObjectGrid(event,$(this),false)\" title=\"Click to set read-only\"></span>' : '<span class=\"k-icon\" onclick=\"ChangeWriteModeObjectGrid(event,$(this),true)\" title=\"Click to set write mode\"></span>' #",
                     attributes: {
                         "class": "writeReadFlagCell",
                         style: "text-align: center;"
@@ -1287,7 +1287,7 @@ function InitializeComponents() {
                     field: "readonly",
                     title: "Your List",
                     width: 30,
-                    template: "#= readonly == null ? '<span class=\"k-icon k-i-plus\" onclick=\"AddToYourListObjectGrid(event,$(this))\"></span>' : '<span class=\"k-icon k-i-minus\" onclick=\"RemoveFromYourListObjectGrid(event,$(this))\"></span>' #",
+                    template: "#= readonly == null ? '<span class=\"k-icon k-i-plus\" onclick=\"AddToYourListObjectGrid(event,$(this))\" title=\"Click to add to your list\"></span>' : '<span class=\"k-icon k-i-minus\" onclick=\"RemoveFromYourListObjectGrid(event,$(this))\" title=\"Click to remove from your list\"></span>' #",
                     attributes: {
                         "class": "writeReadFlagCell",
                         style: "text-align: center;"
