@@ -39,7 +39,7 @@
     function LoadDefaultSettings()
     {
         $_SESSION['dbName'] = "BIM3DSG_BIM-test-v2";
-        $_SESSION['title'] = "BIM3DSG - TEST";
+        $_SESSION['title'] = "BIM3DSG";
 
         $_SESSION['dbConnectionString'] = "host=localhost port=5432 dbname=" . $_SESSION['dbName'] . " user=postgres password=PASSWORD";
         $_SESSION["layer0Label"] = 'Layer0';
