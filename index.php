@@ -3,6 +3,7 @@
 ?>
 
 <!DOCTYPE html>
+<!--suppress HtmlRequiredLangAttribute -->
 <html>
     <head>
         <title><?php echo $_SESSION['titolo']; ?></title>
@@ -326,8 +327,7 @@
                         </div>
                     </div>
                 </div>
-                <div id="informationSubVersionTab" class="informationWindowTabItem">
-                </div>
+                <div id="informationSubVersionTab" class="informationWindowTabItem"></div>
             </div>
         </div>
 

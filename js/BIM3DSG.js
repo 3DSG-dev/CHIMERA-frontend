@@ -168,7 +168,7 @@ function ChangeInformationFieldsStyle(recompute) {
             if (recompute === true || !$("#infoCategoryContainer").hasClass("informationColumnRight")) {
                 SetTwoColumnsBoxedStyle("#informationObjectTab");
                 SetTwoColumnsBoxedStyle("#informationVersionTab");
-                $("#informationSubVersionTab").find(".subVersionTabPanelItem").each(function (i, panelItem) {
+                $("#informationSubVersionTab").find("div.subVersionPanelItem").each(function (i, panelItem) {
                     SetTwoColumnsBoxedStyle(panelItem);
                 })
             }
@@ -446,6 +446,7 @@ function SetDynamicInformationFields() {
 
     function CreateDynamicInformationFields() {
         function DeleteDynamicInformationFields() {
+            $("#informationSubVersionTab").empty();
             $("#informationWindowTabControl").find("div.boxedContainer").each(function (i, sheet) {
                 if (sheet.dataset["codice"] > 0) {
                     $(sheet).remove();
@@ -639,6 +640,58 @@ function SetDynamicInformationFields() {
             InitializeFieldKendoComponents(destinationTabSel);
         }
 
+        function CreateSubVersionInformationField(schedeSubVersion, maxSubVersion) {
+            /**
+             * @return {string}
+             */
+            function GenerateExpanderHtml(maxSubVersion) {
+                /**
+                 * @return {string}
+                 */
+                function GenerateSubVersionExpanderHtml(subVersion) {
+                    var html = '   <li id="informationSubVersionPanel' + subVersion + '" data-subversion="' + subVersion + '" class="hidden"> SubVersion ' + subVersion + '\n';
+                    html += '       <div id="informationSubVersionContent' + subVersion + '" data-ref="OggettiSubVersion" data-subversion="' + subVersion + '" class="subVersionPanelItem">\n';
+                    html += '       </div>\n';
+                    html += '   </li>\n';
+                    return html;
+                }
+
+                /**
+                 * @return {string}
+                 */
+                function GenerateInterventionExpanderHtml(subVersion) {
+                    var html = '   <li id="infoInterventionPanel-' + subVersion + '" data-subversion="' + subVersion + '" class="hidden"> Intervention ' + subVersion + '\n';
+                    html += '       <div id="infoInterventiSubVersionContent"' + subVersion + ' data-ref="InterventiSubVersion" data-subversion="' + subVersion + '" class="subVersionPanelItem">\n';
+                    html += '       </div> \n';
+                    html += '   </li>\n';
+                    return html;
+                }
+
+                var html = '<ul id="informationSubVersionExpanderControl">\n';
+                html += GenerateSubVersionExpanderHtml(0);
+                for (var i = 1; i < maxSubVersion + 5; i++) {
+                    html += GenerateInterventionExpanderHtml(i);
+                    html += GenerateSubVersionExpanderHtml(i);
+                }
+                html += '</ul>\n';
+                return html;
+            }
+
+            var informationSubVersionTab = $('#informationSubVersionTab');
+            informationSubVersionTab.append(GenerateExpanderHtml(maxSubVersion));
+            $("#informationSubVersionExpanderControl").kendoPanelBar({});
+            informationSubVersionTab.find("div.subVersionPanelItem").each(function (i, expander) {
+                switch (expander.dataset["ref"]) {
+                    case "OggettiSubVersion":
+                        CreateInformationFieldSingleTab(schedeSubVersion, expander.id);
+                        break;
+                    case "InterventiSubVersion":
+                        //TODO
+                        break;
+                }
+            });
+        }
+
         DeleteDynamicInformationFields();
 
         $.ajax({
@@ -647,6 +700,7 @@ function SetDynamicInformationFields() {
             success: function (resultData) {
                 CreateInformationFieldSingleTab(resultData["SchedeOggetto"], "informationObjectTab");
                 CreateInformationFieldSingleTab(resultData["SchedeVersione"], "informationVersionTab");
+                CreateSubVersionInformationField(resultData["SchedeSubVersion"], parseInt(resultData["MaxSubVersion"]));
 
                 ChangeInformationFieldsStyle(true);
             },
@@ -716,6 +770,9 @@ function ResetInformation() {
                 $(elem).addClass("hidden");
             }
         });
+        $("#informationSubVersionExpanderControl").children("li").each(function (i, expander) {
+            $(expander).addClass("hidden");
+        })
     }
 
     var informationWindowTabControl = $("#informationWindowTabControl");
@@ -745,6 +802,16 @@ function UpdateInformation(codiceVersione, readonly) {
                     success: function (resultData) {
                         SetVisibleInformationSheet(resultData["SchedeVisibiliOggetto"], "informationObjectTab");
                         SetVisibleInformationSheet(resultData["SchedeVisibiliVersione"], "informationVersionTab");
+                        $('#informationSubVersionTab').find("div.subVersionPanelItem").each(function (i, expander) {
+                            switch (expander.dataset["ref"]) {
+                                case "OggettiSubVersion":
+                                    SetVisibleInformationSheet(resultData["SchedeVisibiliSubVersion"], expander.id);
+                                    break;
+                                case "InterventiSubVersion":
+                                    //TODO
+                                    break;
+                            }
+                        });
                         ChangeInformationFieldsStyle(true);
                     },
                     error: function (jqXHR, textStatus, errorThrown) {
@@ -891,6 +958,21 @@ function UpdateInformation(codiceVersione, readonly) {
             success: function (resultData) {
                 SetFieldValue(resultData["InformazioniOggetto"], "informationObjectTab");
                 SetFieldValue(resultData["InformazioniVersione"], "informationVersionTab");
+                $('#informationSubVersionTab').find("div.subVersionPanelItem").each(function (i, expander) {
+                    switch (expander.dataset["ref"]) {
+                        case "OggettiSubVersion":
+                            var codiceSubVersion = resultData["CodiceSubVersion" + expander.dataset["subversion"]];
+                            if (codiceSubVersion > 0) {
+                                expander.dataset["codice"] = codiceSubVersion;
+                                $(expander).parent().removeClass("hidden");
+                                SetFieldValue(resultData["InformazioniSubVersion" + expander.dataset["subversion"]], expander.id);
+                            }
+                            break;
+                        case "InterventiSubVersion":
+                            //TODO
+                            break;
+                    }
+                });
             },
             error: function (jqXHR, textStatus, errorThrown) {
                 console.log(textStatus, errorThrown);
@@ -967,8 +1049,11 @@ function SaveSheetInformation() {
                 break;
             case "timestamp":
                 url += 'Timestamp.php';
-                // noinspection JSCheckFunctionSignatures
-                value = $(inputField).data("kendoDateTimePicker").value().toLocaleString('it-it');
+                value = $(inputField).data("kendoDateTimePicker").value();
+                if (value != null) {
+                    // noinspection JSCheckFunctionSignatures
+                    value = value.toLocaleString('it-it');
+                }
                 break;
             case "int":
             case "real":
@@ -987,6 +1072,7 @@ function SaveSheetInformation() {
                 return;
         }
 
+        var destinationControl = $("#" + inputField.dataset["destination"]);
         var codice;
         switch (inputField.dataset["destination"]) {
             case "informationObjectTab" :
@@ -996,10 +1082,15 @@ function SaveSheetInformation() {
                 codice = $("#infoCodiceVersione").val();
                 break;
             default:
-                return;
+                if (inputField.dataset["destination"].startsWith("informationSubVersionContent")) {
+                    codice = destinationControl[0].dataset["codice"];
+                }
+                else {
+                    return;
+                }
         }
 
-        var dbReference = $("#" + inputField.dataset["destination"])[0].dataset["ref"];
+        var dbReference = destinationControl[0].dataset["ref"];
         //TODO: quando si dismette il vecchio sistema rinominare funzione nel DB e togliere l'IF seguente
         if (dbReference === "OggettiVersion") {
             dbReference = "OggettiVersioni";
@@ -1091,7 +1182,18 @@ function AddNewComboValue(inputId, addValue) {
         },
         success: function () {
             var inputFieldKendo = inputSel[0].dataset["tipo"] === "combo" ? inputSel.data("kendoComboBox") : inputSel.data("kendoMultiSelect");
-            FillComboValues(inputFieldKendo, dbReference, codiceCampo);
+            if (dbReference === "OggettiSubVersion") {
+                $("#informationSubVersionTab").find("input, select").each(function (i, inputField) {
+                    if (inputField.dataset["codice"] === codiceCampo) {
+                        inputSel = $(inputField);
+                        inputFieldKendo = inputField.dataset["tipo"] === "combo" ? inputSel.data("kendoComboBox") : inputSel.data("kendoMultiSelect");
+                        FillComboValues(inputFieldKendo, dbReference, codiceCampo);
+                    }
+                });
+            }
+            else {
+                FillComboValues(inputFieldKendo, dbReference, codiceCampo);
+            }
         },
         error: function (jqXHR, textStatus, errorThrown) {
             console.log(textStatus, errorThrown);
@@ -1154,6 +1256,7 @@ function ChangeComboValueDialogOpen(event) {
         renameComboDialogKendo.open();
     }
     else {
+        // noinspection JSPotentiallyInvalidConstructorUsage
         InitializeRenameComboDialog(renameComboDialog);
     }
 
@@ -1183,7 +1286,18 @@ function RemoveComboValue(event) {
                 },
                 success: function () {
                     var inputFieldKendo = inputSel[0].dataset["tipo"] === "combo" ? inputSel.data("kendoComboBox") : inputSel.data("kendoMultiSelect");
-                    FillComboValues(inputFieldKendo, dbReference, codiceCampo);
+                    if (dbReference === "OggettiSubVersion") {
+                        $("#informationSubVersionTab").find("input, select").each(function (i, inputField) {
+                            if (inputField.dataset["codice"] === codiceCampo) {
+                                inputSel = $(inputField);
+                                inputFieldKendo = inputField.dataset["tipo"] === "combo" ? inputSel.data("kendoComboBox") : inputSel.data("kendoMultiSelect");
+                                FillComboValues(inputFieldKendo, dbReference, codiceCampo);
+                            }
+                        });
+                    }
+                    else {
+                        FillComboValues(inputFieldKendo, dbReference, codiceCampo);
+                    }
                 },
                 error: function (jqXHR, textStatus, errorThrown) {
                     console.log(textStatus, errorThrown);
@@ -1217,7 +1331,7 @@ function InitializeComponents() {
                 $("#select" + field).kendoComboBox({
                     filter: "contains",
                     suggest: true,
-                    placeholder: "Select a value to apply the filter ...",
+                    placeholder: "Select a " + label + "'s value to apply the filter ...",
                     dataTextField: field,
                     dataValueField: field,
                     change: SearchFormCombobox_OnChange
@@ -1232,12 +1346,12 @@ function InitializeComponents() {
             CreateCombobox("Versione", _versionLabel);
         }
 
-        function UpdateSearchFormCombobox(senderId) {
+        function UpdateSearchFormCombobox(senderLabel) {
             $.ajax({
                 url: './php/getListLayersAndName.php',
                 dataType: "json",
                 data: {
-                    senderId: senderId,
+                    senderId: senderLabel,
                     layer0: $("#selectLayer0").data("kendoComboBox").value(),
                     layer1: $("#selectLayer1").data("kendoComboBox").value(),
                     layer2: $("#selectLayer2").data("kendoComboBox").value(),

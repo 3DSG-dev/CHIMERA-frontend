@@ -22,6 +22,19 @@
     }
     echo ', "InformazioniVersione": ' . json_encode($rowArray);
 
+    $SQL = 'SELECT "Codice", "SubVersion" FROM "OggettiSubVersion" WHERE "CodiceVersione" = ' . $codiceVersione . ' ORDER BY "Codice"';
+    $result = pg_query($dbConnection, $SQL) or die ("Error: $SQL");
+    while ($row = pg_fetch_array($result, null, PGSQL_ASSOC)) {
+        $SQL2 = 'SELECT "OggettiSubVersion_Schede".* FROM "OggettiSubVersion_Schede" JOIN "OggettiSubVersion_RelazioniSchede" ON "OggettiSubVersion_Schede"."CodiceScheda" = "OggettiSubVersion_RelazioniSchede"."CodiceScheda" WHERE "OggettiSubVersion_RelazioniSchede"."CodiceSubVersion" = ' . $row["Codice"];
+        $result2 = pg_query($dbConnection, $SQL2) or die ("Error: $SQL2");
+        $rowArray2 = array();
+        while ($row2 = pg_fetch_array($result2, null, PGSQL_ASSOC)) {
+            $rowArray2[] = $row2;
+        }
+        echo ', "CodiceSubVersion' . $row["SubVersion"] . '": ' . $row["Codice"];
+        echo ', "InformazioniSubVersion' . $row["SubVersion"] . '": ' . json_encode($rowArray2);
+    }
+
     echo "}";
 
     include("./defaultEnd.php");
