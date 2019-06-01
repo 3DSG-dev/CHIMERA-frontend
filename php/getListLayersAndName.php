@@ -10,7 +10,7 @@
         $nomeValue = isset($_GET['nome']) ? $_GET['nome'] : null;
         $versioneValue = isset($_GET['versione']) ? $_GET['versione'] : null;
 
-        $SQL = "SELECT DISTINCT \"$campo\"" . ' FROM "Oggetti" JOIN "OggettiVersion" ON "Oggetti"."Codice" = "OggettiVersion"."CodiceOggetto" WHERE ("Live" = 1 OR "Live" = 2 OR "Live" = 5 OR "Live" = 7)';
+        $SQL = 'SELECT DISTINCT "' . $campo . '" FROM "Oggetti" JOIN "OggettiVersion" ON "Oggetti"."Codice" = "OggettiVersion"."CodiceOggetto" WHERE ("Live" = 1 OR "Live" = 2 OR "Live" = 5 OR "Live" = 7)';
         if ($layer0Value && $campo != "Layer0")
             $SQL .= " AND \"Layer0\" = '$layer0Value'";
         if ($layer1Value && $campo != "Layer1")
