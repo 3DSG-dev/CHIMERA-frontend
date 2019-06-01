@@ -21,6 +21,7 @@
         $SQL .= " AND \"Name\" = '$nomeValue'";
     if ($versioneValue)
         $SQL .= " AND \"Versione\" = '$nomeValue'";
+    $SQL .= ' ORDER BY "Layer0", "Layer1", "Layer2", "Layer3", "Name", "Versione"';
 
     $result = pg_query($dbConnection, $SQL) or die ("Error: $SQL");
     $rowArray = array();
