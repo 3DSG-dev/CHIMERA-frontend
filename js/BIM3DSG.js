@@ -568,7 +568,6 @@ function SetDynamicInformationFields() {
 
                 destinationTabSel.find("input, select").each(function (i, inputField) {
                     var inputFieldSel = $(inputField);
-                    var inputFieldKendo;
                     switch (inputField.dataset["tipo"]) {
                         case "timestamp":
                             inputFieldSel.kendoDateTimePicker({
@@ -613,9 +612,7 @@ function SetDynamicInformationFields() {
                                 template: '#:Value#<span class="k-icon k-i-edit buttonDropdownItemEdit" data-codice="#:Codice#" data-value="#:Value#" data-ref="' + inputField.id + '" onclick="ChangeComboValueDialogOpen(event)"></span><span class="k-icon k-i-delete buttonDropdownItemErase" data-codice="#:Codice#" data-value="#:Value#" data-ref="' + inputField.id + '" onclick="RemoveComboValue(event)"></span>',
                                 footerTemplate: AddComboValueHtml
                             });
-                            inputFieldKendo = inputFieldSel.data("kendoComboBox");
-                            inputFieldKendo.readonly();
-                            FillComboValues(inputFieldKendo, destinationTabSel[0].dataset["ref"], inputField.dataset["codice"]);
+                            inputFieldSel.data("kendoComboBox").readonly();
                             break;
                         case "multicombo":
                             inputFieldSel.kendoMultiSelect({
@@ -627,9 +624,7 @@ function SetDynamicInformationFields() {
                                 change: SortKendoMultiSelectValue,
                                 autoClose: false
                             });
-                            inputFieldKendo = inputFieldSel.data("kendoMultiSelect");
-                            inputFieldKendo.readonly();
-                            FillComboValues(inputFieldKendo, destinationTabSel[0].dataset["ref"], inputField.dataset["codice"]);
+                            inputFieldSel.data("kendoMultiSelect").readonly();
                             break;
                     }
                 });
@@ -703,12 +698,14 @@ function SetDynamicInformationFields() {
                 CreateSubVersionInformationField(resultData["SchedeSubVersion"], parseInt(resultData["MaxSubVersion"]));
 
                 ChangeInformationFieldsStyle(true);
+                FillAllComboValues();
             },
             error: function (jqXHR, textStatus, errorThrown) {
                 console.log(textStatus, errorThrown);
                 kendo.alert("Unexpected error while creating dynamic object information fields!");
             }
         });
+
     }
 
     ResetInformation();
@@ -1147,6 +1144,36 @@ function ChangeCategory() {
     else {
         kendo.alert("Can't change category in read only mode!");
     }
+}
+
+function FillAllComboValues() {
+    function FillComboValuesSingleTab(comboValues, destinationTab) {
+        $("#" + destinationTab).find("select").each(function (i, inputField) {
+            switch (inputField.dataset["tipo"]) {
+                case "combo":
+                    $(inputField).data("kendoComboBox").setDataSource(comboValues[inputField.dataset["codice"]]);
+                    break;
+                case "multicombo":
+                    $(inputField).data("kendoMultiSelect").setDataSource(comboValues[inputField.dataset["codice"]]);
+                    break;
+            }
+        });
+    }
+
+    $.ajax({
+        url: './php/getAllComboValue.php',
+        dataType: "json",
+        data: {},
+        success: function (resultData) {
+            FillComboValuesSingleTab(resultData["ComboOggetto"], "informationObjectTab");
+            FillComboValuesSingleTab(resultData["ComboVersione"], "informationVersionTab");
+            FillComboValuesSingleTab(resultData["ComboSubVersion"], "informationSubVersionTab");
+        },
+        error: function (jqXHR, textStatus, errorThrown) {
+            console.log(textStatus, errorThrown);
+            kendo.alert("Unexpected error during the update of the combobox fields!");
+        }
+    });
 }
 
 function FillComboValues(inputFieldKendo, dbReference, codiceCampo) {
