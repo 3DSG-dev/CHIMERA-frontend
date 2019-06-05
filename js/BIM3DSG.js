@@ -1508,11 +1508,12 @@ function InitializeComponents() {
 
         function SetInformationDefaultSheets() {
             function SetInformationCategorySheet() {
-                $("#infoCategory").kendoDropDownList({
+                var infoCategoryKendo = $("#infoCategory").kendoDropDownList({
                     dataTextField: "Nome",
                     dataValueField: "Codice",
                     filter: "contains"
                 }).data("kendoDropDownList");
+                KendoDropDownList_EnableClearButton(infoCategoryKendo);
             }
 
             SetInformationCategorySheet();
@@ -1603,4 +1604,33 @@ function RefreshKendoComboValue(inputFieldKendo) {
             inputFieldKendo.value(tmpValue);
             break;
     }
+}
+
+function KendoDropDownList_EnableClearButton(controlKendo) {
+    function ShowHideClearButton(event) {
+        var sender = event.sender;
+        var senderElement = $(sender.wrapper[0]);
+        var clearButton = senderElement.find("span.k-clear-value");
+        var isReadonly = senderElement.children("input").attr("readonly") === "readonly";
+
+        if (sender.selectedIndex === -1 || isReadonly) {
+            clearButton.addClass("k-hidden");
+        }
+        else {
+            clearButton.removeClass("k-hidden");
+        }
+    }
+
+    var html = '<!--suppress HtmlUnknownAttribute --><span unselectable="on" class="k-icon k-clear-value k-i-close k-hidden" title="clear" role="button" tabindex="-1" onclick="KendoDropDownList_OnClearButtonClick(event)"></span>';
+    $(controlKendo.wrapper[0]).children("span.k-dropdown-wrap").prepend(html);
+    controlKendo.bind("cascade", ShowHideClearButton);
+}
+
+function KendoDropDownList_OnClearButtonClick(event) {
+    event.preventDefault();
+    event.stopPropagation();
+
+    var senderDropDown = $(event.currentTarget).parents(".k-dropdown");
+    var senderKendo = senderDropDown.children("input").data("kendoDropDownList");
+    senderKendo.value(null);
 }
