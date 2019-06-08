@@ -1,5 +1,6 @@
 //Global vars
 var _openedWindows = 0;
+var _isMouseDown = false;
 
 // Events functions
 $(function () {
@@ -180,6 +181,15 @@ function ChangeInformationFieldsStyle(recompute) {
 
     var fieldStyleChanged = SwitchFieldStyle(recompute);
     SwitchBoxedStyle(fieldStyleChanged || recompute);
+}
+
+function ChangeInformationFieldsStyleFromElement(isMouseUp) {
+    if (_isMouseDown) {
+        if (isMouseUp) {
+            _isMouseDown = false;
+        }
+        ChangeInformationFieldsStyle(true);
+    }
 }
 
 function ChangeObjectsGridAlignment() {
@@ -487,6 +497,7 @@ function SetDynamicInformationFields() {
                  */
                 function AddField(destinationTab, field) {
                     var html = "";
+                    var height;
                     if (field["IsTitle"] === "t") {
                         html += '                        <h4>' + field["Campo"] + '</h4>\n';
                     }
@@ -522,9 +533,9 @@ function SetDynamicInformationFields() {
                             html += '                            <select data-tipo="multicombo" data-codice="' + field["Codice"] + '" data-destination="' + destinationTab + '" id="' + destinationTab + '_' + field["Codice"] + '"></select>\n';
                         }
                         else {
-                            field["Height"] = field["Height"] / 22;
-                            if (field["Height"] > 1) {
-                                html += '                            <textarea data-tipo="text" data-codice="' + field["Codice"] + '" data-role="textinfo" data-destination="' + destinationTab + '" id="' + destinationTab + '_' + field["Codice"] + '" style="height: ' + field["Height"] * 31 + 'px" type="text" class="k-textbox" readonly></textarea>\n';
+                            height = field["Height"] / 22;
+                            if (height > 1) {
+                                html += '                            <textarea data-tipo="text" data-codice="' + field["Codice"] + '" data-role="textinfo" data-destination="' + destinationTab + '" id="' + destinationTab + '_' + field["Codice"] + '" style="height: ' + height * 31 + 'px" type="text" class="k-textbox" onmousedown="_isMouseDown = true;" onmousemove="ChangeInformationFieldsStyleFromElement(false)" onmouseup="ChangeInformationFieldsStyleFromElement(true)" readonly></textarea>\n';
                             }
                             else {
                                 html += '                            <input data-tipo="text" data-codice="' + field["Codice"] + '" data-role="textinfo" data-destination="' + destinationTab + '" id="' + destinationTab + '_' + field["Codice"] + '" type="text" class="k-textbox" readonly/>\n';
