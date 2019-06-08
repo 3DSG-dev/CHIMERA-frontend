@@ -285,10 +285,15 @@ function GetDataItemFromVersione(codiceVersione) {
 function SetObjectGridDataSource(objectList) {
     $("#objectsGrid").data("kendoGrid").setDataSource(new kendo.data.DataSource({data: objectList}));
 
+    kendo.ui.progress($(document.body), false);
+
     SetDynamicInformationFields();
 }
 
 function LoadUserListObjectGrid() {
+    var body = $(document.body);
+    kendo.ui.progress(body, true);
+
     $.ajax({
         url: 'php/getImportList.php',
         dataType: "json",
@@ -296,6 +301,7 @@ function LoadUserListObjectGrid() {
             SetObjectGridDataSource(resultData);
         },
         error: function (jqXHR, textStatus, errorThrown) {
+            kendo.ui.progress(body, false);
             console.log(textStatus, errorThrown);
             kendo.alert("Unexpected error while loading import list!");
         }
@@ -303,6 +309,9 @@ function LoadUserListObjectGrid() {
 }
 
 function SearchObjects() {
+    var body = $(document.body);
+    kendo.ui.progress(body, true);
+
     $.ajax({
         url: 'php/searchObjects.php',
         dataType: "json",
@@ -318,6 +327,7 @@ function SearchObjects() {
             SetObjectGridDataSource(resultData);
         },
         error: function (jqXHR, textStatus, errorThrown) {
+            kendo.ui.progress(body, false);
             console.log(textStatus, errorThrown);
             kendo.alert("Unexpected error while searching objects!");
         }
@@ -698,6 +708,9 @@ function SetDynamicInformationFields() {
             });
         }
 
+        var body = $(document.body);
+        kendo.ui.progress(body, true);
+
         DeleteDynamicInformationFields();
 
         $.ajax({
@@ -710,8 +723,11 @@ function SetDynamicInformationFields() {
 
                 ChangeInformationFieldsStyle(true);
                 FillAllComboValues();
+
+                kendo.ui.progress(body, false);
             },
             error: function (jqXHR, textStatus, errorThrown) {
+                kendo.ui.progress(body, false);
                 console.log(textStatus, errorThrown);
                 kendo.alert("Unexpected error while creating dynamic object information fields!");
             }
@@ -1577,13 +1593,6 @@ function InitializeComponents() {
 /**
  * @return {string}
  */
-function GetDateTime(data) {
-    return data != null ? new Date(Date.parse(data.replace(" ", "T").substring(0, data.length - 3))) : "";
-}
-
-/**
- * @return {string}
- */
 function GetLocaleDateTime(data) {
     return data != null ? GetDateTime(data).toLocaleString() : "";
 }
@@ -1595,8 +1604,11 @@ function GetLocaleDate(data) {
     return data != null ? GetDateTime(data).toLocaleDateString() : "";
 }
 
-function KendoCheckBoxReadOnly_PreventClick(event) {
-    event.preventDefault();
+/**
+ * @return {string}
+ */
+function GetDateTime(data) {
+    return data != null ? new Date(Date.parse(data.replace(" ", "T").substring(0, data.length - 3))) : "";
 }
 
 function RefreshKendoComboValue(inputFieldKendo) {
@@ -1615,6 +1627,10 @@ function RefreshKendoComboValue(inputFieldKendo) {
             inputFieldKendo.value(tmpValue);
             break;
     }
+}
+
+function KendoCheckBoxReadOnly_PreventClick(event) {
+    event.preventDefault();
 }
 
 function KendoDropDownList_EnableClearButton(controlKendo) {
