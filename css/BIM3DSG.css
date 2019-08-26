@@ -686,6 +686,28 @@ td.k-command-cell {
     border-color: var(--grigiomedio);
 }
 
+/* Kendo UI - Circular Loader */
+div.k-loading-mask {
+    z-index: 3; /* must be larger than the z-index:2 of #container */
+}
+
+.k-loading-mask .k-loading-image {
+    background-image: none;
+}
+
+.k-loading-mask .k-loading-image {
+    background-image: url('../img/icons/background_loader.png');
+}
+
+.k-i-loading {
+    color: #fff;
+}
+
+.k-i-loading::before, .k-loading-image::before, .k-i-loading::after, .k-loading-image::after {
+    color: #fff;
+    border-width: .07em;
+}
+
 /* Stilizzazione Layout base - Tema BIM3DSG ------------------------------------------- */
 /* Page Sections, Rows, Columns - Tema BIM3DSG */
 .pageSection {
