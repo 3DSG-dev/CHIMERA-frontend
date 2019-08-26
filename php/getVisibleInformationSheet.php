@@ -30,6 +30,14 @@
     }
     echo ', "SchedeVisibiliSubVersion": ' . json_encode($rowArray);
 
+    $SQL = 'SELECT "CodiceScheda" FROM "InterventiSubVersion_CategorieSchede" WHERE "CodiceCategoria" = ' . $codiceCategoria;
+    $result = pg_query($dbConnection, $SQL) or die ("Error: $SQL");
+    $rowArray = array();
+    while ($row = pg_fetch_array($result, null, PGSQL_ASSOC)) {
+        $rowArray[] = $row;
+    }
+    echo ', "SchedeVisibiliInterventiSubVersion": ' . json_encode($rowArray);
+
     echo "}";
 
     include("./defaultEnd.php");
