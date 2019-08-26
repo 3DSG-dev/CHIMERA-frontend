@@ -4,9 +4,11 @@
     function GetComboValue($dbReference, $dbConnection)
     {
         $i = 0;
+        /** @noinspection SqlResolve */
         $SQL = 'SELECT DISTINCT("CodiceCampo") FROM "' . $dbReference . '_InfoComboBox"';
         $result = pg_query($dbConnection, $SQL) or die ("Error: $SQL");
         while ($row = pg_fetch_array($result, null, PGSQL_ASSOC)) {
+            /** @noinspection SqlResolve */
             $SQL2 = 'SELECT * FROM "' . $dbReference . '_InfoComboBox" WHERE "CodiceCampo" = ' . $row["CodiceCampo"] . 'ORDER BY "Posizione", "Value"';
             $result2 = pg_query($dbConnection, $SQL2) or die ("Error: $SQL2");
             $rowArray2 = array();
@@ -31,6 +33,9 @@
 
     echo '}, "ComboSubVersion" : {';
     GetComboValue("OggettiSubVersion", $dbConnection);
+
+    echo '}, "ComboInterventiSubVersion" : {';
+    GetComboValue("InterventiSubVersion", $dbConnection);
 
     echo "}}";
 

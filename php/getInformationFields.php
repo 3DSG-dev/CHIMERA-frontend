@@ -34,6 +34,14 @@
     }
     echo ', "SchedeSubVersion": ' . json_encode($rowArray);
 
+    $SQL = 'SELECT "InterventiSubVersion_ListaSchede"."Titolo", "InterventiSubVersion_ListaInformazioni".* FROM "InterventiSubVersion_ListaSchede" JOIN "InterventiSubVersion_ListaInformazioni" ON "InterventiSubVersion_ListaSchede"."Codice" = "InterventiSubVersion_ListaInformazioni"."CodiceTitolo" ORDER BY "InterventiSubVersion_ListaSchede"."Posizione", "InterventiSubVersion_ListaSchede"."Titolo", "InterventiSubVersion_ListaInformazioni"."Posizione", "InterventiSubVersion_ListaInformazioni"."Campo"';
+    $result = pg_query($dbConnection, $SQL) or die ("Error: $SQL");
+    $rowArray = array();
+    while ($row = pg_fetch_array($result, null, PGSQL_ASSOC)) {
+        $rowArray[] = $row;
+    }
+    echo ', "SchedeInterventiSubVersion": ' . json_encode($rowArray);
+
     echo "}";
 
     include("./defaultEnd.php");
