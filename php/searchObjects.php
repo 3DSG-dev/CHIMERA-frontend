@@ -11,17 +11,17 @@
 
     $SQL = 'SELECT "OggettiVersion"."CodiceOggetto", "OggettiVersion"."Codice" AS "CodiceVersione", "Layer0", "Layer1", "Layer2", "Layer3", "Versione", "Name", "Type", "readonly" FROM "Oggetti" JOIN "OggettiVersion" ON "Oggetti"."Codice" = "OggettiVersion"."CodiceOggetto" LEFT JOIN "Modelli3D" ON "OggettiVersion"."CodiceModello" = "Modelli3D"."Codice" LEFT JOIN (SELECT * FROM "Import" WHERE "User"=\'' . $_SESSION['validUserName'] . '\') list ON list."CodiceVersione" = "OggettiVersion"."Codice" WHERE true';
     if ($layer0Value)
-        $SQL .= " AND \"Layer0\" LIKE '$layer0Value'";
+        $SQL .= ' AND "Layer0" LIKE ' . pg_escape_literal($layer0Value);
     if ($layer1Value)
-        $SQL .= " AND \"Layer1\" LIKE '$layer1Value'";
+        $SQL .= ' AND "Layer1" LIKE ' . pg_escape_literal($layer1Value);
     if ($layer2Value)
-        $SQL .= " AND \"Layer2\" LIKE '$layer2Value'";
+        $SQL .= ' AND "Layer2" LIKE ' . pg_escape_literal($layer2Value);
     if ($layer3Value)
-        $SQL .= " AND \"Layer3\" LIKE '$layer3Value'";
+        $SQL .= ' AND "Layer3" LIKE ' . pg_escape_literal($layer3Value);
     if ($nomeValue)
-        $SQL .= " AND \"Name\" LIKE '$nomeValue'";
+        $SQL .= ' AND "Name" LIKE ' . pg_escape_literal($nomeValue);
     if ($versioneValue)
-        $SQL .= " AND \"Versione\" = $versioneValue";
+        $SQL .= ' AND "Versione" = ' . $versioneValue;
     if (!$includeLayerObjects)
         $SQL .= " AND \"Layer0\" != '-' AND \"Layer1\" != '-' AND \"Layer2\" != '-' AND \"Layer3\" != '-' AND \"Name\" != '-'";
     $SQL .= ' ORDER BY "Layer0", "Layer1", "Layer2", "Layer3", "Name", "Versione"';
