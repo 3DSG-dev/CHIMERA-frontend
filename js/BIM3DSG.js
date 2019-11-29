@@ -375,19 +375,15 @@ function SearchObjects() {
 }
 
 function SearchAndAddToTourList() {
-    function AddToTourList() {
-        return $.ajax({
-            url: 'php/addObjectsToYourList.php',
-            dataType: "json",
-            data: GetSearchFormComboValues(),
-            error: function (jqXHR, textStatus, errorThrown) {
-                AlertMessage("Unexpected error while adding objects to your list!", textStatus + "; " + errorThrown);
-            }
-        });
-    }
-
-    AddToTourList()
-        .then(SearchObjects());
+    $.ajax({
+        url: 'php/addObjectsToYourList.php',
+        dataType: "json",
+        data: GetSearchFormComboValues(),
+        success: SearchObjects,
+        error: function (jqXHR, textStatus, errorThrown) {
+            AlertMessage("Unexpected error while adding objects to your list!", textStatus + "; " + errorThrown);
+        }
+    });
 }
 
 function GetObjectGridCellValue(item, column) {
@@ -1636,28 +1632,28 @@ function InitializeComponents() {
             var html;
             html = '<div class="toolbar3dContainer">';
             html += '    <div class="button3dContainer">';
-            html += '       <span id="zoomAll3dScene" alt="Zoom All" title="Zoom All">';
-            html += '           <img src="../img/icons/3dWindow/zoomAll.png">';
+            html += '       <span id="zoomAll3dScene" title="Zoom All">';
+            html += '           <img src="../img/icons/3dWindow/zoomAll.png" alt="Zoom All">';
             html += '       </span>';
             html += '    </div>';
             html += '    <div class="button3dContainer">';
-            html += '       <span id="sync3dScene" alt="Sync 3d scene with your list" title="Sync 3d scene with your list">';
-            html += '           <img src="../img/icons/3dWindow/updateSync.png">';
+            html += '       <span id="sync3dScene" title="Sync 3d scene with your list">';
+            html += '           <img src="../img/icons/3dWindow/updateSync.png" alt="Sync 3d scene with your list">';
             html += '       </span>';
             html += '    </div>';
             html += '    <div class="button3dContainer">';
-            html += '       <span id="clear3dScene" alt="Clear 3d scene" title="Clear 3d scene">';
-            html += '           <img src="../img/icons/3dWindow/clearView.png">';
+            html += '       <span id="clear3dScene" title="Clear 3d scene">';
+            html += '           <img src="../img/icons/3dWindow/clearView.png" alt="Clear 3d scene">';
             html += '       </span>';
             html += '    </div>';
             html += '    <div class="button3dContainer">';
-            html += '       <span id="reload3dScene" alt="Reload 3d scene" title="Reload 3d scene">';
-            html += '           <img src="../img/icons/3dWindow/reloadAll.png">';
+            html += '       <span id="reload3dScene" title="Reload 3d scene">';
+            html += '           <img src="../img/icons/3dWindow/reloadAll.png" alt="Reload 3d scene">';
             html += '       </span>';
             html += '    </div>';
             html += '    <div class="button3dContainer">';
-            html += '       <span id="settings3d" alt="3D Settings" title="3D Settings">';
-            html += '           <img src="../img/icons/3dWindow/3dSettings.png">';
+            html += '       <span id="settings3d" title="3D Settings">';
+            html += '           <img src="../img/icons/3dWindow/3dSettings.png" alt="3D Settings">';
             html += '       </span>';
             html += '    </div>';
             html += '</div>';
