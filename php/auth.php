@@ -41,7 +41,7 @@
         $_SESSION['dbName'] = "BIM3DSG_BIM-test-v2";
         $_SESSION['title'] = "BIM3DSG";
 
-        $_SESSION['dbConnectionString'] = "host=localhost port=5432 dbname=" . $_SESSION['dbName'] . " user=postgres password=5ETBL6gzh9";
+        $_SESSION['dbConnectionString'] = "host=localhost port=5432 dbname={$_SESSION['dbName']} user=postgres password=5ETBL6gzh9";
         $_SESSION["layer0Label"] = 'Layer0';
         $_SESSION["layer1Label"] = 'Layer1';
         $_SESSION["layer2Label"] = 'Layer2';

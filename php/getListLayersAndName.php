@@ -12,17 +12,17 @@
 
         $SQL = 'SELECT DISTINCT "' . $campo . '" FROM "Oggetti" JOIN "OggettiVersion" ON "Oggetti"."Codice" = "OggettiVersion"."CodiceOggetto" WHERE ("Live" = 1 OR "Live" = 2 OR "Live" = 5 OR "Live" = 7)';
         if ($layer0Value && $campo != "Layer0")
-            $SQL .= " AND \"Layer0\" = '$layer0Value'";
+            $SQL .= " AND \"Layer0\" LIKE '$layer0Value'";
         if ($layer1Value && $campo != "Layer1")
-            $SQL .= " AND \"Layer1\" = '$layer1Value'";
+            $SQL .= " AND \"Layer1\" LIKE '$layer1Value'";
         if ($layer2Value && $campo != "Layer2")
-            $SQL .= " AND \"Layer2\" = '$layer2Value'";
+            $SQL .= " AND \"Layer2\" LIKE '$layer2Value'";
         if ($layer3Value && $campo != "Layer3")
-            $SQL .= " AND \"Layer3\" = '$layer3Value'";
+            $SQL .= " AND \"Layer3\" LIKE '$layer3Value'";
         if ($nomeValue && $campo != "Name")
-            $SQL .= " AND \"Name\" = '$nomeValue'";
+            $SQL .= " AND \"Name\" LIKE '$nomeValue'";
         if ($versioneValue && $campo != "Versione")
-            $SQL .= " AND \"Versione\" = '$nomeValue'";
+            $SQL .= " AND \"Versione\" = $versioneValue";
         $SQL .= " ORDER BY \"$campo\"";
 
         return $SQL;

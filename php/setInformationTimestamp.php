@@ -1,18 +1,13 @@
 <?php
-    include("./defaultStart.php");
-
-    $dbReference = isset($_GET['dbReference']) ? $_GET['dbReference'] : null;
-    $codiceRiferimento = isset($_GET['codiceRiferimento']) ? $_GET['codiceRiferimento'] : null;
-    $codiceCampo = isset($_GET['codiceCampo']) ? $_GET['codiceCampo'] : null;
-    $valore = isset($_GET['valore']) ? $_GET['valore'] : null;
+    include("./setInformationParameters.php");
 
     if (!IsNullOrEmptyString($codiceRiferimento) && !IsNullOrEmptyString($codiceCampo)) {
         if (IsNullOrEmptyString($valore)) {
-            $SQL = "SELECT set" . $dbReference . "infoschedavalue($codiceRiferimento, $codiceCampo, null)";
+            $SQL = "SELECT set" . $dbReference . "infoSchedaValue($codiceRiferimento, $codiceCampo, null)";
         }
         else {
             $valore = pg_escape_literal($valore);
-            $SQL = "SELECT set" . $dbReference . "infoschedavalue($codiceRiferimento, $codiceCampo, to_timestamp($valore, 'DD/MM/YY, HH24:MI:SS'))";
+            $SQL = "SELECT set" . $dbReference . "infoSchedaValue($codiceRiferimento, $codiceCampo, to_timestamp($valore, 'DD/MM/YY, HH24:MI:SS'))";
         }
     }
     else {

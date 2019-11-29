@@ -4,6 +4,7 @@
     $dbReference = isset($_GET['dbReference']) ? $_GET['dbReference'] : null;
     $codiceCombo = isset($_GET['codiceCombo']) ? $_GET['codiceCombo'] : null;
 
+    /** @noinspection SqlResolve */
     $SQL = 'DELETE FROM "' . $dbReference . '_InfoComboBox" WHERE "Codice" = ' . $codiceCombo;
 
     $result = pg_query($dbConnection, $SQL) or die ("Error: $SQL");

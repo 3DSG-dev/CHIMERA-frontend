@@ -1,7 +1,7 @@
 <?php
     include("./defaultStart.php");
 
-    $SQL = 'SELECT "Import"."CodiceOggetto", "Import"."CodiceVersione", "Layer0", "Layer1", "Layer2", "Layer3", "Versione", "Name", "readonly" FROM "Import" JOIN "Oggetti" ON "CodiceOggetto" = "Oggetti"."Codice" JOIN "OggettiVersion" ON "Import"."CodiceVersione" = "OggettiVersion"."Codice" WHERE "User"= \'' . $_SESSION['validUserName'] . '\' ORDER BY "Layer0", "Layer1", "Layer2", "Layer3", "Name", "Versione"';
+    $SQL = 'SELECT "Import"."CodiceOggetto", "Import"."CodiceVersione", "Layer0", "Layer1", "Layer2", "Layer3", "Versione", "Name", "Type", "readonly" FROM "Import" JOIN "Oggetti" ON "CodiceOggetto" = "Oggetti"."Codice" JOIN "OggettiVersion" ON "Import"."CodiceVersione" = "OggettiVersion"."Codice" LEFT JOIN "Modelli3D" ON "Import"."CodiceModello" = "Modelli3D"."Codice" WHERE "User"= \'' . $_SESSION['validUserName'] . '\' ORDER BY "Layer0", "Layer1", "Layer2", "Layer3", "Name", "Versione"';
 
     $result = pg_query($dbConnection, $SQL) or die ("Error: $SQL");
     $rowArray = array();
