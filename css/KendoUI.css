@@ -1596,10 +1596,7 @@ kendo-sortable {
 .input-group-prepend + .k-widget.form-control .k-numeric-wrap,
 .input-group-prepend + .k-widget.form-control .k-picker-wrap,
 .input-group-prepend + .k-widget.form-control > .k-textbox {
-    border-top-left-radius: 0;
-    border-top-right-radius: 2px;
-    border-bottom-right-radius: 2px;
-    border-bottom-left-radius: 0;
+    border-radius: 0 2px 2px 0;
 }
 
 .k-widget.form-control .k-input {
@@ -4141,8 +4138,7 @@ kendo-sortable {
 
 .k-resize-handle::before {
     content: "";
-    border: 0 solid;
-    border-color: inherit;
+    border: 0 solid inherit;
 }
 
 .k-resize-n {
@@ -6421,7 +6417,6 @@ div.k-grid-footer {
 .k-grid-content {
     position: relative;
     overflow: auto;
-    overflow-x: auto;
     overflow-y: scroll;
     flex: 1;
     width: 100%;
@@ -6713,8 +6708,7 @@ div.k-grid-footer {
 
 .k-column-chooser-title,
 .k-column-list-item {
-    padding: 4px 8px;
-    padding-right: 32px;
+    padding: 4px 32px 4px 8px;
 }
 
 .k-column-list-item {
@@ -6940,8 +6934,7 @@ th.k-sorted {
     display: flex;
     flex: 0 0 auto;
     flex-direction: row;
-    border: 0 solid transparent;
-    border-color: inherit;
+    border: 0 solid inherit;
 }
 
 .k-tabstrip > .k-tabstrip-items .k-item {
@@ -6993,8 +6986,7 @@ th.k-sorted {
     width: 20%;
     height: 0;
     transition: width .2s linear;
-    border: 0;
-    border-color: inherit;
+    border: 0 inherit;
     border-top: 1px solid transparent;
     background: none;
 }
@@ -7712,8 +7704,7 @@ th.k-sorted {
 .k-spreadsheet-haxis,
 .k-spreadsheet-vaxis {
     position: absolute;
-    border: 0 solid;
-    border-color: inherit;
+    border: 0 solid inherit;
 }
 
 .k-spreadsheet-haxis {
@@ -8278,8 +8269,7 @@ th.k-sorted {
     font-size: 14px;
     line-height: 1.42857;
     position: relative;
-    padding: 4px 8px;
-    padding-right: 48px;
+    padding: 4px 48px 4px 8px;
     cursor: move;
     text-align: left;
     white-space: normal;
@@ -9759,12 +9749,12 @@ th.k-sorted {
 }
 
 .k-calendar .k-nav-fast {
-    flex: 1 1 0%;
+    flex: 1 1 0;
     margin: 0 0.25rem;
 }
 
 .k-calendar .k-nav-today {
-    flex: 1 1 0%;
+    flex: 1 1 0;
 }
 
 .k-calendar .k-content {
@@ -9844,7 +9834,6 @@ th.k-sorted {
     overflow-x: hidden;
     overflow-y: auto;
     box-sizing: content-box;
-    margin-right: -100px;
     margin-right: -117px;
     margin-left: -100px;
     padding-right: 100px;
@@ -9854,7 +9843,6 @@ th.k-sorted {
 .k-calendar[dir='rtl'] .k-content.k-scrollable,
 .k-rtl .k-calendar .k-content.k-scrollable {
     margin-right: -100px;
-    margin-left: -100px;
     margin-left: -117px;
     padding-right: 100px;
     padding-left: 100px;
@@ -10324,7 +10312,7 @@ th.k-sorted {
 .k-datepicker .k-dateinput,
 .k-datetimepicker .k-dateinput,
 .k-timepicker .k-dateinput {
-    flex: 1 1 0%;
+    flex: 1 1 0;
     width: 100%;
     margin: 0;
 }
@@ -10421,7 +10409,6 @@ th.k-sorted {
     position: relative;
     display: inline-block;
     overflow: hidden;
-    overflow-x: hidden;
     overflow-y: auto;
     box-sizing: content-box;
     width: 5em;
@@ -10476,7 +10463,6 @@ th.k-sorted {
     display: block;
     overflow-x: hidden;
     overflow-y: scroll;
-    margin-right: -100px;
     margin-right: -117px;
     margin-left: -100px;
     padding-right: 100px;
@@ -11118,8 +11104,7 @@ th.k-sorted {
     line-height: 1.42857;
     align-self: center;
     width: 25%;
-    padding: 5px 0;
-    padding-right: 12px;
+    padding: 5px 12px 5px 0;
     text-align: right;
 }
 
@@ -11898,7 +11883,7 @@ table.k-editor {
 
 .k-editor-toolbar.k-toolbar-resizable {
     overflow: hidden;
-    flex: 1 1 0%;
+    flex: 1 1 0;
     flex-wrap: nowrap;
 }
 
@@ -12009,8 +11994,7 @@ table.k-editor {
     margin: 1px;
     vertical-align: top;
     opacity: .7;
-    border: 1px solid;
-    border-color: inherit;
+    border: 1px solid inherit;
 }
 
 .k-editor .k-resize-handle {
@@ -13273,8 +13257,7 @@ li.k-item.k-drag-clue {
     height: 100%;
     margin: -1px 0 0 -1px;
     color: inherit;
-    border: 1px solid;
-    border-color: inherit;
+    border: 1px solid inherit;
     background-color: inherit;
 }
 
@@ -15642,8 +15625,7 @@ li.k-item.k-drag-clue {
     display: flex;
     align-items: center;
     flex-direction: row;
-    padding: 4px 8px;
-    padding-right: 32px;
+    padding: 4px 32px 4px 8px;
 }
 
 .k-menu-group .k-item.k-separator,

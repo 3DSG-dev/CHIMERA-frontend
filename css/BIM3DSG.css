@@ -209,17 +209,17 @@ button::-moz-focus-inner {
 
 .k-confirm .k-window-titlebar::before {
     content: 'Confirm';
-    background: url("../img/icons/confirm_icon_title.png") no-repeat;
+    background: url("../img/icons/windowsTitle/confirmDialog.png") no-repeat;
 }
 
 .k-alert .k-window-titlebar::before {
     content: 'Alert';
-    background: url("../img/icons/alert_icon_title.png") no-repeat;
+    background: url("../img/icons/windowsTitle/alertDialog.png") no-repeat;
 }
 
 .k-prompt .k-window-titlebar::before {
     content: 'Input data';
-    background: url("../img/icons/prompt_icon_title.png") no-repeat;
+    background: url("../img/icons/windowsTitle/promptDialog.png") no-repeat;
 }
 
 .k-confirm .k-window-titlebar::before, .k-alert .k-window-titlebar::before, .k-prompt .k-window-titlebar::before {
@@ -696,7 +696,7 @@ div.k-loading-mask {
 }
 
 .k-loading-mask .k-loading-image {
-    background-image: url('../img/icons/background_loader.png');
+    background-image: url('../img/progressBarBackground.png');
 }
 
 .k-i-loading {
@@ -709,6 +709,13 @@ div.k-loading-mask {
 }
 
 /* Stilizzazione Layout base - Tema BIM3DSG ------------------------------------------- */
+.centeredAbsolute {
+    position: absolute;
+    transform: translate(-50%, -50%);
+    left: 50%;
+    top: 50%
+}
+
 /* Page Sections, Rows, Columns - Tema BIM3DSG */
 .pageSection {
     padding: 10px 10px 10px 10px;
@@ -845,7 +852,7 @@ div.k-loading-mask {
     height: 2rem;
     border: 2px solid var(--grigiochiaro);
     border-radius: 50%;
-    background: url("../img/icons/user_icon.png") no-repeat;
+    background: url("../img/icons/user.png") no-repeat;
     background-size: cover;
 }
 
@@ -920,14 +927,6 @@ div.k-loading-mask {
     background-color: #7590c6;
 }
 
-#mode3DButton {
-    background-color: #f79e45;
-}
-
-#mode3DButton:hover, #mode3DButton:focus {
-    background-color: #fcac5d;
-}
-
 .sideToolbarButton img {
     display: inline-block;
     width: 40px;
@@ -936,6 +935,14 @@ div.k-loading-mask {
 
 .sideToolbarSeparator {
     margin-bottom: 20px;
+}
+
+#mode3DButton {
+    background-color: #f79e45;
+}
+
+#mode3DButton:hover, #mode3DButton:focus {
+    background-color: #fcac5d;
 }
 
 /* Main page - Select object section */
@@ -995,11 +1002,28 @@ div.k-loading-mask {
 
 #searchObjectBtnContainer {
     float: left;
-    width: 33%;
+    width: 66.5%;
     min-height: 35px;
     padding: 10px 0 10px 0;
     border-radius: 0 0 12px 12px;
     background-color: #d4e8f9;
+}
+
+.searchButton {
+    float: left;
+    width: calc(33% - 32px);
+    padding: 0 16px;
+}
+
+.searchCheckBox {
+    float: left;
+    width: calc(34% - 32px);
+    margin-top: 6px;
+    padding: 0 16px;
+}
+
+.searchCheckBox .k-checkbox-label {
+    padding-left: 24px;
 }
 
 #searchObjectBtnContainer .buttonBordered {
@@ -1012,7 +1036,7 @@ div.k-loading-mask {
 
 #loadUserListBtnContainer {
     float: left;
-    width: 56%;
+    width: 32%;
     min-height: 35px;
     padding: 10px 0 10px 0;
     background-color: #fff;
@@ -1032,7 +1056,7 @@ div.k-loading-mask {
 /* Window and Dialog popup*/
 /* Login dialog window */
 .loginDialogIcon .k-window-title::before {
-    background: url("../img/icons/lock_icon.png") no-repeat;
+    background: url("../img/icons/windowsTitle/login.png") no-repeat;
 }
 
 .loginDialogTitle .k-window-titlebar {
@@ -1046,7 +1070,7 @@ div.k-loading-mask {
 
 /* Rename Combo dialog when edit dropdown icon is clicked on information window */
 .renameComboDialogIcon .k-window-title::before {
-    background: url("../img/icons/edit_icon_title.png") no-repeat;
+    background: url("../img/icons/windowsTitle/edit.png") no-repeat;
 }
 
 .renameComboDialogTitle .k-window-titlebar {
@@ -1059,7 +1083,7 @@ div.k-loading-mask {
 }
 
 .informationWindowIcon .k-window-title::before {
-    background: url("../img/icons/information_icon_35x35.png") no-repeat;
+    background: url("../img/icons/windowsTitle/information.png") no-repeat;
 }
 
 .informationWindowTitle .k-window-titlebar {
@@ -1177,9 +1201,211 @@ div.k-loading-mask {
     text-align: left;
 }
 
+/* Model window */
+#modelWindow {
+    padding: 0 6px;
+}
+
+.modelWindowIcon .k-window-title::before {
+    background: url("../img/icons/windowsTitle/3dMode.png") no-repeat;
+    margin-right: 6px;
+}
+
+.modelWindowTitle .k-window-titlebar {
+    width: 160px;
+}
+
+#modelCanvas {
+    width: 100%;
+    height: calc(100% - 7px);
+}
+
+#play3DButton {
+    display: block;
+    margin: auto;
+    padding: 6px 6px 0 6px;
+    text-align: center;
+    border: none;
+    -moz-border-radius: 10px;
+    -webkit-border-radius: 10px;
+    border-radius: 10px;
+    background-color: var(--main-color);
+}
+
+.toolbar3dContainer {
+    position: absolute;
+    top: 6px;
+    right: 8px;
+}
+
+.button3dContainer {
+    display: inline-block;
+    margin-left: 1px;
+}
+
+.button3dContainer span {
+    display: block;
+    padding: 1px 2px;
+    border: none;
+    -moz-border-radius: 6px;
+    -webkit-border-radius: 6px;
+    border-radius: 6px;
+    background-color: var(--main-color);
+}
+
+.button3dContainer span:hover, .button3dContainer span:focus {
+    background-color: #7590c6;
+}
+
+.button3dContainer img {
+    display: inline-block;
+    width: 25px;
+    vertical-align: middle;
+}
+
+#settings3dFrame {
+    background-color: #ebeff5;
+    overflow: hidden;
+}
+
+#settings3dFrame h4 {
+    margin: 0;
+    padding: 16px 0;
+}
+
+.settings3dContainer {
+    float: left;
+    width: 50%;
+    text-align: center;
+}
+
+.dotInput {
+    position: absolute;
+    top: 0;
+    left: 0;
+    background-color: var(--grigiomedio);
+    border-radius: 50%;
+}
+
+.dotInput:after {
+    content: "";
+    position: absolute;
+    display: none;
+}
+
+.dotInput0 {
+    height: 15px;
+    width: 15px;
+}
+
+.dotInput1 {
+    height: 17px;
+    width: 17px;
+}
+
+.dotInput2 {
+    height: 19px;
+    width: 19px;
+}
+
+.dotInput3 {
+    height: 21px;
+    width: 21px;
+}
+
+.dotInput4 {
+    height: 23px;
+    width: 23px;
+}
+
+.dotInput5 {
+    height: 25px;
+    width: 25px;
+}
+
+.dotInput6 {
+    height: 27px;
+    width: 27px;
+}
+
+.dotInput7 {
+    height: 29px;
+    width: 29px;
+}
+
+.dotRadioLabel {
+    display: inline;
+    position: relative;
+    cursor: pointer;
+    font-size: 22px;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
+
+.dotRadioLabel input {
+    position: absolute;
+    opacity: 0;
+    cursor: pointer;
+}
+
+.dotRadioLabel:hover input ~ .dotInput {
+    background-color: var(--grigioscuro);
+}
+
+.dotRadioLabel input:checked ~ .dotInput {
+    background-color: var(--main-color);
+}
+
+.dotRadioLabel input:checked ~ .dotInput:after {
+    display: block;
+}
+
+.dotRadioLabel0 {
+    padding-left: 0;
+    padding-top: 0
+}
+
+.dotRadioLabel1 {
+    padding-left: 20px;
+    padding-top: 2px;
+}
+
+.dotRadioLabel2 {
+    padding-left: 22px;
+    padding-top: 4px;
+}
+
+.dotRadioLabel3 {
+    padding-left: 24px;
+    padding-top: 6px;
+}
+
+.dotRadioLabel4 {
+    padding-left: 26px;
+    padding-top: 8px;
+}
+
+.dotRadioLabel5 {
+    padding-left: 28px;
+    padding-top: 10px;
+}
+
+.dotRadioLabel6 {
+    padding-left: 30px;
+    padding-top: 12px;
+}
+
+.dotRadioLabel7 {
+    padding-left: 32px;
+    padding-top: 14px;
+}
+
+
 /* Info Dialog (alert, confirm, prompt dialog had a specific widget in kendo except for "info") */
 .infoDialogIcon .k-window-title::before {
-    background: url("../img/icons/infodialog_icon_title.png") no-repeat;
+    background: url("../img/icons/windowsTitle/infoDialog.png") no-repeat;
 }
 
 .infoDialogTitle .k-window-titlebar {
