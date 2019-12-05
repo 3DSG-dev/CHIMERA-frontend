@@ -1837,6 +1837,123 @@ function InitializeComponents() {
             });
         }
 
+        function AddNewObject() {
+            function InitializeAddNewObjectDialog(addNewObjectDialog) {
+                function InitializeDialog() {
+                    function AddNewObjectDialog_OnSubmit() {
+                        $.ajax({
+                            url: './php/addNewObject.php',
+                            dataType: "json",
+                            data: {
+                                layer0: $("#newObjectLayer0").data("kendoComboBox").value(),
+                                layer1: $("#newObjectLayer1").data("kendoComboBox").value(),
+                                layer2: $("#newObjectLayer2").data("kendoComboBox").value(),
+                                layer3: $("#newObjectLayer3").data("kendoComboBox").value(),
+                                nome: $("#newObjectName").data("kendoComboBox").value(),
+                            },
+                            success: function (resultData) {
+                                kendo.alert(resultData);
+                            },
+                            error: function (jqXHR, textStatus, errorThrown) {
+                                AlertMessage("Unexpected error during adding a new object!", textStatus + "; " + errorThrown);
+                            }
+                        });
+                        /*var newValueInput = $("#newValue");
+                          var inputSel = $("#" + newValueInput[0].dataset["ref"]);
+                          var {codiceCampo, dbReference} = GetComboDbReferences(inputSel);
+                          $.ajax({
+                              url: './php/changeInformationComboValue.php',
+                              dataType: "json",
+                              data: {
+                                  dbReference: dbReference,
+                                  codiceCombo: newValueInput[0].dataset["codice"],
+                                  newValue: newValueInput.val()
+                              },
+                              success: function () {
+                                  UpdateComboValue(inputSel, dbReference, codiceCampo);
+                              },
+                              error: function (jqXHR, textStatus, errorThrown) {
+                                  AlertMessage("Unexpected error during the update of the combobox fields!", textStatus + "; " + errorThrown);
+                              }
+                          });*/
+                    }
+
+                    addNewObjectDialog.kendoDialog({
+                        width: "340px",
+                        title: "Add a new object",
+                        closable: true,
+                        modal: true,
+                        actions: [
+                            {text: 'CANCEL', action: this.close()},
+                            {text: 'OK', primary: true, action: AddNewObjectDialog_OnSubmit}
+                        ]
+                    });
+                    addNewObjectDialog.parents(".k-widget").addClass("windowTitle windowIcon addNewObjectDialogTitle addNewObjectDialogIcon");
+
+                    $("#newValue").on("keyup", function (event) {
+                        if (event.key === "Enter") {
+                            AddNewObjectDialog_OnSubmit();
+                            addNewObjectDialog.data("kendoDialog").close();
+                        }
+                    });
+                }
+
+                function CreateCombobox(field, label) {
+                    $("#newObject" + field).kendoComboBox({
+                        filter: "contains",
+                        filtering: function (e) {
+                            e.filter.value = e.filter.value.replace(/%/g, "");
+                        },
+                        suggest: true,
+                        placeholder: "Write or select " + label + "'s value ...",
+                        dataTextField: field,
+                        dataValueField: field
+                    }).data("kendoComboBox");
+                }
+
+                // noinspection JSPotentiallyInvalidConstructorUsage
+                InitializeDialog();
+
+                CreateCombobox("Layer0", _layer0Label);
+                CreateCombobox("Layer1", _layer1Label);
+                CreateCombobox("Layer2", _layer2Label);
+                CreateCombobox("Layer3", _layer3Label);
+                CreateCombobox("Name", _nameLabel);
+
+                UpdateCombobox();
+            }
+
+            function UpdateCombobox() {
+                $.ajax({
+                    url: './php/getListLayersAndName.php',
+                    dataType: "json",
+                    success: function (resultData) {
+                        for (var field in resultData) {
+                            if (field !== "Versione") {
+                                var kendoCombobox = $("#newObject" + field).data("kendoComboBox");
+                                kendoCombobox.setDataSource(resultData[field]);
+                                kendoCombobox.value(null);
+                            }
+                        }
+                    },
+                    error: function (jqXHR, textStatus, errorThrown) {
+                        AlertMessage("Unexpected error during the update of the search fields!", textStatus + "; " + errorThrown);
+                    }
+                });
+            }
+
+            var addNewObjectDialog = $("#addNewObjectDialog");
+            var addNewObjectDialogKendo = addNewObjectDialog.data("kendoDialog");
+            if (!addNewObjectDialogKendo) {
+                InitializeAddNewObjectDialog(addNewObjectDialog);
+                addNewObjectDialogKendo = addNewObjectDialog.data("kendoDialog");
+            } else {
+                UpdateCombobox();
+            }
+
+            addNewObjectDialogKendo.open();
+        }
+
         $("#mode3DButton").click("click", function () {
             ToggleKendoWindow("modelWindow");
         });
@@ -1846,6 +1963,8 @@ function InitializeComponents() {
         });
 
         $("#cleanYourListButton").click(CleanYourList);
+
+        $("#addNewObjectButton").click(AddNewObject)
     }
 
     SetSearchForm();
@@ -2075,7 +2194,7 @@ function Load3dScene() {
                 }
             },
             {
-                andSelf: false,     // Visit our myLookat node as well
+                andSelf: false,     // Visit our myLookAt node as well
                 depthFirst: false   // Descend depth-first into tree
             }
         );

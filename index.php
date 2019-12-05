@@ -24,9 +24,11 @@
     <script src="./libs/KendoUI/kendo.all.min.js"></script>
     <link rel="stylesheet" type="text/css" href="./css/KendoUI.css"/>
 
+    <!--suppress SpellCheckingInspection -->
     <script src="./libs/dexie.js"></script>
 
     <!--<script type="text/javascript" src="http://scenejs.org/api/latest/scenejs.js"></script>-->
+    <!--suppress SpellCheckingInspection -->
     <script type="text/javascript" src="./libs/SceneJS/scenejs-4.2.2.js"></script>
 
     <!--suppress JSUnusedLocalSymbols -->
@@ -120,8 +122,10 @@
                     <div class="selectObjectButtonsContainer">
                         <div id="searchObjectBtnContainer" class="buttonContainer">
                             <div class="searchCheckBox">
-                                <input id="includeLayerObjects" data-role="checkboxinfo" type="checkbox" checked="checked" class="k-checkbox" />
-                                <label for="includeLayerObjects" class="k-checkbox-label">Include layer objects ( - )</label>
+                                <input id="includeLayerObjects" data-role="checkboxinfo" type="checkbox"
+                                       checked="checked" class="k-checkbox"/>
+                                <label for="includeLayerObjects" class="k-checkbox-label">Include layer objects ( -
+                                    )</label>
                             </div>
                             <div class="searchButton">
                                 <button onclick="SearchObjects()" class="buttonBordered">SEARCH</button>
@@ -146,20 +150,26 @@
     <div id="sideToolbarContainer">
         <div id="sideToolbarList" class="k-widget k-listview k-selectable">
             <div class="sideToolbarItem">
-                        <span id="mode3DButton" class="sideToolbarButton" title="Go to 3D mode">
-                            <img src="img/icons/toolbar/3dMode.png" alt="3D Mode">
-                        </span>
+                <span id="mode3DButton" class="sideToolbarButton orangeButton" title="Go to 3D mode">
+                    <img src="img/icons/toolbar/3dMode.png" alt="3D Mode">
+                </span>
             </div>
             <div class="sideToolbarSeparator"></div>
             <div class="sideToolbarItem">
-                        <span id="cleanYourListButton" class="sideToolbarButton" title="Clean your list">
-                            <img src="img/icons/toolbar/deleteList.png" alt="Clean your list">
-                        </span>
+                <span id="informationButton" class="sideToolbarButton" title="Information">
+                    <img src="img/icons/toolbar/information.png" alt="Information">
+                </span>
+            </div>
+            <div class="sideToolbarSeparator"></div>
+            <div class="sideToolbarItem">
+                <span id="cleanYourListButton" class="sideToolbarButton" title="Clean your list">
+                    <img src="img/icons/toolbar/deleteList.png" alt="Clean your list">
+                </span>
             </div>
             <div class="sideToolbarItem">
-                        <span id="informationButton" class="sideToolbarButton" title="Information">
-                            <img src="img/icons/toolbar/information.png" alt="Information">
-                        </span>
+                <span id="addNewObjectButton" class="sideToolbarButton greenButton" title="Add a new object">
+                    <img src="img/icons/toolbar/addObject.png" alt="Add a new object">
+                </span>
             </div>
         </div>
     </div>
@@ -447,6 +457,36 @@
             <div class="dialogFormField">
                 <label for="newValue">Insert the new value:</label>
                 <input id="newValue" type="text" class="k-textbox" name="newValue" value="" placeholder="newValue">
+            </div>
+        </form>
+    </div>
+
+    <div id="addNewObjectDialog">
+        <div class="k-text-warning">
+            <i>WARNING: in this way you can add only objects without models! For models use the importer.</i>
+        </div>
+        <form id="addNewObjectForm" method="post" action="javascript:void(0);">
+            <div class="dialogFormField">
+                <div class="dialogFormField">
+                    <label for="newObjectLayer0"><?php echo $_SESSION["layer0Label"]; ?> filter</label>
+                    <input id="newObjectLayer0" type="text"/>
+                </div>
+                <div class="dialogFormField">
+                    <label for="newObjectLayer1"><?php echo $_SESSION["layer1Label"]; ?> filter</label>
+                    <input id="newObjectLayer1" type="text">
+                </div>
+                <div class="dialogFormField">
+                    <label for="newObjectLayer2"><?php echo $_SESSION["layer2Label"]; ?> filter</label>
+                    <input id="newObjectLayer2" type="text">
+                </div>
+                <div class="dialogFormField">
+                    <label for="newObjectLayer3"><?php echo $_SESSION["layer3Label"]; ?> filter</label>
+                    <input id="newObjectLayer3" type="text">
+                </div>
+                <div class="dialogFormField">
+                    <label for="newObjectName"><?php echo $_SESSION["nomeLabel"]; ?> filter</label>
+                    <input id="newObjectName" type="text">
+                </div>
             </div>
         </form>
     </div>

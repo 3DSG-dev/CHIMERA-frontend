@@ -9,6 +9,10 @@
     --bluscuro-sfondo: #004577;
     --azzurrino-sfondo-over: rgba(174, 202, 242, 0.2);
     --azzurrino-sfondo-selected-over: rgba(174, 202, 242, 0.7);
+    --greenButtonBackground: #4fb356;
+    --greenButtonBackgroundHover: #75e67d;
+    --redBackground: #ec5154;
+    --redBackgroundHover: #ef7376;
     --grigioscuroforte-testo: #333;
     --grigioscuro: #9c9d9e;
     --grigiomedio: #ccc;
@@ -574,7 +578,7 @@ span.k-widget.k-tooltip-validation {
     margin: 0;
 }
 
-.k-switch-label-off, k-switch-label-on {
+.k-switch-label-off, .k-switch-label-on {
     display: none;
 }
 
@@ -796,7 +800,7 @@ div.k-loading-mask {
 
 .dialogFormField {
     position: relative;
-    width: 80%;
+    width: 90%;
 }
 
 /* Stilizzazione SPECIFICA ------------------------------------------------------- */
@@ -937,12 +941,20 @@ div.k-loading-mask {
     margin-bottom: 20px;
 }
 
-#mode3DButton {
+.orangeButton {
     background-color: #f79e45;
 }
 
-#mode3DButton:hover, #mode3DButton:focus {
+.orangeButton:hover, .orangeButton:focus {
     background-color: #fcac5d;
+}
+
+.greenButton {
+    background-color: var(--greenButtonBackground);
+}
+
+.greenButton:hover, .greenButton:focus {
+    background-color: var(--greenButtonBackgroundHover);
 }
 
 /* Main page - Select object section */
@@ -1075,6 +1087,15 @@ div.k-loading-mask {
 
 .renameComboDialogTitle .k-window-titlebar {
     width: 280px;
+}
+
+/* Rename Combo dialog when edit dropdown icon is clicked on information window */
+.addNewObjectDialogIcon .k-window-title::before {
+    background: url("../img/icons/windowsTitle/addObject.png") no-repeat;
+}
+
+.addNewObjectDialogTitle .k-window-titlebar {
+    width: 230px;
 }
 
 /* Information window */
@@ -1401,7 +1422,6 @@ div.k-loading-mask {
     padding-left: 32px;
     padding-top: 14px;
 }
-
 
 /* Info Dialog (alert, confirm, prompt dialog had a specific widget in kendo except for "info") */
 .infoDialogIcon .k-window-title::before {
