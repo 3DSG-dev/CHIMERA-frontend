@@ -468,23 +468,23 @@
         <form id="addNewObjectForm" method="post" action="javascript:void(0);">
             <div class="dialogFormField">
                 <div class="dialogFormField">
-                    <label for="newObjectLayer0"><?php echo $_SESSION["layer0Label"]; ?> filter</label>
+                    <label for="newObjectLayer0"><?php echo $_SESSION["layer0Label"]; ?></label>
                     <input id="newObjectLayer0" type="text"/>
                 </div>
                 <div class="dialogFormField">
-                    <label for="newObjectLayer1"><?php echo $_SESSION["layer1Label"]; ?> filter</label>
+                    <label for="newObjectLayer1"><?php echo $_SESSION["layer1Label"]; ?></label>
                     <input id="newObjectLayer1" type="text">
                 </div>
                 <div class="dialogFormField">
-                    <label for="newObjectLayer2"><?php echo $_SESSION["layer2Label"]; ?> filter</label>
+                    <label for="newObjectLayer2"><?php echo $_SESSION["layer2Label"]; ?></label>
                     <input id="newObjectLayer2" type="text">
                 </div>
                 <div class="dialogFormField">
-                    <label for="newObjectLayer3"><?php echo $_SESSION["layer3Label"]; ?> filter</label>
+                    <label for="newObjectLayer3"><?php echo $_SESSION["layer3Label"]; ?></label>
                     <input id="newObjectLayer3" type="text">
                 </div>
                 <div class="dialogFormField">
-                    <label for="newObjectName"><?php echo $_SESSION["nomeLabel"]; ?> filter</label>
+                    <label for="newObjectName"><?php echo $_SESSION["nomeLabel"]; ?></label>
                     <input id="newObjectName" type="text">
                 </div>
             </div>
