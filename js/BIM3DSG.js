@@ -1884,8 +1884,15 @@ function InitializeComponents() {
                         closable: true,
                         modal: true,
                         actions: [
-                            {text: 'CANCEL', action: this.close()},
-                            {text: 'OK', primary: true, action: AddNewObjectDialog_OnSubmit}
+                            {
+                                text: 'CANCEL',
+                                action: this.close()
+                            },
+                            {
+                                text: 'ADD',
+                                primary: true,
+                                action: AddNewObjectDialog_OnSubmit
+                            }
                         ]
                     });
                     addNewObjectDialog.parents(".k-widget").addClass("windowTitle windowIcon addNewObjectDialogTitle addNewObjectDialogIcon");
