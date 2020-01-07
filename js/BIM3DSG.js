@@ -3,7 +3,6 @@ const ToRad = Math.PI / 180.0;
 
 // Global vars
 var _openedWindows = 0;
-var _isMouseDown = false;
 
 // Global model var
 var _myScene;
@@ -12,16 +11,18 @@ var _resetLook;
 var _startEye;
 var _startLook;
 var _startUpZ = 1;
+var _pickedObject;
 
 // Global Mouse var
-var _isDragging = false;
-var _contextMenuToDisable = false;
-var _dragged = false;
+var _isMouseDown = false;
 var _leftMouseDown = false;
 var _rightMouseDown = false;
 var _centerMouseDown = false;
 var _mouseStartX;
 var _mouseStartY;
+var _isDragging = false;
+var _contextMenuToDisable = false;
+var _dragged = false;
 
 // Global Touch var
 var _canvasDiagonal;
@@ -33,6 +34,7 @@ var _isTouchRotate = false;
 
 // Global 3D settings
 var _textureEnable = true;
+var _addHotSpotMode = false;
 
 // Global select var
 var _singleSelecting = true;
@@ -1632,27 +1634,32 @@ function InitializeComponents() {
             var html;
             html = '<div class="toolbar3dContainer">';
             html += '    <div class="button3dContainer">';
-            html += '       <span id="zoomAll3dScene" title="Zoom All">';
+            html += '       <span id="zoomAll3dSceneButton" title="Zoom All">';
             html += '           <img src="../img/icons/3dWindow/zoomAll.png" alt="Zoom All">';
             html += '       </span>';
             html += '    </div>';
             html += '    <div class="button3dContainer">';
-            html += '       <span id="sync3dScene" title="Sync 3d scene with your list">';
+            html += '       <span id="sync3dSceneButton" title="Sync 3d scene with your list">';
             html += '           <img src="../img/icons/3dWindow/updateSync.png" alt="Sync 3d scene with your list">';
             html += '       </span>';
             html += '    </div>';
             html += '    <div class="button3dContainer">';
-            html += '       <span id="clear3dScene" title="Clear 3d scene">';
+            html += '       <span id="clear3dSceneButton" title="Clear 3d scene">';
             html += '           <img src="../img/icons/3dWindow/clearView.png" alt="Clear 3d scene">';
             html += '       </span>';
             html += '    </div>';
             html += '    <div class="button3dContainer">';
-            html += '       <span id="reload3dScene" title="Reload 3d scene">';
+            html += '       <span id="reload3dSceneButton" title="Reload 3d scene">';
             html += '           <img src="../img/icons/3dWindow/reloadAll.png" alt="Reload 3d scene">';
             html += '       </span>';
             html += '    </div>';
             html += '    <div class="button3dContainer">';
-            html += '       <span id="settings3d" title="3D Settings">';
+            html += '       <span id="addNewHotspotButton" class="greenButton" title="Add a new Hotspot">';
+            html += '           <img src="../img/icons/3dWindow/addHotspot.png" alt="Add a new Hotspot">';
+            html += '       </span>';
+            html += '    </div>';
+            html += '    <div class="button3dContainer">';
+            html += '       <span id="settings3dButton" title="3D Settings">';
             html += '           <img src="../img/icons/3dWindow/3dSettings.png" alt="3D Settings">';
             html += '       </span>';
             html += '    </div>';
@@ -1660,7 +1667,7 @@ function InitializeComponents() {
 
             $(".modelWindowTitle").prepend(html);
 
-            $("#settings3d").click(Toggle3dSettings);
+            $("#settings3dButton").click(Toggle3dSettings);
         }
 
         function Initialize3d() {
@@ -1700,13 +1707,20 @@ function InitializeComponents() {
                     Load3dScene();
                 }
 
-                $("#zoomAll3dScene").click(ResetEye);
+                function ToggleAddNewHotspot() {
+                    $("#addHotspotNotification").toggleClass("hidden");
+                    _addHotSpotMode = !_addHotSpotMode;
+                }
 
-                $("#sync3dScene").click(Sync3dScene);
+                $("#zoomAll3dSceneButton").click(ResetEye);
 
-                $("#clear3dScene").click(ResetView);
+                $("#sync3dSceneButton").click(Sync3dScene);
 
-                $("#reload3dScene").click(function () {
+                $("#clear3dSceneButton").click(ResetView);
+
+                $("#addNewHotspotButton").click(ToggleAddNewHotspot);
+
+                $("#reload3dSceneButton").click(function () {
                     ResetView();
                     Load3dScene()
                         .then(setTimeout(ResetEye, 200));
@@ -1858,24 +1872,6 @@ function InitializeComponents() {
                                 AlertMessage("Unexpected error during adding a new object!", textStatus + "; " + errorThrown);
                             }
                         });
-                        /*var newValueInput = $("#newValue");
-                          var inputSel = $("#" + newValueInput[0].dataset["ref"]);
-                          var {codiceCampo, dbReference} = GetComboDbReferences(inputSel);
-                          $.ajax({
-                              url: './php/changeInformationComboValue.php',
-                              dataType: "json",
-                              data: {
-                                  dbReference: dbReference,
-                                  codiceCombo: newValueInput[0].dataset["codice"],
-                                  newValue: newValueInput.val()
-                              },
-                              success: function () {
-                                  UpdateComboValue(inputSel, dbReference, codiceCampo);
-                              },
-                              error: function (jqXHR, textStatus, errorThrown) {
-                                  AlertMessage("Unexpected error during the update of the combobox fields!", textStatus + "; " + errorThrown);
-                              }
-                          });*/
                     }
 
                     addNewObjectDialog.kendoDialog({
@@ -1915,7 +1911,7 @@ function InitializeComponents() {
                         placeholder: "Write or select " + label + "'s value ...",
                         dataTextField: field,
                         dataValueField: field
-                    }).data("kendoComboBox");
+                    });
                 }
 
                 // noinspection JSPotentiallyInvalidConstructorUsage
@@ -2226,6 +2222,160 @@ function Load3dScene() {
                 return pageCoordinates;
             }
 
+            function AddNewHotSpot() {
+                function InitializeAddNewHotspotDialog(addNewHotspotDialog) {
+                    function InitializeDialog() {
+                        function AddNewHotspotDialog_OnSubmit() {
+                            $.ajax({
+                                url: './php/addNewHotspot.php',
+                                dataType: "json",
+                                data: {
+                                    layer0: $("#newHotspotLayer0").data("kendoComboBox").value(),
+                                    layer1: $("#newHotspotLayer1").data("kendoComboBox").value(),
+                                    layer2: $("#newHotspotLayer2").data("kendoComboBox").value(),
+                                    layer3: $("#newHotspotLayer3").data("kendoComboBox").value(),
+                                    nome: $("#newHotspotName").data("kendoComboBox").value(),
+                                    xc: _pickedObject.worldPos[0],
+                                    yc: _pickedObject.worldPos[1],
+                                    zc: _pickedObject.worldPos[2],
+                                    radius: $("#newHotspotRadius").data("kendoNumericTextBox").value(),
+                                    SRS: $("#newHotspotSRS").val(),
+                                    translationX: $("#newHotspotWorldTranslationX").data("kendoNumericTextBox").value(),
+                                    translationY: $("#newHotspotWorldTranslationY").data("kendoNumericTextBox").value(),
+                                    translationZ: $("#newHotspotWorldTranslationZ").data("kendoNumericTextBox").value()
+                                },
+                                success: function (resultData2) {
+                                    if (resultData2 === "success") {
+                                        Load3dScene();
+                                    } else {
+                                        AlertMessage("Unexpected error during adding a new hotspot!", resultData2)
+                                    }
+                                },
+                                error: function (jqXHR, textStatus, errorThrown) {
+                                    AlertMessage("Unexpected error during adding a new hotspot!", textStatus + "; " + errorThrown);
+                                }
+                            });
+                        }
+
+                        addNewHotspotDialog.kendoDialog({
+                            width: "340px",
+                            title: "Add a new hotspot",
+                            closable: true,
+                            modal: true,
+                            actions: [
+                                {
+                                    text: 'CANCEL',
+                                    action: this.close()
+                                },
+                                {
+                                    text: 'ADD',
+                                    primary: true,
+                                    action: AddNewHotspotDialog_OnSubmit
+                                }
+                            ]
+                        });
+                        addNewHotspotDialog.parents(".k-widget").addClass("windowTitle windowIcon addNewObjectDialogTitle addNewObjectDialogIcon");
+
+                        $("#addNewHotspotForm input").on("keyup", function (event) {
+                            if (event.key === "Enter") {
+                                AddNewHotspotDialog_OnSubmit();
+                                addNewHotspotDialog.data("kendoDialog").close();
+                            }
+                        });
+                    }
+
+                    function CreateCombobox(field, label) {
+                        $("#newHotspot" + field).kendoComboBox({
+                            filter: "contains",
+                            filtering: function (e) {
+                                e.filter.value = e.filter.value.replace(/%/g, "");
+                            },
+                            suggest: true,
+                            placeholder: "Write or select " + label + "'s value ...",
+                            dataTextField: field,
+                            dataValueField: field
+                        });
+                    }
+
+                    function CreateNumericTextBox(fieldId) {
+                        $("#" + fieldId).kendoNumericTextBox({
+                            decimals: 3,
+                            step: 0.001,
+                            format: "0.#########"
+                        });
+                    }
+
+                    // noinspection JSPotentiallyInvalidConstructorUsage
+                    InitializeDialog();
+
+                    CreateCombobox("Layer0", _layer0Label);
+                    CreateCombobox("Layer1", _layer1Label);
+                    CreateCombobox("Layer2", _layer2Label);
+                    CreateCombobox("Layer3", _layer3Label);
+                    CreateCombobox("Name", _nameLabel);
+                    UpdateCombobox(addNewHotspotDialog.data("kendoDialog"));
+
+                    CreateNumericTextBox("newHotspotRadius");
+                    CreateNumericTextBox("newHotspotWorldTranslationX");
+                    CreateNumericTextBox("newHotspotWorldTranslationY");
+                    CreateNumericTextBox("newHotspotWorldTranslationZ");
+                }
+
+                function UpdateCombobox(addNewHotspotDialogKendo) {
+                    $.ajax({
+                        url: './php/getListLayersAndName.php',
+                        dataType: "json",
+                        success: function (resultData) {
+                            for (var field in resultData) {
+                                if (field !== "Versione") {
+                                    var kendoCombobox = $("#newHotspot" + field).data("kendoComboBox");
+                                    kendoCombobox.setDataSource(resultData[field]);
+                                    kendoCombobox.value(null);
+                                }
+                            }
+
+                            $.ajax({
+                                url: './php/getBaseInformation.php',
+                                dataType: "json",
+                                data: {
+                                    codiceVersione: _pickedObject["name"].substring(1)
+                                },
+                                success: function (resultData) {
+                                    $("#newHotspotLayer0").data("kendoComboBox").value(resultData["Layer0"]);
+                                    $("#newHotspotLayer1").data("kendoComboBox").value(resultData["Layer1"]);
+                                    $("#newHotspotLayer2").data("kendoComboBox").value(resultData["Layer2"]);
+                                    $("#newHotspotLayer3").data("kendoComboBox").value(resultData["Layer3"]);
+                                    $("#newHotspotSRS").val(resultData["SRS"]);
+                                    $("#newHotspotWorldTranslationX").data("kendoNumericTextBox").value(resultData["TranslationX"]);
+                                    $("#newHotspotWorldTranslationY").data("kendoNumericTextBox").value(resultData["TranslationY"]);
+                                    $("#newHotspotWorldTranslationZ").data("kendoNumericTextBox").value(resultData["TranslationZ"]);
+                                },
+                                error: function (jqXHR, textStatus, errorThrown) {
+                                    AlertMessage("Unexpected error while loading base information!", textStatus + "; " + errorThrown);
+                                },
+                                complete: function () {
+                                    addNewHotspotDialogKendo.open();
+                                }
+                            });
+                        },
+                        error: function (jqXHR, textStatus, errorThrown) {
+                            AlertMessage("Unexpected error during the update of the search fields!", textStatus + "; " + errorThrown);
+                        }
+                    });
+                }
+
+                var addNewHotspotDialog = $("#addNewHotspotDialog");
+                var addNewHotspotDialogKendo = addNewHotspotDialog.data("kendoDialog");
+                if (!addNewHotspotDialogKendo) {
+                    InitializeAddNewHotspotDialog(addNewHotspotDialog);
+                } else {
+                    UpdateCombobox(addNewHotspotDialogKendo);
+                }
+
+                // noinspection JSJQueryEfficiency
+                $("#newHotspotRadius").data("kendoNumericTextBox").value("0.02");
+            }
+
             var coords = FindCanvasClickCoordinates(pageCoordinates, clickedElement);
 
             /*if (_measureDistance) {
@@ -2252,31 +2402,27 @@ function Load3dScene() {
                             else {
                                 CleanDistanceHit();
                             }
-                        }
-                        else if (_addHotSpot) {
-                            var pickRecord = _myScene.pick({canvasPos: [coords.x, coords.y], rayPick: true});
-                            if (pickRecord) {
-                                AddNewHotSpot(pickRecord);
-                            }
-                            else {
-                                alert("Occorre cliccare su un modello 3D");
-                            }
-                        }
-                        else {*/
-            var pickRecord = _myScene.pick({canvasPos: [coords.x, coords.y]});
-
-            if (pickRecord) {
-                var pickedObject = Get3dObjectFromName(pickRecord.name);
-
-                if (_selected3dObjectList.indexOf(pickedObject) === -1) {
-                    Select3dObject(pickedObject);
+                        }*/
+            if (_addHotSpotMode) {
+                _pickedObject = _myScene.pick({canvasPos: [coords.x, coords.y], rayPick: true});
+                if (_pickedObject) {
+                    AddNewHotSpot();
                 } else {
-                    Unselect3dObject(pickedObject);
+                    kendo.alert("You must click on a mesh to add an hotspot!");
                 }
             } else {
-                UnselectAll3dObjects();
+                _pickedObject = _myScene.pick({canvasPos: [coords.x, coords.y]});
+                if (_pickedObject) {
+                    var pickedObject = Get3dObjectFromName(_pickedObject["name"]);
+                    if (_selected3dObjectList.indexOf(pickedObject) === -1) {
+                        Select3dObject(pickedObject);
+                    } else {
+                        Unselect3dObject(pickedObject);
+                    }
+                } else {
+                    UnselectAll3dObjects();
+                }
             }
-            //}
         }
 
         function SetMouseEventHandler(modelCanvas) {

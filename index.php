@@ -448,6 +448,9 @@
                 </div>
             </div>
         </div>
+        <div id="notification3dContainer">
+            <span id="addHotspotNotification" class="hidden">Click on a mesh to add an hotspot</span>
+        </div>
 
         <canvas id="modelCanvas"></canvas>
     </div>
@@ -467,26 +470,69 @@
         </div>
         <form id="addNewObjectForm" method="post" action="javascript:void(0);">
             <div class="dialogFormField">
-                <div class="dialogFormField">
-                    <label for="newObjectLayer0"><?php echo $_SESSION["layer0Label"]; ?></label>
-                    <input id="newObjectLayer0" type="text"/>
-                </div>
-                <div class="dialogFormField">
-                    <label for="newObjectLayer1"><?php echo $_SESSION["layer1Label"]; ?></label>
-                    <input id="newObjectLayer1" type="text">
-                </div>
-                <div class="dialogFormField">
-                    <label for="newObjectLayer2"><?php echo $_SESSION["layer2Label"]; ?></label>
-                    <input id="newObjectLayer2" type="text">
-                </div>
-                <div class="dialogFormField">
-                    <label for="newObjectLayer3"><?php echo $_SESSION["layer3Label"]; ?></label>
-                    <input id="newObjectLayer3" type="text">
-                </div>
-                <div class="dialogFormField">
-                    <label for="newObjectName"><?php echo $_SESSION["nomeLabel"]; ?></label>
-                    <input id="newObjectName" type="text">
-                </div>
+                <label for="newObjectLayer0"><?php echo $_SESSION["layer0Label"]; ?></label>
+                <input id="newObjectLayer0" type="text"/>
+            </div>
+            <div class="dialogFormField">
+                <label for="newObjectLayer1"><?php echo $_SESSION["layer1Label"]; ?></label>
+                <input id="newObjectLayer1" type="text">
+            </div>
+            <div class="dialogFormField">
+                <label for="newObjectLayer2"><?php echo $_SESSION["layer2Label"]; ?></label>
+                <input id="newObjectLayer2" type="text">
+            </div>
+            <div class="dialogFormField">
+                <label for="newObjectLayer3"><?php echo $_SESSION["layer3Label"]; ?></label>
+                <input id="newObjectLayer3" type="text">
+            </div>
+            <div class="dialogFormField">
+                <label for="newObjectName"><?php echo $_SESSION["nomeLabel"]; ?></label>
+                <input id="newObjectName" type="text">
+            </div>
+        </form>
+    </div>
+
+    <div id="addNewHotspotDialog">
+        <form id="addNewHotspotForm" method="post" action="javascript:void(0);">
+            <div class="dialogFormField">
+                <label for="newHotspotLayer0"><?php echo $_SESSION["layer0Label"]; ?></label>
+                <input id="newHotspotLayer0" type="text"/>
+            </div>
+            <div class="dialogFormField">
+                <label for="newHotspotLayer1"><?php echo $_SESSION["layer1Label"]; ?></label>
+                <input id="newHotspotLayer1" type="text">
+            </div>
+            <div class="dialogFormField">
+                <label for="newHotspotLayer2"><?php echo $_SESSION["layer2Label"]; ?></label>
+                <input id="newHotspotLayer2" type="text">
+            </div>
+            <div class="dialogFormField">
+                <label for="newHotspotLayer3"><?php echo $_SESSION["layer3Label"]; ?></label>
+                <input id="newHotspotLayer3" type="text">
+            </div>
+            <div class="dialogFormField">
+                <label for="newHotspotName"><?php echo $_SESSION["nomeLabel"]; ?></label>
+                <input id="newHotspotName" type="text">
+            </div>
+            <div class="dialogFormField">
+                <label for="newHotspotRadius">Radius</label>
+                <input id="newHotspotRadius" type="number">
+            </div>
+            <div class="dialogFormField">
+                <label for="newHotspotSRS">SRS</label>
+                <input id="newHotspotSRS" type="text" class="k-textbox">
+            </div>
+            <div class="dialogFormField">
+                <label for="newHotspotWorldTranslationX">World translation X</label>
+                <input id="newHotspotWorldTranslationX" type="number">
+            </div>
+            <div class="dialogFormField">
+                <label for="newHotspotWorldTranslationY">World translation Y</label>
+                <input id="newHotspotWorldTranslationY" type="number">
+            </div>
+            <div class="dialogFormField">
+                <label for="newHotspotWorldTranslationZ">World translation Z</label>
+                <input id="newHotspotWorldTranslationZ" type="number">
             </div>
         </form>
     </div>

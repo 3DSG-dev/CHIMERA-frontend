@@ -803,6 +803,10 @@ div.k-loading-mask {
     width: 90%;
 }
 
+.dialogFormField .k-widget {
+    width: 100%;
+}
+
 /* Stilizzazione SPECIFICA ------------------------------------------------------- */
 /* Page Sections, Rows, Columns */
 #pageContainer {
@@ -950,11 +954,11 @@ div.k-loading-mask {
 }
 
 .greenButton {
-    background-color: var(--greenButtonBackground);
+    background-color: var(--greenButtonBackground) !important;
 }
 
 .greenButton:hover, .greenButton:focus {
-    background-color: var(--greenButtonBackgroundHover);
+    background-color: var(--greenButtonBackgroundHover) !important;
 }
 
 /* Main page - Select object section */
@@ -1089,12 +1093,21 @@ div.k-loading-mask {
     width: 280px;
 }
 
-/* Rename Combo dialog when edit dropdown icon is clicked on information window */
+/* Add a new object dialog */
 .addNewObjectDialogIcon .k-window-title::before {
     background: url("../img/icons/windowsTitle/addObject.png") no-repeat;
 }
 
 .addNewObjectDialogTitle .k-window-titlebar {
+    width: 230px;
+}
+
+/* add a new hotspot dialog */
+.addNewHotspotDialogIcon .k-window-title::before {
+    background: url("../img/icons/windowsTitle/addHotspot.png") no-repeat;
+}
+
+.addNewHotspotObjectDialogTitle .k-window-titlebar {
     width: 230px;
 }
 
@@ -1282,6 +1295,19 @@ div.k-loading-mask {
     display: inline-block;
     width: 25px;
     vertical-align: middle;
+}
+
+#notification3dContainer {
+    position: absolute;
+    margin-top: 8px;
+    width: 99%;
+    text-align: center;
+}
+
+#addHotspotNotification {
+    padding: 8px;
+    background: var(--greenButtonBackground);
+    color: white;
 }
 
 #settings3dFrame {
