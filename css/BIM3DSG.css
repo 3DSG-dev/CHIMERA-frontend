@@ -1235,6 +1235,50 @@ div.k-loading-mask {
     text-align: left;
 }
 
+/*Windows Common css */
+.playButton {
+    display: block;
+    margin: auto;
+    padding: 6px 6px 0 6px;
+    text-align: center;
+    border: none;
+    -moz-border-radius: 10px;
+    -webkit-border-radius: 10px;
+    border-radius: 10px;
+    background-color: var(--main-color);
+}
+
+.windowsToolbarContainer {
+    position: absolute;
+    top: 6px;
+    right: 8px;
+}
+
+.buttonWindowsToolbarContainer {
+    display: inline-block;
+    margin-left: 1px;
+}
+
+.buttonWindowsToolbarContainer span {
+    display: block;
+    padding: 1px 2px;
+    border: none;
+    -moz-border-radius: 6px;
+    -webkit-border-radius: 6px;
+    border-radius: 6px;
+    background-color: var(--main-color);
+}
+
+.buttonWindowsToolbarContainer span:hover, .buttonWindowsToolbarContainer span:focus {
+    background-color: #7590c6;
+}
+
+.buttonWindowsToolbarContainer img {
+    display: inline-block;
+    width: 25px;
+    vertical-align: middle;
+}
+
 /*GIS Window */
 #gisWindow {
     padding: 0 6px;
@@ -1288,49 +1332,6 @@ div.k-loading-mask {
 #modelCanvas {
     width: 100%;
     height: calc(100% - 7px);
-}
-
-.playButton {
-    display: block;
-    margin: auto;
-    padding: 6px 6px 0 6px;
-    text-align: center;
-    border: none;
-    -moz-border-radius: 10px;
-    -webkit-border-radius: 10px;
-    border-radius: 10px;
-    background-color: var(--main-color);
-}
-
-.windowsToolbarContainer {
-    position: absolute;
-    top: 6px;
-    right: 8px;
-}
-
-.buttonWindowsToolbarContainer {
-    display: inline-block;
-    margin-left: 1px;
-}
-
-.buttonWindowsToolbarContainer span {
-    display: block;
-    padding: 1px 2px;
-    border: none;
-    -moz-border-radius: 6px;
-    -webkit-border-radius: 6px;
-    border-radius: 6px;
-    background-color: var(--main-color);
-}
-
-.buttonWindowsToolbarContainer span:hover, .buttonWindowsToolbarContainer span:focus {
-    background-color: #7590c6;
-}
-
-.buttonWindowsToolbarContainer img {
-    display: inline-block;
-    width: 25px;
-    vertical-align: middle;
 }
 
 #notification3dContainer {
