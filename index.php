@@ -27,6 +27,16 @@
     <!--suppress SpellCheckingInspection -->
     <script src="./libs/dexie.js"></script>
 
+    <!--suppress SpellCheckingInspection -->
+    <link rel="stylesheet"
+          href="https://cdn.jsdelivr.net/gh/openlayers/openlayers.github.io@master/en/v6.1.1/css/ol.css"
+          type="text/css">
+    <!--suppress SpellCheckingInspection -->
+    <script src="https://cdn.jsdelivr.net/gh/openlayers/openlayers.github.io@master/en/v6.1.1/build/ol.js"></script>
+
+    <link rel="stylesheet" href="https://rawgit.com/walkermatt/ol-layerswitcher/master/src/ol-layerswitcher.css">
+    <script src="http://rawgit.com/walkermatt/ol-layerswitcher/master/dist/ol-layerswitcher.js"></script>
+
     <!--<script type="text/javascript" src="http://scenejs.org/api/latest/scenejs.js"></script>-->
     <!--suppress SpellCheckingInspection -->
     <script type="text/javascript" src="./libs/SceneJS/scenejs-4.2.2.js"></script>
@@ -152,6 +162,11 @@
             <div class="sideToolbarItem">
                 <span id="mode3DButton" class="sideToolbarButton orangeButton" title="Go to 3D mode">
                     <img src="img/icons/toolbar/3dMode.png" alt="3D Mode">
+                </span>
+            </div>
+            <div class="sideToolbarItem">
+                <span id="modeGisButton" class="sideToolbarButton orangeButton" title="Go to GIS mode">
+                    <img src="img/icons/toolbar/gisMode.png" alt="GIS mode">
                 </span>
             </div>
             <div class="sideToolbarSeparator"></div>
@@ -368,8 +383,8 @@
 
     <div id="modelWindow" class="fixedPosition">
         <div class="centeredAbsolute">
-            <span id="play3DButton" title="Go to 3D mode">
-                <img src="img/icons/3dWindow/3dPlay.png" alt="3D Mode">
+            <span id="play3DButton" class="playButton" title="Go to 3D mode">
+                <img src="img/icons/playButton.png" alt="3D Mode">
             </span>
         </div>
         <div id="settings3dFrame">
@@ -453,6 +468,15 @@
         </div>
 
         <canvas id="modelCanvas"></canvas>
+    </div>
+
+    <div id="gisWindow" class="fixedPosition">
+        <div class="centeredAbsolute">
+            <span id="playGisButton" class="playButton" title="Go to GIS mode">
+                <img src="img/icons/playButton.png" alt="GIS Mode">
+            </span>
+        </div>
+        <div id="mapContainer"></div>
     </div>
 
     <div id="changeComboValueDialog">
