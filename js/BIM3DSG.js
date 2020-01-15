@@ -1637,42 +1637,42 @@ function InitializeComponents() {
             modelWindow.parents(".k-widget").addClass("windowTitle windowIcon modelWindowTitle modelWindowIcon");
         }
 
-        function Add3Toolbar() {
+        function Add3dToolbar() {
             function Toggle3dSettings() {
                 $("#settings3dFrame").toggleClass("hidden");
                 ResizeModelCanvas();
             }
 
             var html;
-            html = '<div class="toolbar3dContainer">';
-            html += '    <div class="button3dContainer">';
+            html = '<div class="windowsToolbarContainer">';
+            html += '    <div class="buttonWindowsToolbarContainer">';
             html += '       <span id="zoomAll3dSceneButton" title="Zoom All">';
-            html += '           <img src="../img/icons/3dWindow/zoomAll.png" alt="Zoom All">';
+            html += '           <img src="../img/icons/windowsToolbar/zoomAll.png" alt="Zoom All">';
             html += '       </span>';
             html += '    </div>';
-            html += '    <div class="button3dContainer">';
+            html += '    <div class="buttonWindowsToolbarContainer">';
             html += '       <span id="sync3dSceneButton" title="Sync 3d scene with your list">';
-            html += '           <img src="../img/icons/3dWindow/updateSync.png" alt="Sync 3d scene with your list">';
+            html += '           <img src="../img/icons/windowsToolbar/updateSync.png" alt="Sync 3d scene with your list">';
             html += '       </span>';
             html += '    </div>';
-            html += '    <div class="button3dContainer">';
+            html += '    <div class="buttonWindowsToolbarContainer">';
             html += '       <span id="clear3dSceneButton" title="Clear 3d scene">';
-            html += '           <img src="../img/icons/3dWindow/clearView.png" alt="Clear 3d scene">';
+            html += '           <img src="../img/icons/windowsToolbar/clearView.png" alt="Clear 3d scene">';
             html += '       </span>';
             html += '    </div>';
-            html += '    <div class="button3dContainer">';
+            html += '    <div class="buttonWindowsToolbarContainer">';
             html += '       <span id="reload3dSceneButton" title="Reload 3d scene">';
-            html += '           <img src="../img/icons/3dWindow/reloadAll.png" alt="Reload 3d scene">';
+            html += '           <img src="../img/icons/windowsToolbar/reloadAll.png" alt="Reload 3d scene">';
             html += '       </span>';
             html += '    </div>';
-            html += '    <div class="button3dContainer">';
+            html += '    <div class="buttonWindowsToolbarContainer">';
             html += '       <span id="addNewHotspotButton" class="greenButton" title="Add a new Hotspot">';
-            html += '           <img src="../img/icons/3dWindow/addHotspot.png" alt="Add a new Hotspot">';
+            html += '           <img src="../img/icons/windowsToolbar/addHotspot.png" alt="Add a new Hotspot">';
             html += '       </span>';
             html += '    </div>';
-            html += '    <div class="button3dContainer">';
+            html += '    <div class="buttonWindowsToolbarContainer">';
             html += '       <span id="settings3dButton" title="3D Settings">';
-            html += '           <img src="../img/icons/3dWindow/3dSettings.png" alt="3D Settings">';
+            html += '           <img src="../img/icons/windowsToolbar/3dSettings.png" alt="3D Settings">';
             html += '       </span>';
             html += '    </div>';
             html += '</div>';
@@ -1749,7 +1749,7 @@ function InitializeComponents() {
 
         InitializeModelWindow();
 
-        Add3Toolbar();
+        Add3dToolbar();
 
         $("#play3DButton").click(Initialize3d);
     }
@@ -1780,12 +1780,35 @@ function InitializeComponents() {
         }
 
         function InitializeGis() {
+            function EnableGisButtons() {
+                $("#reloadGisButton").click(function () {
+                    LoadGis();
+                });
+            }
+
             $(this.parentElement).fadeOut(1500);
+
+            EnableGisButtons();
 
             LoadGis();
         }
 
+        function AddGisToolbar() {
+            var html;
+            html = '<div class="windowsToolbarContainer">';
+            html += '    <div class="buttonWindowsToolbarContainer">';
+            html += '       <span id="reloadGisButton" title="Reload GIS">';
+            html += '           <img src="../img/icons/windowsToolbar/reloadAll.png" alt="Reload GIS">';
+            html += '       </span>';
+            html += '    </div>';
+            html += '</div>';
+
+            $(".gisWindowTitle").prepend(html);
+        }
+
         InitializeGisWindow();
+
+        AddGisToolbar();
 
         $("#playGisButton").click(InitializeGis);
     }
@@ -2911,7 +2934,7 @@ function LoadGis() {
     /**
      * @return {string}
      */
-    function InitializeMap(layers, gisSettings) {
+    function InitializeMap(mapContainer, layers, gisSettings) {
         function ParseBaseGisSettings(gisSettings) {
             var centerLongitude = 0;
             var centerLatitude = 0;
@@ -2960,7 +2983,7 @@ function LoadGis() {
                 new ol.control.LayerSwitcher({})
             ])
         });
-        $("#mapContainer").data("map", map);
+        mapContainer.data("map", map);
 
         return projection;
     }
@@ -3000,6 +3023,13 @@ function LoadGis() {
 
     ProgressBar(true);
 
+    var mapContainer = $("#mapContainer");
+    var map = mapContainer.data("map");
+    if (map) {
+        mapContainer.empty();
+        mapContainer.data("map", null);
+    }
+
     $.ajax({
         url: './php/getGisSettings.php',
         dataType: "json",
@@ -3010,7 +3040,7 @@ function LoadGis() {
 
             AddDynamicLayers(layers)
                 .then(function () {
-                    var projection = InitializeMap(layers, gisSettings);
+                    var projection = InitializeMap(mapContainer, layers, gisSettings);
                     SetLayersExtent(layers, projection);
                 });
 

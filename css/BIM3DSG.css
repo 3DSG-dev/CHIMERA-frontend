@@ -1302,18 +1302,18 @@ div.k-loading-mask {
     background-color: var(--main-color);
 }
 
-.toolbar3dContainer {
+.windowsToolbarContainer {
     position: absolute;
     top: 6px;
     right: 8px;
 }
 
-.button3dContainer {
+.buttonWindowsToolbarContainer {
     display: inline-block;
     margin-left: 1px;
 }
 
-.button3dContainer span {
+.buttonWindowsToolbarContainer span {
     display: block;
     padding: 1px 2px;
     border: none;
@@ -1323,11 +1323,11 @@ div.k-loading-mask {
     background-color: var(--main-color);
 }
 
-.button3dContainer span:hover, .button3dContainer span:focus {
+.buttonWindowsToolbarContainer span:hover, .buttonWindowsToolbarContainer span:focus {
     background-color: #7590c6;
 }
 
-.button3dContainer img {
+.buttonWindowsToolbarContainer img {
     display: inline-block;
     width: 25px;
     vertical-align: middle;
