@@ -1235,6 +1235,42 @@ div.k-loading-mask {
     text-align: left;
 }
 
+/*GIS Window */
+#gisWindow {
+    padding: 0 6px;
+}
+
+.gisWindowIcon .k-window-title::before {
+    background: url("../img/icons/windowsTitle/gisMode.png") no-repeat;
+    margin-right: 6px;
+}
+
+.gisWindowTitle .k-window-titlebar {
+    width: 160px;
+}
+
+#mapContainer {
+    width: 100%;
+    height: calc(100% - 7px);
+}
+
+.ol-mouse-position {
+    right: 42px;
+    color: rgb(255, 255, 255);
+    font-size: 12px;
+    text-align: center;
+    padding: 2.5px;
+    background: rgba(0, 60, 136, 0.5);
+    background-clipclip: padding-box;
+    border: 3px solid rgba(255, 255, 255, 0.4);
+    border-radius: 4px;
+}
+
+.ol -overviewmap {
+    left: 8px;
+    bottom: 34px;
+}
+
 /* Model window */
 #modelWindow {
     padding: 0 6px;
@@ -1254,7 +1290,7 @@ div.k-loading-mask {
     height: calc(100% - 7px);
 }
 
-#play3DButton {
+.playButton {
     display: block;
     margin: auto;
     padding: 6px 6px 0 6px;

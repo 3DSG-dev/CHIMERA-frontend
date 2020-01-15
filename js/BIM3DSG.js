@@ -96,6 +96,7 @@ function ResizeComponents() {
     ResizeObjectsGridContainer();
     ResizeInformationWindow();
     ResizeModelWindow();
+    ResizeGisWindow();
 }
 
 function ResizeObjectsGrid() {
@@ -142,6 +143,18 @@ function ResizeModelWindow() {
     var {width, maxWidth, height, portingHeight} = GetAvailableWindowSize(1000, 740, 120, 90);
 
     $("#modelWindow").data("kendoWindow").wrapper.css({
+        width: width,
+        height: height,
+        top: (portingHeight - height) * 3 / 4,
+        right: "auto",
+        left: maxWidth ? "auto" : 55
+    });
+}
+
+function ResizeGisWindow() {
+    var {width, maxWidth, height, portingHeight} = GetAvailableWindowSize(1000, 740, 120, 90);
+
+    $("#gisWindow").data("kendoWindow").wrapper.css({
         width: width,
         height: height,
         top: (portingHeight - height) * 3 / 4,
@@ -790,7 +803,6 @@ function SetDynamicInformationFields() {
                 AlertMessage("Unexpected error while creating dynamic object information fields!", textStatus + "; " + errorThrown);
             }
         });
-
     }
 
     ResetInformation();
@@ -1742,6 +1754,42 @@ function InitializeComponents() {
         $("#play3DButton").click(Initialize3d);
     }
 
+    function SetGisWindow() {
+        function InitializeGisWindow() {
+            function GisWindow_OnResize() {
+                var map = $("#mapContainer").data("map");
+                if (map) {
+                    map.updateSize();
+                }
+            }
+
+            var gisWindow = $("#gisWindow");
+            gisWindow.removeClass("fixedPosition");
+
+            gisWindow.kendoWindow({
+                title: "GIS",
+                minWidth: 390,
+                minHeight: 200,
+                visible: false,
+                resizable: true,
+                open: Windows_OnOpen,
+                resize: GisWindow_OnResize,
+                close: Windows_OnClose
+            }).data("kendoWindow");
+            gisWindow.parents(".k-widget").addClass("windowTitle windowIcon gisWindowTitle gisWindowIcon");
+        }
+
+        function InitializeGis() {
+            $(this.parentElement).fadeOut(1500);
+
+            LoadGis();
+        }
+
+        InitializeGisWindow();
+
+        $("#playGisButton").click(InitializeGis);
+    }
+
     function SetInformationWindow() {
         function InitializeInformationWindow() {
             function InformationWindow_OnResize() {
@@ -1961,6 +2009,10 @@ function InitializeComponents() {
             ToggleKendoWindow("modelWindow");
         });
 
+        $("#modeGisButton").click("click", function () {
+            ToggleKendoWindow("gisWindow");
+        });
+
         $("#informationButton").click("click", function () {
             ToggleKendoWindow("informationWindow");
         });
@@ -1973,6 +2025,7 @@ function InitializeComponents() {
     SetSearchForm();
     SetObjectsGrid();
     SetModelWindow();
+    SetGisWindow();
     SetInformationWindow();
     SetToolbarButtons();
 }
@@ -2764,6 +2817,210 @@ function ResetEye() {
     mainView.setUp(up);
     mainView.setLook(_resetLook);
     mainView.setEye(_resetEye);
+}
+
+//GIS scene
+function LoadGis() {
+    function AddDefaultMaps(layers, gisSettings) {
+        function ParseDefaultMapsSettings(gisSettings) {
+            var openStreetMap = true;
+            var openStreetMapVisible = true;
+
+            gisSettings.forEach(function (setting) {
+                switch (setting["Key"]) {
+                    case "OpenStreetMap":
+                        openStreetMap = setting["BoolValue"] === "t";
+                        break;
+                    case "OpenStreetMapVisible":
+                        openStreetMapVisible = setting["BoolValue"] === "t";
+                        break;
+                }
+            });
+            return {openStreetMap, openStreetMapVisible};
+        }
+
+        var {openStreetMap, openStreetMapVisible} = ParseDefaultMapsSettings(gisSettings);
+
+        var defaultMapsLayers = [];
+
+        function AddOpenStreetMap(defaultMapsLayers, openStreetMapVisible) {
+            defaultMapsLayers.push(new ol.layer.Tile({
+                title: 'OpenStreetMap',
+                visible: openStreetMapVisible,
+                source: new ol.source.OSM()
+            }));
+        }
+
+        if (openStreetMap) {
+            AddOpenStreetMap(defaultMapsLayers, openStreetMapVisible);
+        }
+
+        if (defaultMapsLayers.length > 0) {
+            layers.push(new ol.layer.Group({
+                title: 'Default maps',
+                layers: defaultMapsLayers
+            }));
+        }
+    }
+
+    function AddDynamicLayers(layers) {
+        return $.ajax({
+            url: './php/getGisLayers.php',
+            dataType: "json",
+            success: function (resultData) {
+                var group = null;
+                var layerList = [];
+                resultData.forEach(function (layerData) {
+                    if (group !== layerData["Group"]) {
+                        if (group != null) {
+                            layers.push(new ol.layer.Group({
+                                title: group,
+                                layers: layerList
+                            }))
+                        }
+                        group = layerData["Group"];
+                        layerList = [];
+                    }
+                    if (layerData["Tipo"] === "ImageWMS") {
+                        layerList.push(new ol.layer.Image({
+                            title: layerData["Name"],
+                            name: layerData["Title"],
+                            visible: layerData["Visible"] === "t",
+                            declaredSRS: layerData["DeclaredSRS"],
+                            source: new ol.source.ImageWMS({
+                                url: layerData["url"],
+                                params: {
+                                    FORMAT: layerData["Format"],
+                                    STYLES: layerData["Style"],
+                                    LAYERS: layerData["Layer"],
+                                }
+                            })
+                        }));
+                    }
+                });
+                if (group != null) {
+                    layers.push(new ol.layer.Group({
+                        title: group,
+                        layers: layerList
+                    }))
+                }
+            }
+        });
+    }
+
+    /**
+     * @return {string}
+     */
+    function InitializeMap(layers, gisSettings) {
+        function ParseBaseGisSettings(gisSettings) {
+            var centerLongitude = 0;
+            var centerLatitude = 0;
+            var zoom = 0;
+            var coordinatesFractionDigits = 0;
+            var projection = "EPSG:3857";
+
+            gisSettings.forEach(function (setting) {
+                switch (setting["Key"]) {
+                    case "centerLongitude":
+                        centerLongitude = parseFloat(setting["RealValue"]);
+                        break;
+                    case "centerLatitude":
+                        centerLatitude = parseFloat(setting["RealValue"]);
+                        break;
+                    case "zoom":
+                        zoom = parseInt(setting["IntValue"]);
+                        break;
+                    case "coordinatesFractionDigits":
+                        coordinatesFractionDigits = parseInt(setting["IntValue"]);
+                        break;
+                    case "projection":
+                        projection = setting["TextValue"];
+                        break;
+                }
+            });
+            return {centerLongitude, centerLatitude, zoom, coordinatesFractionDigits, projection};
+        }
+
+        var {centerLongitude, centerLatitude, zoom, coordinatesFractionDigits, projection} = ParseBaseGisSettings(gisSettings);
+        var map = new ol.Map({
+            target: document.getElementById('mapContainer'),
+            layers: layers,
+            view: new ol.View({
+                center: ol.proj.fromLonLat([centerLongitude, centerLatitude]),
+                zoom: zoom
+            }),
+            controls: ol.control.defaults().extend([
+                new ol.control.ScaleLine(),
+                new ol.control.FullScreen(),
+                new ol.control.OverviewMap(),
+                new ol.control.MousePosition({
+                    coordinateFormat: ol.coordinate.createStringXY(coordinatesFractionDigits),
+                    projection: projection
+                }),
+                new ol.control.LayerSwitcher({})
+            ])
+        });
+        $("#mapContainer").data("map", map);
+
+        return projection;
+    }
+
+    function SetLayersExtent(layers, projection) {
+        function SetLayerExtent(layer, layersWMS, projection) {
+            var layerWMS = layersWMS.find(o => o.Name === layer.get('name'));
+            if (layerWMS) {
+                layer.setExtent(ol.proj.transformExtent(layerWMS.BoundingBox[0].extent, layer.get('declaredSRS'), projection));
+            }
+        }
+
+        jQuery.support.cors = true;
+        $.ajax({
+            url: 'http://bim3dsurvey.it:8080/geoserver/test/wms?request=GetCapabilities&service=WMS&version=1.1.1',
+            success: function (response) {
+                var capabilitiesParser = new ol.format.WMSCapabilities();
+                var capabilities = capabilitiesParser.read(response);
+                var layersWMS = capabilities.Capability.Layer.Layer;
+
+                layers.forEach(function (layer) {
+                    if (layer instanceof ol.layer.Group) {
+                        layer.getLayers().forEach(function (subLayer) {
+                            SetLayerExtent(subLayer, layersWMS, projection);
+                        });
+                    } else {
+                        SetLayerExtent(layer, layersWMS, projection);
+                    }
+                });
+            },
+            error: function (jqXHR, textStatus, errorThrown) {
+                AlertMessage("Unexpected error while setting layers extend!", textStatus + "; " + errorThrown);
+            }
+        });
+        jQuery.support.cors = false;
+    }
+
+    ProgressBar(true);
+
+    $.ajax({
+        url: './php/getGisSettings.php',
+        dataType: "json",
+        success: function (gisSettings) {
+            var layers = [];
+
+            AddDefaultMaps(layers, gisSettings);
+
+            AddDynamicLayers(layers)
+                .then(function () {
+                    var projection = InitializeMap(layers, gisSettings);
+                    SetLayersExtent(layers, projection);
+                });
+
+            ProgressBar(false);
+        },
+        error: function (jqXHR, textStatus, errorThrown) {
+            ProgressBar(false);
+            AlertMessage("Unexpected error while reading Gis Settings!", textStatus + "; " + errorThrown);
+        }
+    });
 }
 
 // Camera functions
