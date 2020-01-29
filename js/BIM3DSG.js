@@ -2965,6 +2965,33 @@ function LoadGis() {
         }
 
         var {centerLongitude, centerLatitude, zoom, coordinatesFractionDigits, projection} = ParseBaseGisSettings(gisSettings);
+
+        /*var vector = new ol.layer.Vector({
+            source: new ol.source.Vector({
+                format: new ol.format.GeoJSON(),
+                url: function(extent) {
+                    return 'http://bim3dsurvey.it:8080/geoserver/wfs?service=WFS&' +
+                        'version=1.1.0&request=GetFeature&typename=test:testshp&' +
+                        'outputFormat=application/json&srsname=EPSG:3857&' +
+                        'bbox=' + extent.join(',') + ',EPSG:3857';
+                },
+                strategy: ol.loadingstrategy.bbox
+            }),
+            style: new ol.style.Style({
+                stroke: new ol.style.Stroke({
+                    color: 'rgba(0, 0, 255, 1.0)',
+                    width: 2
+                }),
+                fill: new ol.style.Fill({
+                    color: 'rgba(0, 0, 255, 0.3)'
+                })
+            })
+        });
+        layers.push(new ol.layer.Group({
+            title: 'vector',
+            layers: [vector]
+        }));*/
+
         var map = new ol.Map({
             target: document.getElementById('mapContainer'),
             layers: layers,
@@ -2985,6 +3012,72 @@ function LoadGis() {
         });
         mapContainer.data("map", map);
 
+        map.on('click', function (event) {
+            function GetFeatures(layer) {
+                if (layer instanceof ol.layer.Image && layer.getVisible() === true) {
+                    var url = layer.getSource().getFeatureInfoUrl(
+                        event.coordinate,
+                        map.getView().getResolution(),
+                        map.getView().getProjection(),
+                        {
+                            'INFO_FORMAT': 'application/json'
+                        }
+                    );
+
+                    jQuery.support.cors = true;
+                    $.ajax({
+                        url: url,
+                        type: "get",
+                        dataType: "json",
+                        success: function (resultData) {
+                            if (resultData.features.length > 0) {
+                                var featureProperties = resultData.features[0].properties;
+
+                                if (featureProperties["layer0"]) {
+                                    console.log(featureProperties);
+                                }
+                            }
+                        },
+                        error: function (jqXHR, textStatus, errorThrown) {
+                            return null;
+                        }
+                    });
+                    jQuery.support.cors = false;
+                }
+            }
+
+            var feature = map.forEachFeatureAtPixel(event.pixel, function (feature, layer) {
+                return feature;
+            });
+
+            if (feature) {
+
+                var coord = feature.getGeometry().getCoordinates();
+                var props = feature.getProperties();
+                console.log(props);
+                return;
+            }
+
+            layers.forEach(function (layer) {
+                if (layer instanceof ol.layer.Group) {
+                    layer.getLayers().forEach(function (subLayer) {
+                        GetFeatures(subLayer);
+                    });
+                } else {
+                    GetFeatures(layer);
+                }
+            });
+        });
+
+        map.on('pointermove', function (e) {
+            if (e.dragging) {
+                return;
+            }
+            var pixel = map.getEventPixel(e.originalEvent);
+            var hit = map.hasFeatureAtPixel(pixel);
+            map.getTarget().style.cursor = hit ? 'pointer' : '';
+        });
+
         return projection;
     }
 
@@ -2992,7 +3085,8 @@ function LoadGis() {
         function SetLayerExtent(layer, layersWMS, projection) {
             var layerWMS = layersWMS.find(o => o.Name === layer.get('name'));
             if (layerWMS) {
-                layer.setExtent(ol.proj.transformExtent(layerWMS.BoundingBox[0].extent, layer.get('declaredSRS'), projection));
+                var extent = layer.get('declaredSRS') === projection ? layerWMS.BoundingBox[0].extent : ol.proj.transformExtent(layerWMS.BoundingBox[0].extent, layer.get('declaredSRS'), projection);
+                layer.setExtent(extent);
             }
         }
 
