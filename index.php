@@ -3,6 +3,7 @@
 ?>
 
 <!DOCTYPE html>
+<!--suppress HtmlRequiredLangAttribute -->
 <html>
 <head>
     <title><?php echo $_SESSION['title']; ?></title>
@@ -26,7 +27,7 @@
     <!--suppress SpellCheckingInspection -->
     <script src="./libs/dexie.js"></script>
 
-    <!--suppress SpellCheckingInspection, JSUnresolvedLibraryUR -->
+    <!--suppress SpellCheckingInspection, JSUnresolvedLibraryURL -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/openlayers/openlayers.github.io@master/en/v6.1.1/css/ol.css" type="text/css">
     <!--suppress SpellCheckingInspection, JSUnresolvedLibraryURL -->
     <script src="https://cdn.jsdelivr.net/gh/openlayers/openlayers.github.io@master/en/v6.1.1/build/ol.js"></script>
