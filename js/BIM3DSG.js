@@ -139,10 +139,10 @@ function ComputeCanvasDiagonal() {
     _canvasDiagonal = ComputeDiagonal(modelCanvas.width(), modelCanvas.height());
 }
 
-function ResizeModelWindow() {
+function SetCssLeftWindow(id) {
     var {width, maxWidth, height, portingHeight} = GetAvailableWindowSize(1000, 740, 120, 90);
 
-    $("#modelWindow").data("kendoWindow").wrapper.css({
+    $(id).data("kendoWindow").wrapper.css({
         width: width,
         height: height,
         top: (portingHeight - height) * 3 / 4,
@@ -151,16 +151,12 @@ function ResizeModelWindow() {
     });
 }
 
-function ResizeGisWindow() {
-    var {width, maxWidth, height, portingHeight} = GetAvailableWindowSize(1000, 740, 120, 90);
+function ResizeModelWindow() {
+    SetCssLeftWindow("#modelWindow");
+}
 
-    $("#gisWindow").data("kendoWindow").wrapper.css({
-        width: width,
-        height: height,
-        top: (portingHeight - height) * 3 / 4,
-        right: "auto",
-        left: maxWidth ? "auto" : 55
-    });
+function ResizeGisWindow() {
+    SetCssLeftWindow("#gisWindow");
 }
 
 function ResizeInformationWindow() {
@@ -519,7 +515,6 @@ function GetWriteMode(codiceVersione) {
     return $.ajax({
         url: "./php/getWriteMode.php",
         dataType: "json",
-        crossDomain: false,
         data: {
             codiceVersione: codiceVersione
         },
@@ -1781,9 +1776,77 @@ function InitializeComponents() {
 
         function InitializeGis() {
             function EnableGisButtons() {
+                function InitializeGisLayersSettings() {
+                    function InitializeTransparencySlide() {
+                        function ChangeLayerOpacity(event) {
+                            var layer = GetLayerByName($("#mapContainer").data("map"), event.sender.element[0].name);
+                            layer.setOpacity(event.value / 100);
+                        }
+
+                        $("#layersGisTreeView .transparencySliderContainer").children("input").kendoSlider({
+                            min: 0,
+                            max: 100,
+                            value: 100,
+                            smallStep: 1,
+                            largeStep: 10,
+                            showButtons: false,
+                            tickPlacement: "none",
+                            change: ChangeLayerOpacity,
+                            slide: ChangeLayerOpacity
+                        });
+                    }
+
+                    function ChangeLayerVisibility(event) {
+                        function SetLayerVisibility(map, item) {
+                            var layer = GetLayerByName(map, item.get('id'));
+                            if (layer) {
+                                layer.setVisible(item.checked);
+                            }
+                        }
+
+                        var map = $("#mapContainer").data("map");
+                        var layersGisTreeView = $("#layersGisTreeView").data("kendoTreeView");
+                        var item = layersGisTreeView.dataItem(event.node);
+                        if (item.hasChildren) {
+                            item.items.forEach(function (innerItem) {
+                                SetLayerVisibility(map, innerItem);
+                            });
+                        } else {
+                            SetLayerVisibility(map, item);
+                        }
+                    }
+
+                    var layersGisTreeView = $("#layersGisTreeView");
+                    if (!layersGisTreeView.data("kendoTreeView")) {
+                        layersGisTreeView.kendoTreeView({
+                            template: kendo.template(
+                                "#: item.text #" +
+                                "# if (!item.items) { #" +
+                                "<div class='transparencySliderContainer'>" +
+                                "<input id='layerSlider-#: item.id #' name='#: item.id #'/>" +
+                                "</div>" +
+                                "# } #"
+                            ),
+                            checkboxes: {checkChildren: true},
+                            dataBound: InitializeTransparencySlide,
+                            check: ChangeLayerVisibility
+                        });
+                    } else {
+                        layersGisTreeView.unbind("dataBound");
+                        layersGisTreeView.setDataSource([]);
+                    }
+                }
+
+                function ToggleGisLayersSettings() {
+                    $("#layersGisContainer").toggleClass("hidden");
+                }
+
                 $("#reloadGisButton").click(function () {
                     LoadGis();
                 });
+
+                InitializeGisLayersSettings();
+                $("#layersGisButton").click(ToggleGisLayersSettings);
             }
 
             $(this.parentElement).fadeOut(1500);
@@ -1799,6 +1862,11 @@ function InitializeComponents() {
             html += '    <div class="buttonWindowsToolbarContainer">';
             html += '       <span id="reloadGisButton" title="Reload GIS">';
             html += '           <img src="../img/icons/windowsToolbar/reloadAll.png" alt="Reload GIS">';
+            html += '       </span>';
+            html += '    </div>';
+            html += '    <div class="buttonWindowsToolbarContainer">';
+            html += '       <span id="layersGisButton" title="GIS Layers">';
+            html += '           <img src="../img/icons/windowsToolbar/gisLayers.png" alt="GIS Layers">';
             html += '       </span>';
             html += '    </div>';
             html += '</div>';
@@ -2869,6 +2937,7 @@ function LoadGis() {
         function AddOpenStreetMap(defaultMapsLayers, openStreetMapVisible) {
             defaultMapsLayers.push(new ol.layer.Tile({
                 title: 'OpenStreetMap',
+                name: 'OpenStreetMap',
                 visible: openStreetMapVisible,
                 source: new ol.source.OSM()
             }));
@@ -2925,7 +2994,7 @@ function LoadGis() {
                     layers.push(new ol.layer.Group({
                         title: group,
                         layers: layerList
-                    }))
+                    }));
                 }
             }
         });
@@ -3006,8 +3075,7 @@ function LoadGis() {
                 new ol.control.MousePosition({
                     coordinateFormat: ol.coordinate.createStringXY(coordinatesFractionDigits),
                     projection: projection
-                }),
-                new ol.control.LayerSwitcher({})
+                })
             ])
         });
         mapContainer.data("map", map);
@@ -3038,7 +3106,7 @@ function LoadGis() {
                                 }
                             }
                         },
-                        error: function (jqXHR, textStatus, errorThrown) {
+                        error: function () {
                             return null;
                         }
                     });
@@ -3046,13 +3114,13 @@ function LoadGis() {
                 }
             }
 
-            var feature = map.forEachFeatureAtPixel(event.pixel, function (feature, layer) {
+            var feature = map.forEachFeatureAtPixel(event.pixel, function (feature) {
                 return feature;
             });
 
             if (feature) {
 
-                var coord = feature.getGeometry().getCoordinates();
+                //var coord = feature.getGeometry().getCoordinates();
                 var props = feature.getProperties();
                 console.log(props);
                 return;
@@ -3115,6 +3183,32 @@ function LoadGis() {
         jQuery.support.cors = false;
     }
 
+    function AddLayersToGisTreeView(layers) {
+        var layersGisTreeView = $("#layersGisTreeView").data("kendoTreeView");
+        var layerData = [];
+        layers.forEach(function (layer) {
+            if (layer instanceof ol.layer.Group) {
+                var innerLayerData = [];
+                layer.getLayers().forEach(function (subLayer) {
+                    innerLayerData.push({
+                        text: subLayer.get('title'),
+                        id: subLayer.get('name'),
+                        checked: subLayer.get('visible')
+                    });
+                });
+                layerData.push({
+                    text: layer.get('title'),
+                    id: layer.get('name'),
+                    expanded: true,
+                    items: innerLayerData
+                });
+            } else {
+                layerData.push({text: layer.get('title'), id: layer.get('name')});
+            }
+        });
+        layersGisTreeView.setDataSource(new kendo.data.HierarchicalDataSource({data: layerData}));
+    }
+
     ProgressBar(true);
 
     var mapContainer = $("#mapContainer");
@@ -3136,6 +3230,7 @@ function LoadGis() {
                 .then(function () {
                     var projection = InitializeMap(mapContainer, layers, gisSettings);
                     SetLayersExtent(layers, projection);
+                    AddLayersToGisTreeView(layers);
                 });
 
             ProgressBar(false);
@@ -3376,4 +3471,25 @@ function ToggleKendoWindow(windowId) {
     } else {
         kendoWindow.close();
     }
+}
+
+/**
+ * @return {null}
+ */
+function GetLayerByName(map, name) {
+    var result = null;
+    map.getLayers().forEach(function (layer) {
+        if (layer instanceof ol.layer.Group) {
+            layer.getLayers().forEach(function (subLayer) {
+                if (subLayer.get('name') === name) {
+                    result = subLayer;
+                }
+            });
+        } else {
+            if (layer.get('name') === name) {
+                result = layer;
+            }
+        }
+    });
+    return result;
 }

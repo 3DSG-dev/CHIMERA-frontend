@@ -3,7 +3,6 @@
 ?>
 
 <!DOCTYPE html>
-<!--suppress HtmlRequiredLangAttribute -->
 <html>
 <head>
     <title><?php echo $_SESSION['title']; ?></title>
@@ -27,15 +26,10 @@
     <!--suppress SpellCheckingInspection -->
     <script src="./libs/dexie.js"></script>
 
-    <!--suppress SpellCheckingInspection -->
-    <link rel="stylesheet"
-          href="https://cdn.jsdelivr.net/gh/openlayers/openlayers.github.io@master/en/v6.1.1/css/ol.css"
-          type="text/css">
-    <!--suppress SpellCheckingInspection -->
+    <!--suppress SpellCheckingInspection, JSUnresolvedLibraryUR -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/openlayers/openlayers.github.io@master/en/v6.1.1/css/ol.css" type="text/css">
+    <!--suppress SpellCheckingInspection, JSUnresolvedLibraryURL -->
     <script src="https://cdn.jsdelivr.net/gh/openlayers/openlayers.github.io@master/en/v6.1.1/build/ol.js"></script>
-
-    <link rel="stylesheet" href="https://rawgit.com/walkermatt/ol-layerswitcher/master/src/ol-layerswitcher.css">
-    <script src="http://rawgit.com/walkermatt/ol-layerswitcher/master/dist/ol-layerswitcher.js"></script>
 
     <!--<script type="text/javascript" src="http://scenejs.org/api/latest/scenejs.js"></script>-->
     <!--suppress SpellCheckingInspection -->
@@ -471,6 +465,10 @@
     </div>
 
     <div id="gisWindow" class="fixedPosition">
+        <div id="layersGisContainer" class="hidden">
+            <h4>Layers</h4>
+            <div id="layersGisTreeView"></div>
+        </div>
         <div class="centeredAbsolute">
             <span id="playGisButton" class="playButton" title="Go to GIS mode">
                 <img src="img/icons/playButton.png" alt="GIS Mode">
