@@ -655,6 +655,13 @@ function SetDynamicInformationFields() {
                     return html;
                 }
 
+                /**
+                 * @return {string}
+                 */
+                function GetComboTemplate(inputField) {
+                    return '#:Value#<span class="k-icon k-i-edit buttonDropdownItemEdit" data-codice="#:Codice#" data-value="#:Value#" data-ref="' + inputField.id + '" onclick="ChangeComboValueDialogOpen(event)"></span><span class="k-icon k-i-delete buttonDropdownItemErase" data-codice="#:Codice#" data-value="#:Value#" data-ref="' + inputField.id + '" onclick="RemoveComboValue(event)"></span>';
+                }
+
                 destinationTabSel.find("input, select").each(function (i, inputField) {
                     var inputFieldSel = $(inputField);
                     switch (inputField.dataset["tipo"]) {
@@ -698,7 +705,7 @@ function SetDynamicInformationFields() {
                                 dataTextField: "Value",
                                 dataValueField: "Codice",
                                 filter: "contains",
-                                template: '#:Value#<span class="k-icon k-i-edit buttonDropdownItemEdit" data-codice="#:Codice#" data-value="#:Value#" data-ref="' + inputField.id + '" onclick="ChangeComboValueDialogOpen(event)"></span><span class="k-icon k-i-delete buttonDropdownItemErase" data-codice="#:Codice#" data-value="#:Value#" data-ref="' + inputField.id + '" onclick="RemoveComboValue(event)"></span>',
+                                template: GetComboTemplate(inputField),
                                 footerTemplate: AddComboValueHtml
                             });
                             inputFieldSel.data("kendoComboBox").readonly();
@@ -708,7 +715,7 @@ function SetDynamicInformationFields() {
                                 dataTextField: "Value",
                                 dataValueField: "Codice",
                                 filter: "contains",
-                                template: '#:Value#<span class="k-icon k-i-edit buttonDropdownItemEdit" data-codice="#:Codice#" data-value="#:Value#" data-ref="' + inputField.id + '" onclick="ChangeComboValueDialogOpen(event)"></span><span class="k-icon k-i-delete buttonDropdownItemErase" data-codice="#:Codice#" data-value="#:Value#" data-ref="' + inputField.id + '" onclick="RemoveComboValue(event)"></span>',
+                                template: GetComboTemplate(inputField),
                                 footerTemplate: AddComboValueHtml,
                                 change: SortKendoMultiSelectValue,
                                 autoClose: false
@@ -1816,6 +1823,7 @@ function InitializeComponents() {
                         }
                     }
 
+                    // noinspection JSJQueryEfficiency
                     var layersGisTreeView = $("#layersGisTreeView");
                     if (!layersGisTreeView.data("kendoTreeView")) {
                         layersGisTreeView.kendoTreeView({
@@ -2818,7 +2826,7 @@ function ResetView() {
 function Get3dObjectFromName(name) {
     if (_myScene) {
         var pickedObject = _myScene.findNode(name);
-        if (pickedObject && pickedObject.id.substring(0, 1) === "m") {
+        if (pickedObject && pickedObject.id.substring(0, 1) === "m" && pickedObject.id.includes("_")) {
             pickedObject = pickedObject.parent.parent.parent.parent;
         }
         return pickedObject;
@@ -3333,6 +3341,10 @@ function Select3dObject(object, from3dScene = true) {
             ObjectGridClearSelection();
             objectsGrid.select("tr[data-uid='" + dataItem["uid"] + "']");
         }
+    }
+
+    if (!from3dScene && object === _selected3dObjectList[_selected3dObjectList.length - 1]) {
+        return;
     }
 
     if (_singleSelecting) {
