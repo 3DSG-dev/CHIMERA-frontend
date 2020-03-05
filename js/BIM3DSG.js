@@ -545,7 +545,7 @@ function SetDynamicInformationFields() {
         function DeleteDynamicInformationFields() {
             $("#informationSubVersionTab").empty();
             $("#informationWindowTabControl").find("div.boxedContainer").each(function (i, sheet) {
-                if (sheet.dataset["codice"] > 0) {
+                if (sheet.dataset["codice"] > 0 || sheet.dataset["table"]) {
                     $(sheet).remove();
                 }
             });
@@ -659,6 +659,7 @@ function SetDynamicInformationFields() {
                  * @return {string}
                  */
                 function GetComboTemplate(inputField) {
+                    // noinspection JSDeprecatedSymbols
                     return '#:Value#<span class="k-icon k-i-edit buttonDropdownItemEdit" data-codice="#:Codice#" data-value="#:Value#" data-ref="' + inputField.id + '" onclick="ChangeComboValueDialogOpen(event)"></span><span class="k-icon k-i-delete buttonDropdownItemErase" data-codice="#:Codice#" data-value="#:Value#" data-ref="' + inputField.id + '" onclick="RemoveComboValue(event)"></span>';
                 }
 
@@ -783,28 +784,73 @@ function SetDynamicInformationFields() {
             });
         }
 
+        function AddGisInformationFields() {
+            return $.ajax({
+                url: './php/getGisInformationFields.php',
+                dataType: "json",
+                success: function (resultData) {
+                    var html = "";
+                    for (var id in resultData) {
+                        var [database, table] = id.split("||");
+                        html += '                    <div id="' + database + "_" + table + '" data-db="' + database + '" data-table="' + table + '" class="boxedContainer hidden">\n';
+                        html += '                        <h3>' + table + '</h3>\n';
+
+                        resultData[id].forEach(function (field) {
+                            id = id.replace("||", "_");
+                            html += '                        <div class="informationFieldContainer">\n';
+                            html += '                            <div class="labelContainer"><label for="' + id + '_' + field["column_name"] + '">' + field["column_name"] + '</label></div>\n';
+                            switch (field["data_type"]) {
+                                case "integer" :
+                                    html += '                            <input data-tipo="int" data-destination="' + id + '" id="' + id + '_' + field["column_name"] + '" type="number">\n';
+                                    break;
+                                case "numeric" :
+                                    html += '                            <input data-tipo="real" data-destination="' + id + '" id="' + id + '_' + field["column_name"] + '" type="number">\n';
+                                    break;
+                                case "character varying":
+                                    html += '                            <textarea data-tipo="text" data-role="textinfo" data-destination="' + id + '" id="' + id + '_' + field["column_name"] + '" style="height: 31px" type="text" class="k-textbox" onmousedown="_isMouseDown = true;" onmousemove="ChangeInformationFieldsStyleFromElement(false)" onmouseup="ChangeInformationFieldsStyleFromElement(true)" readonly></textarea>\n';
+                                    break;
+                            }
+                            html += '                        </div>\n';
+                        });
+
+                        html += "                    </div>\n";
+                    }
+
+                    $("#informationVersionTab").append(html);
+                },
+                error: function (jqXHR, textStatus, errorThrown) {
+                    AlertMessage("Unexpected error while creating GIS information fields!", textStatus + "; " + errorThrown);
+                }
+            });
+        }
+
+        function AddDynamicInformationField() {
+            $.ajax({
+                url: './php/getInformationFields.php',
+                dataType: "json",
+                success: function (resultData) {
+                    CreateInformationFieldSingleTab(resultData["SchedeOggetto"], "informationObjectTab");
+                    CreateInformationFieldSingleTab(resultData["SchedeVersione"], "informationVersionTab");
+                    CreateSubVersionInformationField(resultData["SchedeSubVersion"], resultData["SchedeInterventiSubVersion"], parseInt(resultData["MaxSubVersion"]));
+
+                    ChangeInformationFieldsStyle(true);
+                    FillAllComboValues();
+
+                    ProgressBar(false);
+                },
+                error: function (jqXHR, textStatus, errorThrown) {
+                    ProgressBar(false);
+                    AlertMessage("Unexpected error while creating dynamic object information fields!", textStatus + "; " + errorThrown);
+                }
+            });
+        }
+
         ProgressBar(true);
 
         DeleteDynamicInformationFields();
 
-        $.ajax({
-            url: './php/getInformationFields.php',
-            dataType: "json",
-            success: function (resultData) {
-                CreateInformationFieldSingleTab(resultData["SchedeOggetto"], "informationObjectTab");
-                CreateInformationFieldSingleTab(resultData["SchedeVersione"], "informationVersionTab");
-                CreateSubVersionInformationField(resultData["SchedeSubVersion"], resultData["SchedeInterventiSubVersion"], parseInt(resultData["MaxSubVersion"]));
-
-                ChangeInformationFieldsStyle(true);
-                FillAllComboValues();
-
-                ProgressBar(false);
-            },
-            error: function (jqXHR, textStatus, errorThrown) {
-                ProgressBar(false);
-                AlertMessage("Unexpected error while creating dynamic object information fields!", textStatus + "; " + errorThrown);
-            }
-        });
+        AddGisInformationFields()
+            .then(AddDynamicInformationField);
     }
 
     ResetInformation();
@@ -862,7 +908,7 @@ function ResetInformation() {
 
     function HideAllInformationSheet(informationWindowTabControl) {
         informationWindowTabControl.find("div.boxedContainer").each(function (i, elem) {
-            if (elem.dataset["codice"] > 0) {
+            if (elem.dataset["codice"] > 0 || elem.dataset["table"]) {
                 $(elem).addClass("hidden");
             }
         });
@@ -1075,6 +1121,47 @@ function UpdateInformation(codiceVersione, readonly) {
         });
     }
 
+    function UpdateGisInformation() {
+        function SetFieldValue(valueList, destinationTab) {
+            if (valueList) {
+                $("#" + destinationTab).removeClass("hidden");
+                $.each(valueList, function (key, value) {
+                    var inputField = $("#" + destinationTab + "_" + key);
+                    if (inputField[0]) {
+                        switch (inputField[0].dataset["tipo"]) {
+                            case "text":
+                                inputField.val(value);
+                                break;
+                            case "int":
+                                inputField.data("kendoNumericTextBox").value(value);
+                                break;
+                            case "real":
+                                inputField.data("kendoNumericTextBox").value(value);
+                                break;
+                        }
+                    }
+                });
+            }
+        }
+
+        $.ajax({
+            url: './php/getGisInformation.php',
+            dataType: "json",
+            data: {
+                codiceVersione: codiceVersione
+            },
+            success: function (resultData) {
+                for (var destinationTab in resultData) {
+                    SetFieldValue(resultData[destinationTab][0], destinationTab.replace("||", "_"));
+                }
+                ChangeInformationFieldsStyle(true);
+            },
+            error: function (jqXHR, textStatus, errorThrown) {
+                AlertMessage("Unexpected error while loading dynamic information!", textStatus + "; " + errorThrown);
+            }
+        });
+    }
+
     function SetWriteMode(writeMode) {
         function SetWriteInputFields(inputFieldContainer) {
             inputFieldContainer.find("input, textarea, select").each(function (i, inputField) {
@@ -1124,6 +1211,7 @@ function UpdateInformation(codiceVersione, readonly) {
 
     ResetInformation();
     UpdateBaseInformation(codiceVersione);
+    UpdateGisInformation();
     UpdateDynamicInformation(codiceVersione);
     SetWriteMode(!readonly);
 }
@@ -1508,6 +1596,7 @@ function InitializeComponents() {
 
     function SetObjectsGrid() {
         function SetColumnsHeader() {
+            // noinspection JSDeprecatedSymbols
             return [
                 {field: "CodiceOggetto", title: "Object id", width: 50},
                 {field: "CodiceVersione", title: "Version id", width: 50},
@@ -3462,6 +3551,7 @@ function KendoDropDownList_EnableClearButton(controlKendo) {
         }
     }
 
+    // noinspection JSDeprecatedSymbols
     var html = '<!--suppress HtmlUnknownAttribute --><span unselectable="on" class="k-icon k-clear-value k-i-close k-hidden" title="clear" role="button" tabindex="-1" onclick="KendoDropDownList_OnClearButtonClick(event)"></span>';
     $(controlKendo.wrapper[0]).children("span.k-dropdown-wrap").prepend(html);
     controlKendo.bind("cascade", ShowHideClearButton);
