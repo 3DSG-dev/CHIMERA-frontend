@@ -10,7 +10,7 @@
         echo json_encode($row);
     }
     else {
-        die("Invalid parameters");
+        echo('{"rw":"f"}');
     }
 
     include("./defaultEnd.php");

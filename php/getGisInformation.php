@@ -26,8 +26,14 @@
                 $dbConnection2 = pg_connect("host=localhost port=5432 dbname=$database user=postgres password=5ETBL6gzh9") or die ('Error connecting to db');
             }
 
+            $layer0 = pg_escape_literal($objectData["Layer0"]);
+            $layer1 = pg_escape_literal($objectData["Layer1"]);
+            $layer2 = pg_escape_literal($objectData["Layer2"]);
+            $layer3 = pg_escape_literal($objectData["Layer3"]);
+            $name = pg_escape_literal($objectData["Name"]);
+
             /** @noinspection SqlResolve */
-            $SQL2 = "SELECT * FROM {$row["Table"]} WHERE layer0 = '{$objectData["Layer0"]}' AND layer1 = '{$objectData["Layer1"]}' AND layer2 = '{$objectData["Layer2"]}' AND layer3 = '{$objectData["Layer3"]}' AND name = '{$objectData["Name"]}' AND versione = '{$objectData["Versione"]}'";
+            $SQL2 = "SELECT * FROM {$row["Table"]} WHERE layer0 = $layer0 AND layer1 = $layer1 AND layer2 = $layer2 AND layer3 = $layer3 AND name = $name AND versione = {$objectData["Versione"]}";
             $result2 = pg_query($dbConnection2, $SQL2) or die ("Error: $SQL2");
             $rowArray2 = array();
             while ($row2 = pg_fetch_array($result2, null, PGSQL_ASSOC)) {

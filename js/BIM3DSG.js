@@ -70,13 +70,17 @@ function ResizeHeaderLoghi() {
 
     if (spazioPerLoghi <= 130) {
         ShowHideLoghi("none", "none", "none", "none");
-    } else if (spazioPerLoghi <= 192) {
+    }
+    else if (spazioPerLoghi <= 192) {
         ShowHideLoghi("none", "block", "none", "none");
-    } else if (spazioPerLoghi <= 515) {
+    }
+    else if (spazioPerLoghi <= 515) {
         ShowHideLoghi("none", "block", "none", "block");
-    } else if (spazioPerLoghi <= 655) {
+    }
+    else if (spazioPerLoghi <= 655) {
         ShowHideLoghi("block", "none", "none", "block");
-    } else if (spazioPerLoghi > 655) {
+    }
+    else if (spazioPerLoghi > 655) {
         ShowHideLoghi("block", "none", "block", "none");
     }
 }
@@ -112,7 +116,8 @@ function ResizeObjectsGrid() {
 
     if (width < objectsGrid.parent().width()) {
         objectsGrid.width(width);
-    } else {
+    }
+    else {
         objectsGrid.css('width', 'auto');
     }
 }
@@ -195,7 +200,8 @@ function ChangeInformationFieldsStyle(recompute) {
 
         if ($("#informationWindow").width() > 730) {
             return SwitchFieldStyleClass("labelInline", "labelMultiline", "inputInline", "inputMultiline", recompute);
-        } else {
+        }
+        else {
             return SwitchFieldStyleClass("labelMultiline", "labelInline", "inputMultiline", "inputInline", recompute);
         }
     }
@@ -211,12 +217,13 @@ function ChangeInformationFieldsStyle(recompute) {
                 if (rightHeight < leftHeight) {
                     rightHeight += sheetHeight;
                     addClass = "informationColumnRight";
-                } else {
+                }
+                else {
                     rightHeight -= leftHeight;
                     leftHeight = sheetHeight;
                 }
                 sheetSel.removeClass("informationColumnLeft informationColumnRight").addClass(addClass);
-            })
+            });
         }
 
         if ($("#informationWindow").width() > 420) {
@@ -225,9 +232,10 @@ function ChangeInformationFieldsStyle(recompute) {
                 SetTwoColumnsBoxedStyle("#informationVersionTab");
                 $("#informationSubVersionTab").find("div.subVersionPanelItem").each(function (i, panelItem) {
                     SetTwoColumnsBoxedStyle(panelItem);
-                })
+                });
             }
-        } else if ($("#infoCategoryContainer").hasClass("informationColumnRight")) {
+        }
+        else if ($("#infoCategoryContainer").hasClass("informationColumnRight")) {
             $(".informationWindowTabItem .boxedContainer").removeClass("informationColumnLeft informationColumnRight");
         }
     }
@@ -248,7 +256,8 @@ function ChangeInformationFieldsStyleFromElement(isMouseUp) {
 function ChangeObjectsGridAlignment() {
     if (_openedWindows > 0) {
         $("#objectsGrid").css("margin", "0");
-    } else {
+    }
+    else {
         $("#objectsGrid").css("margin", "0 auto");
     }
 }
@@ -434,13 +443,14 @@ function AddToYourList(codiceVersione, rw) {
             var dataItem = GetDataItemFromVersione(codiceVersione);
             if (resultData["addimportcodice"] === "ok") {
                 dataItem.set("readonly", rw ? "f" : "t");
-            } else {
+            }
+            else {
                 if (resultData["addimportcodice"].substr(0, 10) === "ATTENZIONE") {
                     dataItem.set("readonly", "t");
                 }
                 kendo.alert(resultData["addimportcodice"]);
             }
-            UpdateInformation(dataItem["CodiceVersione"], dataItem["readonly"] !== "f")
+            UpdateInformation(dataItem["CodiceVersione"], dataItem["readonly"] !== "f");
         },
         error: function (jqXHR, textStatus, errorThrown) {
             AlertMessage("Unexpected error while adding object to your list!", textStatus + "; " + errorThrown);
@@ -468,15 +478,17 @@ function ChangeWriteMode(codiceVersione, rw) {
                         var dataItem = GetDataItemFromVersione(codiceVersione);
                         if (resultData2["addimportcodice"] === "ok") {
                             dataItem.set("readonly", rw ? "f" : "t");
-                        } else {
+                        }
+                        else {
                             if (resultData2["addimportcodice"].substr(0, 10) === "ATTENZIONE") {
                                 dataItem.set("readonly", "t");
-                            } else {
+                            }
+                            else {
                                 dataItem.set("readonly", null);
                             }
                             kendo.alert(resultData2["addimportcodice"]);
                         }
-                        UpdateInformation(dataItem["CodiceVersione"], dataItem["readonly"] !== "f")
+                        UpdateInformation(dataItem["CodiceVersione"], dataItem["readonly"] !== "f");
                     },
                     error: function (jqXHR, textStatus, errorThrown) {
                         dataItem.set("readonly", null);
@@ -587,9 +599,11 @@ function SetDynamicInformationFields() {
                     var height;
                     if (field["IsTitle"] === "t") {
                         html += '                        <h4>' + field["Campo"] + '</h4>\n';
-                    } else if (field["IsSeparator"] === "t") {
+                    }
+                    else if (field["IsSeparator"] === "t") {
                         html += '                        <hr class="k-separator">\n';
-                    } else if (field["IsBool"] === "t") {
+                    }
+                    else if (field["IsBool"] === "t") {
                         html += '                        <div class="informationFieldContainer">\n';
                         html += '                            <div class="labelContainer labelCheckboxContainer">' + field["Campo"] + '</div>\n';
                         html += '                            <div class="inputCheckboxContainer">\n';
@@ -597,25 +611,32 @@ function SetDynamicInformationFields() {
                         html += '                               <label class="k-checkbox-label" for="' + destinationTab + '_' + field["Codice"] + '"></label>\n';
                         html += '                            </div>\n';
                         html += '                        </div>\n';
-                    } else {
+                    }
+                    else {
                         html += '                        <div class="informationFieldContainer">\n';
                         html += '                            <div class="labelContainer"><label for="' + destinationTab + '_' + field["Codice"] + '">' + field["Campo"] + '</label></div>\n';
                         if (field["IsTimestamp"] === "t") {
                             html += '                            <input data-tipo="timestamp" data-codice="' + field["Codice"] + '" data-destination="' + destinationTab + '" id="' + destinationTab + '_' + field["Codice"] + '" name="' + destinationTab + '_' + field["Codice"] + '">\n';
                             html += '                            <span class="k-invalid-msg" data-for="' + destinationTab + '_' + field["Codice"] + '"></span>\n';
-                        } else if (field["IsInt"] === "t") {
+                        }
+                        else if (field["IsInt"] === "t") {
                             html += '                            <input data-tipo="int" data-codice="' + field["Codice"] + '" data-destination="' + destinationTab + '" id="' + destinationTab + '_' + field["Codice"] + '" type="number">\n';
-                        } else if (field["IsReal"] === "t") {
+                        }
+                        else if (field["IsReal"] === "t") {
                             html += '                            <input data-tipo="real" data-codice="' + field["Codice"] + '" data-destination="' + destinationTab + '" id="' + destinationTab + '_' + field["Codice"] + '" type="number">\n';
-                        } else if (field["IsCombo"] === "t") {
+                        }
+                        else if (field["IsCombo"] === "t") {
                             html += '                            <select data-tipo="combo" data-codice="' + field["Codice"] + '" data-destination="' + destinationTab + '" id="' + destinationTab + '_' + field["Codice"] + '"></select>\n';
-                        } else if (field["IsMultiCombo"] === "t") {
+                        }
+                        else if (field["IsMultiCombo"] === "t") {
                             html += '                            <select data-tipo="multicombo" data-codice="' + field["Codice"] + '" data-destination="' + destinationTab + '" id="' + destinationTab + '_' + field["Codice"] + '"></select>\n';
-                        } else {
+                        }
+                        else {
                             height = field["Height"] / 22;
                             if (height > 1) {
                                 html += '                            <textarea data-tipo="text" data-codice="' + field["Codice"] + '" data-role="textinfo" data-destination="' + destinationTab + '" id="' + destinationTab + '_' + field["Codice"] + '" style="height: ' + height * 31 + 'px" type="text" class="k-textbox" onmousedown="_isMouseDown = true;" onmousemove="ChangeInformationFieldsStyleFromElement(false)" onmouseup="ChangeInformationFieldsStyleFromElement(true)" readonly></textarea>\n';
-                            } else {
+                            }
+                            else {
                                 html += '                            <input data-tipo="text" data-codice="' + field["Codice"] + '" data-role="textinfo" data-destination="' + destinationTab + '" id="' + destinationTab + '_' + field["Codice"] + '" type="text" class="k-textbox" readonly/>\n';
                             }
                         }
@@ -792,25 +813,39 @@ function SetDynamicInformationFields() {
                     var html = "";
                     for (var id in resultData) {
                         var [database, table] = id.split("||");
+                        var destinationId = id.replace("||", "_");
                         html += '                    <div id="' + database + "_" + table + '" data-db="' + database + '" data-table="' + table + '" class="boxedContainer hidden">\n';
                         html += '                        <h3>' + table + '</h3>\n';
 
                         resultData[id].forEach(function (field) {
-                            id = id.replace("||", "_");
-                            html += '                        <div class="informationFieldContainer">\n';
-                            html += '                            <div class="labelContainer"><label for="' + id + '_' + field["column_name"] + '">' + field["column_name"] + '</label></div>\n';
-                            switch (field["data_type"]) {
-                                case "integer" :
-                                    html += '                            <input data-tipo="int" data-destination="' + id + '" id="' + id + '_' + field["column_name"] + '" type="number">\n';
-                                    break;
-                                case "numeric" :
-                                    html += '                            <input data-tipo="real" data-destination="' + id + '" id="' + id + '_' + field["column_name"] + '" type="number">\n';
-                                    break;
-                                case "character varying":
-                                    html += '                            <textarea data-tipo="text" data-role="textinfo" data-destination="' + id + '" id="' + id + '_' + field["column_name"] + '" style="height: 31px" type="text" class="k-textbox" onmousedown="_isMouseDown = true;" onmousemove="ChangeInformationFieldsStyleFromElement(false)" onmouseup="ChangeInformationFieldsStyleFromElement(true)" readonly></textarea>\n';
-                                    break;
+                            var colId = field["column_name"].replace(" ", "___");
+                            if (field["data_type"] === "boolean") {
+                                html += '                        <div class="informationFieldContainer">\n';
+                                html += '                            <div class="labelContainer labelCheckboxContainer">' + field["column_name"] + '</div>\n';
+                                html += '                            <div class="inputCheckboxContainer">\n';
+                                html += '                               <input data-tipo="bool" data-destination="' + destinationId + '" id="' + destinationId + '_' + colId + '" data-role="checkboxinfo" type="checkbox" class="k-checkbox" />\n';
+                                html += '                               <label class="k-checkbox-label" for="' + destinationId + '_' + field["column_name"] + '"></label>\n';
+                                html += '                            </div>\n';
+                                html += '                        </div>\n';
                             }
-                            html += '                        </div>\n';
+                            else {
+                                html += '                        <div class="informationFieldContainer">\n';
+                                html += '                            <div class="labelContainer"><label for="' + destinationId + '_' + field["column_name"] + '">' + field["column_name"] + '</label></div>\n';
+                                switch (field["data_type"]) {
+                                    case "integer" :
+                                        html += '                            <input data-tipo="int" data-destination="' + destinationId + '" id="' + destinationId + '_' + colId + '" type="number">\n';
+                                        break;
+                                    case "numeric" :
+                                    case "double precision":
+                                        html += '                            <input data-tipo="real" data-destination="' + destinationId + '" id="' + destinationId + '_' + colId + '" type="number">\n';
+                                        break;
+                                    case "character varying":
+                                    case "character":
+                                        html += '                            <textarea data-tipo="text" data-role="textinfo" data-destination="' + destinationId + '" id="' + destinationId + '_' + colId + '" style="height: 31px" type="text" class="k-textbox" onmousedown="_isMouseDown = true;" onmousemove="ChangeInformationFieldsStyleFromElement(false)" onmouseup="ChangeInformationFieldsStyleFromElement(true)" readonly></textarea>\n';
+                                        break;
+                                }
+                                html += '                        </div>\n';
+                            }
                         });
 
                         html += "                    </div>\n";
@@ -900,7 +935,7 @@ function ResetInformation() {
         buttonContainer.find("button").each(function (i, button) {
             if (button.dataset["codice"] > 0) {
                 button.setAttribute("disabled", true);
-                $(button).unbind("click", SaveSheetInformation)
+                $(button).unbind("click", SaveSheetInformation);
             }
         });
         $("#saveInfoCategory").unbind("click", ChangeCategory);
@@ -914,7 +949,7 @@ function ResetInformation() {
         });
         $("#informationSubVersionExpanderControl").children("li").each(function (i, expander) {
             $(expander).addClass("hidden");
-        })
+        });
     }
 
     var informationWindowTabControl = $("#informationWindowTabControl");
@@ -1126,7 +1161,7 @@ function UpdateInformation(codiceVersione, readonly) {
             if (valueList) {
                 $("#" + destinationTab).removeClass("hidden");
                 $.each(valueList, function (key, value) {
-                    var inputField = $("#" + destinationTab + "_" + key);
+                    var inputField = $("#" + destinationTab + "_" + key.replace(" ", "___"));
                     if (inputField[0]) {
                         switch (inputField[0].dataset["tipo"]) {
                             case "text":
@@ -1137,6 +1172,9 @@ function UpdateInformation(codiceVersione, readonly) {
                                 break;
                             case "real":
                                 inputField.data("kendoNumericTextBox").value(value);
+                                break;
+                            case "bool":
+                                inputField.prop("checked", value === "t");
                                 break;
                         }
                     }
@@ -1267,7 +1305,8 @@ function SaveSheetInformation() {
                 var destination = inputField.dataset["destination"];
                 if (destination.startsWith("informationSubVersionContent") || destination.startsWith("infoInterventiSubVersionContent")) {
                     codice = destinationControl[0].dataset["codice"];
-                } else {
+                }
+                else {
                     return;
                 }
         }
@@ -1299,8 +1338,9 @@ function SaveSheetInformation() {
         sheet.find("input, textarea, select").each(function (i, inputField) {
             SaveInformation(inputField);
         });
-        kendo.alert("Save completed!")
-    } else {
+        kendo.alert("Save completed!");
+    }
+    else {
         kendo.alert("Can't save information in read only mode!");
     }
 }
@@ -1323,7 +1363,8 @@ function ChangeCategory() {
                 AlertMessage("Unexpected error while change object category!", textStatus + "; " + errorThrown);
             }
         });
-    } else {
+    }
+    else {
         kendo.alert("Can't change category in read only mode!");
     }
 }
@@ -1485,7 +1526,8 @@ function ChangeComboValueDialogOpen(event) {
     var renameComboDialogKendo = renameComboDialog.data("kendoDialog");
     if (renameComboDialogKendo) {
         renameComboDialogKendo.open();
-    } else {
+    }
+    else {
         // noinspection JSPotentiallyInvalidConstructorUsage
         InitializeRenameComboDialog(renameComboDialog);
     }
@@ -1653,27 +1695,9 @@ function InitializeComponents() {
         }
 
         function ObjectsGrid_OnChange() {
-            /**
-             * @return {string}
-             */
-            function GetTypeStringCode(type) {
-                switch (type) {
-                    case "0":
-                        return "a";
-                    case "1":
-                        return "p";
-                    case "2":
-                        return "h";
-                    case "3":
-                        return "m";
-                    default:
-                        return "";
-                }
-            }
-
             var selectedObject = this.dataItem(this.select());
             if (selectedObject) {
-                Select3dObject(Get3dObjectFromName(GetTypeStringCode(selectedObject["Type"]) + selectedObject["CodiceVersione"]), false);
+                Select3dObject(Get3dObjectFromName(GetModelTypeStringCode(selectedObject["Type"]) + selectedObject["CodiceVersione"]), false);
                 UpdateInformation(selectedObject["CodiceVersione"], selectedObject["readonly"] !== "f");
             }
         }
@@ -1879,16 +1903,20 @@ function InitializeComponents() {
                             layer.setOpacity(event.value / 100);
                         }
 
-                        $("#layersGisTreeView .transparencySliderContainer").children("input").kendoSlider({
-                            min: 0,
-                            max: 100,
-                            value: 100,
-                            smallStep: 1,
-                            largeStep: 10,
-                            showButtons: false,
-                            tickPlacement: "none",
-                            change: ChangeLayerOpacity,
-                            slide: ChangeLayerOpacity
+                        $("#layersGisTreeView .transparencySliderContainer").children("input").each(function (i, layer) {
+                            if (layer) {
+                                $(layer).kendoSlider({
+                                    min: 0,
+                                    max: 100,
+                                    value: GetLayerByName($("#mapContainer").data("map"), layer.name).getOpacity() * 100,
+                                    smallStep: 1,
+                                    largeStep: 10,
+                                    showButtons: false,
+                                    tickPlacement: "none",
+                                    change: ChangeLayerOpacity,
+                                    slide: ChangeLayerOpacity
+                                });
+                            }
                         });
                     }
 
@@ -1907,7 +1935,8 @@ function InitializeComponents() {
                             item.items.forEach(function (innerItem) {
                                 SetLayerVisibility(map, innerItem);
                             });
-                        } else {
+                        }
+                        else {
                             SetLayerVisibility(map, item);
                         }
                     }
@@ -1928,7 +1957,8 @@ function InitializeComponents() {
                             dataBound: InitializeTransparencySlide,
                             check: ChangeLayerVisibility
                         });
-                    } else {
+                    }
+                    else {
                         layersGisTreeView.unbind("dataBound");
                         layersGisTreeView.setDataSource([]);
                     }
@@ -2099,7 +2129,7 @@ function InitializeComponents() {
                                 layer1: $("#newObjectLayer1").data("kendoComboBox").value(),
                                 layer2: $("#newObjectLayer2").data("kendoComboBox").value(),
                                 layer3: $("#newObjectLayer3").data("kendoComboBox").value(),
-                                nome: $("#newObjectName").data("kendoComboBox").value(),
+                                nome: $("#newObjectName").data("kendoComboBox").value()
                             },
                             success: function (resultData) {
                                 kendo.alert(resultData);
@@ -2186,7 +2216,8 @@ function InitializeComponents() {
             if (!addNewObjectDialogKendo) {
                 InitializeAddNewObjectDialog(addNewObjectDialog);
                 addNewObjectDialogKendo = addNewObjectDialog.data("kendoDialog");
-            } else {
+            }
+            else {
                 UpdateCombobox();
             }
 
@@ -2207,7 +2238,7 @@ function InitializeComponents() {
 
         $("#cleanYourListButton").click(CleanYourList);
 
-        $("#addNewObjectButton").click(AddNewObject)
+        $("#addNewObjectButton").click(AddNewObject);
     }
 
     SetSearchForm();
@@ -2260,7 +2291,8 @@ function Load3dScene() {
             if (_myScene.findNode(node.id) == null) {
                 try {
                     texturedMeshNode.addNode(node);
-                } catch (error) {
+                }
+                catch (error) {
                     AlertMessage("Unexpected error while loading textured mesh!", "Error loading textured mesh: " + error);
                 }
             }
@@ -2274,7 +2306,8 @@ function Load3dScene() {
             if (_myScene.findNode(node.id) == null) {
                 try {
                     pointCloudNode.addNode(node);
-                } catch (error) {
+                }
+                catch (error) {
                     AlertMessage("Unexpected error while loading point cloud!", "Error loading textured mesh: " + error);
                 }
             }
@@ -2288,7 +2321,8 @@ function Load3dScene() {
             if (_myScene.findNode(node.id) == null) {
                 try {
                     hotSpotNode.addNode(node);
-                } catch (error) {
+                }
+                catch (error) {
                     AlertMessage("Unexpected error while loading hotspot!", "Error loading hotspot: " + error);
                 }
             }
@@ -2338,7 +2372,7 @@ function Load3dScene() {
                                     type: "prims/meshGeometry",
                                     fid: (this.id + "_" + i + "_" + lodModello)
                                 }
-                            )
+                            );
                         }
                         this.data["ActualLevel"] = lodModello;
                     }
@@ -2392,7 +2426,7 @@ function Load3dScene() {
                                             type: "prims/meshGeometry",
                                             fid: (id[0] + "_" + i + "_" + multiTextureLod)
                                         }
-                                    )
+                                    );
                                 }
                                 this.data["ActualLevel"] = loadingLod;
 
@@ -2431,7 +2465,7 @@ function Load3dScene() {
                                     type: "prims/pointCloudGeometry",
                                     fid: (this.id + "_" + i + "_" + lodModello)
                                 }
-                            )
+                            );
                         }
                         this.data["ActualLevel"] = lodModello;
                     }
@@ -2488,8 +2522,9 @@ function Load3dScene() {
                                 success: function (resultData2) {
                                     if (resultData2 === "success") {
                                         Load3dScene();
-                                    } else {
-                                        AlertMessage("Unexpected error during adding a new hotspot!", resultData2)
+                                    }
+                                    else {
+                                        AlertMessage("Unexpected error during adding a new hotspot!", resultData2);
                                     }
                                 },
                                 error: function (jqXHR, textStatus, errorThrown) {
@@ -2609,7 +2644,8 @@ function Load3dScene() {
                 var addNewHotspotDialogKendo = addNewHotspotDialog.data("kendoDialog");
                 if (!addNewHotspotDialogKendo) {
                     InitializeAddNewHotspotDialog(addNewHotspotDialog);
-                } else {
+                }
+                else {
                     UpdateCombobox(addNewHotspotDialogKendo);
                 }
 
@@ -2648,19 +2684,23 @@ function Load3dScene() {
                 _pickedObject = _myScene.pick({canvasPos: [coords.x, coords.y], rayPick: true});
                 if (_pickedObject) {
                     AddNewHotSpot();
-                } else {
+                }
+                else {
                     kendo.alert("You must click on a mesh to add an hotspot!");
                 }
-            } else {
+            }
+            else {
                 _pickedObject = _myScene.pick({canvasPos: [coords.x, coords.y]});
                 if (_pickedObject) {
                     var pickedObject = Get3dObjectFromName(_pickedObject["name"]);
                     if (_selected3dObjectList.indexOf(pickedObject) === -1) {
                         Select3dObject(pickedObject);
-                    } else {
+                    }
+                    else {
                         Unselect3dObject(pickedObject);
                     }
-                } else {
+                }
+                else {
                     UnselectAll3dObjects();
                 }
             }
@@ -2695,14 +2735,17 @@ function Load3dScene() {
                     _dragged = true;
                     if (_rightMouseDown && _leftMouseDown) {
                         Pan3dY((event.clientY - _mouseStartY) / 100);
-                    } else if (_leftMouseDown) {
-                        Pan3dXZ((event.clientX - _mouseStartX) / 2000, (event.clientY - _mouseStartY) / 2000)
-                    } else {
+                    }
+                    else if (_leftMouseDown) {
+                        Pan3dXZ((event.clientX - _mouseStartX) / 2000, (event.clientY - _mouseStartY) / 2000);
+                    }
+                    else {
                         var angleX = ToRad * (event.clientY - _mouseStartY) / 2;
                         var angleZ = ToRad * (event.clientX - _mouseStartX) / 2;
                         if (_rightMouseDown) {
                             Rotate3dXZ(angleX, angleZ);
-                        } else if (_centerMouseDown) {
+                        }
+                        else if (_centerMouseDown) {
                             LookRotate3dXZ(angleX, angleZ);
                         }
                     }
@@ -2794,7 +2837,8 @@ function Load3dScene() {
 
                     if (!_isTouchPinch && !_isTouchRotate && _touchEventCache.length === 1) {
                         Pan3dXZ((changedTouch.pageX - _touchEventCache[0].pageX) / 900, (changedTouch.pageY - _touchEventCache[0].pageY) / 900);
-                    } else if (!_isTouchRotate && _touchEventCache.length === 2) {
+                    }
+                    else if (!_isTouchRotate && _touchEventCache.length === 2) {
                         _isTouchPinch = true;
                         ReplaceTouchEvent(changedTouch);
 
@@ -2802,13 +2846,15 @@ function Load3dScene() {
                         var zoom = (currentTouchDiff - _startTouchDiff) / (_startTouchDiff * 3 * (Math.abs(_canvasDiagonal - _startTouchDiff) / _canvasDiagonal));
                         if (zoom < 0) {
                             zoom = zoom * 10;
-                        } else {
+                        }
+                        else {
                             if (zoom >= 0.98) {
                                 zoom = 0.98;
                             }
                         }
                         Zoom3d(zoom);
-                    } else if (_touchEventCache.length === 3) {
+                    }
+                    else if (_touchEventCache.length === 3) {
                         _isTouchPinch = false;
                         _isTouchRotate = true;
                         if (_touchEventCache[0].identifier === changedTouch.identifier) {
@@ -2919,7 +2965,8 @@ function Get3dObjectFromName(name) {
             pickedObject = pickedObject.parent.parent.parent.parent;
         }
         return pickedObject;
-    } else {
+    }
+    else {
         return null;
     }
 }
@@ -3009,6 +3056,11 @@ function ResetEye() {
 
 //GIS scene
 function LoadGis() {
+    function EmptyMap(map) {
+        mapContainer.empty();
+        mapContainer.data("map", null);
+    }
+
     function AddDefaultMaps(layers, gisSettings) {
         function ParseDefaultMapsSettings(gisSettings) {
             var openStreetMap = true;
@@ -3027,10 +3079,6 @@ function LoadGis() {
             return {openStreetMap, openStreetMapVisible};
         }
 
-        var {openStreetMap, openStreetMapVisible} = ParseDefaultMapsSettings(gisSettings);
-
-        var defaultMapsLayers = [];
-
         function AddOpenStreetMap(defaultMapsLayers, openStreetMapVisible) {
             defaultMapsLayers.push(new ol.layer.Tile({
                 title: 'OpenStreetMap',
@@ -3039,6 +3087,10 @@ function LoadGis() {
                 source: new ol.source.OSM()
             }));
         }
+
+        var {openStreetMap, openStreetMapVisible} = ParseDefaultMapsSettings(gisSettings);
+
+        var defaultMapsLayers = [];
 
         if (openStreetMap) {
             AddOpenStreetMap(defaultMapsLayers, openStreetMapVisible);
@@ -3053,6 +3105,33 @@ function LoadGis() {
     }
 
     function AddDynamicLayers(layers) {
+        function AddLayerGroup(layers, group, layerList) {
+            if (group != null) {
+                layers.push(new ol.layer.Group({
+                    title: group,
+                    layers: layerList
+                }));
+            }
+        }
+
+        function AddLayerWMS(layerList, layerData) {
+            layerList.push(new ol.layer.Image({
+                title: layerData["Name"],
+                name: layerData["Title"],
+                visible: layerData["Visible"] === "t",
+                opacity: parseFloat(layerData["Opacity"]),
+                declaredSRS: layerData["DeclaredSRS"],
+                source: new ol.source.ImageWMS({
+                    url: layerData["url"],
+                    params: {
+                        FORMAT: layerData["Format"],
+                        STYLES: layerData["Style"],
+                        LAYERS: layerData["Layer"]
+                    }
+                })
+            }));
+        }
+
         return $.ajax({
             url: './php/getGisLayers.php',
             dataType: "json",
@@ -3061,45 +3140,19 @@ function LoadGis() {
                 var layerList = [];
                 resultData.forEach(function (layerData) {
                     if (group !== layerData["Group"]) {
-                        if (group != null) {
-                            layers.push(new ol.layer.Group({
-                                title: group,
-                                layers: layerList
-                            }))
-                        }
+                        AddLayerGroup(layers, group, layerList);
                         group = layerData["Group"];
                         layerList = [];
                     }
                     if (layerData["Tipo"] === "ImageWMS") {
-                        layerList.push(new ol.layer.Image({
-                            title: layerData["Name"],
-                            name: layerData["Title"],
-                            visible: layerData["Visible"] === "t",
-                            declaredSRS: layerData["DeclaredSRS"],
-                            source: new ol.source.ImageWMS({
-                                url: layerData["url"],
-                                params: {
-                                    FORMAT: layerData["Format"],
-                                    STYLES: layerData["Style"],
-                                    LAYERS: layerData["Layer"],
-                                }
-                            })
-                        }));
+                        AddLayerWMS(layerList, layerData);
                     }
                 });
-                if (group != null) {
-                    layers.push(new ol.layer.Group({
-                        title: group,
-                        layers: layerList
-                    }));
-                }
+                AddLayerGroup(layers, group, layerList);
             }
         });
     }
 
-    /**
-     * @return {string}
-     */
     function InitializeMap(mapContainer, layers, gisSettings) {
         function ParseBaseGisSettings(gisSettings) {
             var centerLongitude = 0;
@@ -3107,6 +3160,7 @@ function LoadGis() {
             var zoom = 0;
             var coordinatesFractionDigits = 0;
             var projection = "EPSG:3857";
+            var urlGetCapabilities = "";
 
             gisSettings.forEach(function (setting) {
                 switch (setting["Key"]) {
@@ -3125,38 +3179,15 @@ function LoadGis() {
                     case "projection":
                         projection = setting["TextValue"];
                         break;
+                    case "urlGetCapabilities":
+                        urlGetCapabilities = setting["TextValue"];
+                        break;
                 }
             });
-            return {centerLongitude, centerLatitude, zoom, coordinatesFractionDigits, projection};
+            return {centerLongitude, centerLatitude, zoom, coordinatesFractionDigits, projection, urlGetCapabilities};
         }
 
-        var {centerLongitude, centerLatitude, zoom, coordinatesFractionDigits, projection} = ParseBaseGisSettings(gisSettings);
-
-        /*var vector = new ol.layer.Vector({
-            source: new ol.source.Vector({
-                format: new ol.format.GeoJSON(),
-                url: function(extent) {
-                    return 'http://bim3dsurvey.it:8080/geoserver/wfs?service=WFS&' +
-                        'version=1.1.0&request=GetFeature&typename=test:testshp&' +
-                        'outputFormat=application/json&srsname=EPSG:3857&' +
-                        'bbox=' + extent.join(',') + ',EPSG:3857';
-                },
-                strategy: ol.loadingstrategy.bbox
-            }),
-            style: new ol.style.Style({
-                stroke: new ol.style.Stroke({
-                    color: 'rgba(0, 0, 255, 1.0)',
-                    width: 2
-                }),
-                fill: new ol.style.Fill({
-                    color: 'rgba(0, 0, 255, 0.3)'
-                })
-            })
-        });
-        layers.push(new ol.layer.Group({
-            title: 'vector',
-            layers: [vector]
-        }));*/
+        var {centerLongitude, centerLatitude, zoom, coordinatesFractionDigits, projection, urlGetCapabilities} = ParseBaseGisSettings(gisSettings);
 
         var map = new ol.Map({
             target: document.getElementById('mapContainer'),
@@ -3189,49 +3220,89 @@ function LoadGis() {
                         }
                     );
 
-                    jQuery.support.cors = true;
                     $.ajax({
                         url: url,
                         type: "get",
                         dataType: "json",
+                        crossDomain: true,
                         success: function (resultData) {
                             if (resultData.features.length > 0) {
                                 var featureProperties = resultData.features[0].properties;
 
-                                if (featureProperties["layer0"]) {
-                                    console.log(featureProperties);
+                                if (featureProperties["layer0"] && featureProperties["layer1"] && featureProperties["layer2"] && featureProperties["layer3"] && featureProperties["name"] && featureProperties["versione"] >= 0) {
+                                    $.ajax({
+                                        url: './php/getCodiceVersione.php',
+                                        dataType: "json",
+                                        data: {
+                                            layer0: featureProperties["layer0"],
+                                            layer1: featureProperties["layer1"],
+                                            layer2: featureProperties["layer2"],
+                                            layer3: featureProperties["layer3"],
+                                            name: featureProperties["name"],
+                                            versione: featureProperties["versione"]
+                                        },
+                                        success: function (resultData) {
+                                            var objectsGrid = $('#objectsGrid').data('kendoGrid');
+                                            var dataItem = GetDataItemFromVersione(resultData["CodiceVersione"]);
+
+                                            if (dataItem == null) {
+                                                var object3d = Get3dObjectFromName(GetModelTypeStringCode(resultData["Type"]) + resultData["CodiceVersione"]);
+                                                if (object3d) {
+                                                    Select3dObject(object3d, false);
+                                                }
+                                                else {
+                                                    GetWriteMode(resultData["CodiceVersione"])
+                                                        .then(function (data) {
+                                                            var readonly = data["rw"] !== "t";
+                                                            ResetInformation();
+                                                            UpdateInformation(resultData["CodiceVersione"], readonly);
+                                                            /*UpdateImagePanel(codice);
+
+                                                            UpdateFilePanel(codice);*/
+                                                        });
+                                                }
+                                            }
+                                            else {
+                                                ObjectGridClearSelection();
+                                                objectsGrid.select("tr[data-uid='" + dataItem["uid"] + "']");
+                                            }
+                                        },
+                                        error: function (jqXHR, textStatus, errorThrown) {
+                                            AlertMessage("Unexpected error while searching for the object!", textStatus + "; " + errorThrown);
+                                        }
+                                    });
                                 }
+                            }
+                            else {
+                                return null;
                             }
                         },
                         error: function () {
                             return null;
                         }
                     });
-                    jQuery.support.cors = false;
                 }
             }
 
             var feature = map.forEachFeatureAtPixel(event.pixel, function (feature) {
                 return feature;
             });
-
             if (feature) {
-
-                //var coord = feature.getGeometry().getCoordinates();
                 var props = feature.getProperties();
                 console.log(props);
-                return;
             }
-
-            layers.forEach(function (layer) {
-                if (layer instanceof ol.layer.Group) {
-                    layer.getLayers().forEach(function (subLayer) {
-                        GetFeatures(subLayer);
-                    });
-                } else {
-                    GetFeatures(layer);
-                }
-            });
+            else {
+                layers.forEach(function (layer) {
+                    if (layer instanceof ol.layer.Group) {
+                        layer.getLayers().forEach(function (subLayer) {
+                            GetFeatures(subLayer);
+                        });
+                    }
+                    else {
+                        GetFeatures(layer);
+                    }
+                });
+            }
         });
 
         map.on('pointermove', function (e) {
@@ -3243,10 +3314,10 @@ function LoadGis() {
             map.getTarget().style.cursor = hit ? 'pointer' : '';
         });
 
-        return projection;
+        return {projection, urlGetCapabilities};
     }
 
-    function SetLayersExtent(layers, projection) {
+    function SetLayersExtent(layers, projection, urlGetCapabilities) {
         function SetLayerExtent(layer, layersWMS, projection) {
             var layerWMS = layersWMS.find(o => o.Name === layer.get('name'));
             if (layerWMS) {
@@ -3255,9 +3326,9 @@ function LoadGis() {
             }
         }
 
-        jQuery.support.cors = true;
         $.ajax({
-            url: 'http://bim3dsurvey.it:8080/geoserver/test/wms?request=GetCapabilities&service=WMS&version=1.1.1',
+            url: urlGetCapabilities,
+            crossDomain: true,
             success: function (response) {
                 var capabilitiesParser = new ol.format.WMSCapabilities();
                 var capabilities = capabilitiesParser.read(response);
@@ -3268,7 +3339,8 @@ function LoadGis() {
                         layer.getLayers().forEach(function (subLayer) {
                             SetLayerExtent(subLayer, layersWMS, projection);
                         });
-                    } else {
+                    }
+                    else {
                         SetLayerExtent(layer, layersWMS, projection);
                     }
                 });
@@ -3277,33 +3349,45 @@ function LoadGis() {
                 AlertMessage("Unexpected error while setting layers extend!", textStatus + "; " + errorThrown);
             }
         });
-        jQuery.support.cors = false;
     }
 
     function AddLayersToGisTreeView(layers) {
-        var layersGisTreeView = $("#layersGisTreeView").data("kendoTreeView");
-        var layerData = [];
-        layers.forEach(function (layer) {
-            if (layer instanceof ol.layer.Group) {
-                var innerLayerData = [];
+        function GetLayerData() {
+            function GetSubLayers(layer) {
+                var subLayerData = [];
                 layer.getLayers().forEach(function (subLayer) {
-                    innerLayerData.push({
+                    subLayerData.push({
                         text: subLayer.get('title'),
                         id: subLayer.get('name'),
                         checked: subLayer.get('visible')
                     });
                 });
-                layerData.push({
-                    text: layer.get('title'),
-                    id: layer.get('name'),
-                    expanded: true,
-                    items: innerLayerData
-                });
-            } else {
-                layerData.push({text: layer.get('title'), id: layer.get('name')});
+                return subLayerData;
             }
-        });
-        layersGisTreeView.setDataSource(new kendo.data.HierarchicalDataSource({data: layerData}));
+
+            var layerData = [];
+            layers.forEach(function (layer) {
+                if (layer instanceof ol.layer.Group) {
+                    layerData.push({
+                        text: layer.get('title'),
+                        id: layer.get('name'),
+                        expanded: true,
+                        items: GetSubLayers(layer)
+                    });
+                }
+                else {
+                    layerData.push({
+                        text: layer.get('title'),
+                        id: layer.get('name')
+                    });
+                }
+            });
+            return layerData;
+        }
+
+        $("#layersGisTreeView").data("kendoTreeView").setDataSource(new kendo.data.HierarchicalDataSource({
+            data: GetLayerData()
+        }));
     }
 
     ProgressBar(true);
@@ -3311,8 +3395,7 @@ function LoadGis() {
     var mapContainer = $("#mapContainer");
     var map = mapContainer.data("map");
     if (map) {
-        mapContainer.empty();
-        mapContainer.data("map", null);
+        EmptyMap(map);
     }
 
     $.ajax({
@@ -3320,17 +3403,18 @@ function LoadGis() {
         dataType: "json",
         success: function (gisSettings) {
             var layers = [];
-
             AddDefaultMaps(layers, gisSettings);
 
             AddDynamicLayers(layers)
                 .then(function () {
-                    var projection = InitializeMap(mapContainer, layers, gisSettings);
-                    SetLayersExtent(layers, projection);
+                    var {projection, urlGetCapabilities} = InitializeMap(mapContainer, layers, gisSettings);
+                    SetLayersExtent(layers, projection, urlGetCapabilities);
                     AddLayersToGisTreeView(layers);
                 });
 
             ProgressBar(false);
+
+            SetDynamicInformationFields();
         },
         error: function (jqXHR, textStatus, errorThrown) {
             ProgressBar(false);
@@ -3426,7 +3510,8 @@ function Select3dObject(object, from3dScene = true) {
 
                     UpdateFilePanel(codice);*/
                 });
-        } else if (dataItem !== objectsGrid.dataItem(objectsGrid.select())) {
+        }
+        else if (dataItem !== objectsGrid.dataItem(objectsGrid.select())) {
             ObjectGridClearSelection();
             objectsGrid.select("tr[data-uid='" + dataItem["uid"] + "']");
         }
@@ -3546,7 +3631,8 @@ function KendoDropDownList_EnableClearButton(controlKendo) {
 
         if (sender.selectedIndex === -1 || isReadonly) {
             clearButton.addClass("k-hidden");
-        } else {
+        }
+        else {
             clearButton.removeClass("k-hidden");
         }
     }
@@ -3570,7 +3656,8 @@ function ToggleKendoWindow(windowId) {
     var kendoWindow = $("#" + windowId).data("kendoWindow");
     if (!kendoWindow.options.visible) {
         kendoWindow.open();
-    } else {
+    }
+    else {
         kendoWindow.close();
     }
 }
@@ -3587,11 +3674,30 @@ function GetLayerByName(map, name) {
                     result = subLayer;
                 }
             });
-        } else {
+        }
+        else {
             if (layer.get('name') === name) {
                 result = layer;
             }
         }
     });
     return result;
+}
+
+/**
+ * @return {string}
+ */
+function GetModelTypeStringCode(type) {
+    switch (type) {
+        case "0":
+            return "a";
+        case "1":
+            return "p";
+        case "2":
+            return "h";
+        case "3":
+            return "m";
+        default:
+            return "";
+    }
 }
