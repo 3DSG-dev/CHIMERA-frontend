@@ -3056,7 +3056,7 @@ function ResetEye() {
 
 //GIS scene
 function LoadGis() {
-    function EmptyMap(map) {
+    function EmptyMap(mapContainer) {
         mapContainer.empty();
         mapContainer.data("map", null);
     }
@@ -3395,7 +3395,7 @@ function LoadGis() {
     var mapContainer = $("#mapContainer");
     var map = mapContainer.data("map");
     if (map) {
-        EmptyMap(map);
+        EmptyMap(mapContainer);
     }
 
     $.ajax({
