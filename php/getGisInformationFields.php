@@ -21,7 +21,7 @@
             $dbConnection2 = pg_connect("host=localhost port=5432 dbname=$database user=postgres password=5ETBL6gzh9") or die ('Error connecting to db');
         }
 
-        $SQL2 = "SELECT column_name, data_type FROM information_schema.columns WHERE table_name = '{$row["Table"]}' AND column_name NOT IN ('layer0', 'layer1', 'layer2', 'layer3', 'name', 'version', 'geom')";
+        $SQL2 = "SELECT column_name, data_type FROM information_schema.columns WHERE table_name = '{$row["Table"]}' AND column_name NOT IN ('layer0', 'layer1', 'layer2', 'layer3', 'name', 'versione', 'geom', 'shape')";
         $result2 = pg_query($dbConnection2, $SQL2) or die ("Error: $SQL2");
         $rowArray2 = array();
         while ($row2 = pg_fetch_array($result2, null, PGSQL_ASSOC)) {
