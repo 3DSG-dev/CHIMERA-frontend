@@ -3246,11 +3246,13 @@ function LoadGis() {
                                             var dataItem = GetDataItemFromVersione(resultData["CodiceVersione"]);
 
                                             if (dataItem == null) {
+                                                ObjectGridClearSelection();
                                                 var object3d = Get3dObjectFromName(GetModelTypeStringCode(resultData["Type"]) + resultData["CodiceVersione"]);
                                                 if (object3d) {
                                                     Select3dObject(object3d, false);
                                                 }
                                                 else {
+                                                    UnselectAll3dObjects(false);
                                                     GetWriteMode(resultData["CodiceVersione"])
                                                         .then(function (data) {
                                                             var readonly = data["rw"] !== "t";
@@ -3263,7 +3265,6 @@ function LoadGis() {
                                                 }
                                             }
                                             else {
-                                                ObjectGridClearSelection();
                                                 objectsGrid.select("tr[data-uid='" + dataItem["uid"] + "']");
                                             }
                                         },
