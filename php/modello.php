@@ -286,6 +286,7 @@ EOT;
         /**
          * @param $nome
          * @param $lodData
+         * @param $texture
          * @param $xc
          * @param $yc
          * @param $zc
@@ -294,7 +295,7 @@ EOT;
          * @param $firstWrite
          * @return string
          */
-        function ModelData($nome, $lodData, $xc, $yc, $zc, $radius, $color, $firstWrite)
+        function ModelData($nome, $lodData, $texture, $xc, $yc, $zc, $radius, $color, $firstWrite)
         {
             $modello = $firstWrite ? "" : ",\n";
             $modello .= <<<EOT
@@ -308,9 +309,9 @@ EOT;
                 "yc": $yc,
                 "zc": $zc,
                 "R": $radius,
-                "ActualLevel":65535,
-                "PartLoaded":0,
-                "TextureLoD":0
+                "ActualLevel": 65535,
+                "PartLoaded": 0,
+                "TextureLoD": $texture
             },
             "nodes": [
                 {
@@ -356,6 +357,7 @@ EOT;
         $zc = 0.0;
         $radius = 0.0;
         $color = [1.0, 1.0, 1.0];
+        $texture = -1;
 
         $SQL = 'SELECT * FROM "ListaOggettiLoD" JOIN "Import" ON "ListaOggettiLoD"."CodiceModello" = "Import"."CodiceModello" WHERE "ModelType" = 0 AND "User"=\'' . $_SESSION['validUserName'] . "'";
 
@@ -363,13 +365,14 @@ EOT;
         while ($row = pg_fetch_array($result, NULL, PGSQL_ASSOC)) {
             if ($row["Codice"] != $id) {
                 if ($id != -1) {
-                    $modello .= ModelData($nome, $lodData, $xc, $yc, $zc, $radius, $color, $firstWrite);
+                    $modello .= ModelData($nome, $lodData, $texture, $xc, $yc, $zc, $radius, $color, $firstWrite);
                     $firstWrite = false;
                 }
 
                 $id = $row["Codice"];
                 $nome = "a" . $id;
                 $lodData = "";
+                $texture = -1;
                 $xc = $row["xc"];
                 $yc = $row["yc"];
                 $zc = $row["zc"];
@@ -378,9 +381,12 @@ EOT;
             }
 
             $lodData .= '"l' . $row["LoD"] . '": ' . $row["JSON_NumeroParti"] . ",";
+            if ($row["TextureJSON"] == "t") {
+                $texture = 0;
+            }
         }
         if ($id != -1) {
-            $modello .= ModelData($nome, $lodData, $xc, $yc, $zc, $radius, $color, $firstWrite);
+            $modello .= ModelData($nome, $lodData, $texture, $xc, $yc, $zc, $radius, $color, $firstWrite);
         }
 
         $modello .= <<<EOT
