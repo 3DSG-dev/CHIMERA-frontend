@@ -2362,7 +2362,7 @@ function Load3dScene() {
                                 applyTo: "color"
                             }
                         );
-                        if (_textureEnable) {
+                        if (_textureEnable && this.data["TextureLoD"] > -1) {
                             LoadTexture(this, lodTexture);
                         }
 
