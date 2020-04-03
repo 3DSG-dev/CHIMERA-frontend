@@ -3699,6 +3699,6 @@ function GetModelTypeStringCode(type) {
         case "3":
             return "m";
         default:
-            return "";
+            return "u";
     }
 }
