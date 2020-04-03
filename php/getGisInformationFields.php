@@ -4,7 +4,7 @@
     header("Content-type: application/json");
     echo "{";
 
-    $SQL = 'SELECT * FROM "GisTables"';
+    $SQL = 'SELECT * FROM "GisTables" ORDER BY "Posizione"';
     $result = pg_query($dbConnection, $SQL) or die ("Error: $SQL");
     $database = null;
     $dbConnection2 = null;
