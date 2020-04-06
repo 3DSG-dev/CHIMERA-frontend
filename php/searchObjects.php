@@ -7,19 +7,20 @@
     $layer3Value = isset($_GET['layer3']) ? $_GET['layer3'] : null;
     $nomeValue = isset($_GET['nome']) ? $_GET['nome'] : null;
     $versioneValue = isset($_GET['versione']) ? $_GET['versione'] : null;
-    $includeLayerObjects = isset($_GET['includeLayerObjects']) ? $_GET['includeLayerObjects'] == "true" : null;
+    $includeLayerObjects = isset($_GET['includeLayerObjects']) ? $_GET['includeLayerObjects'] == "true" : false;
+    $matchString = isset($_GET['matchWholeWorld']) && $_GET['matchWholeWorld'] == "true" ? "" : "%";
 
     $SQL = 'SELECT "OggettiVersion"."CodiceOggetto", "OggettiVersion"."Codice" AS "CodiceVersione", "Layer0", "Layer1", "Layer2", "Layer3", "Versione", "Name", "Type", "readonly" FROM "Oggetti" JOIN "OggettiVersion" ON "Oggetti"."Codice" = "OggettiVersion"."CodiceOggetto" LEFT JOIN "Modelli3D" ON "OggettiVersion"."CodiceModello" = "Modelli3D"."Codice" LEFT JOIN (SELECT * FROM "Import" WHERE "User"=\'' . $_SESSION['validUserName'] . '\') list ON list."CodiceVersione" = "OggettiVersion"."Codice" WHERE true';
     if ($layer0Value)
-        $SQL .= ' AND "Layer0" LIKE ' . pg_escape_literal($layer0Value);
+        $SQL .= ' AND "Layer0" LIKE ' . pg_escape_literal($matchString . $layer0Value . $matchString);
     if ($layer1Value)
-        $SQL .= ' AND "Layer1" LIKE ' . pg_escape_literal($layer1Value);
+        $SQL .= ' AND "Layer1" LIKE ' . pg_escape_literal($matchString . $layer1Value . $matchString);
     if ($layer2Value)
-        $SQL .= ' AND "Layer2" LIKE ' . pg_escape_literal($layer2Value);
+        $SQL .= ' AND "Layer2" LIKE ' . pg_escape_literal($matchString . $layer2Value . $matchString);
     if ($layer3Value)
-        $SQL .= ' AND "Layer3" LIKE ' . pg_escape_literal($layer3Value);
+        $SQL .= ' AND "Layer3" LIKE ' . pg_escape_literal($matchString . $layer3Value . $matchString);
     if ($nomeValue)
-        $SQL .= ' AND "Name" LIKE ' . pg_escape_literal($nomeValue);
+        $SQL .= ' AND "Name" LIKE ' . pg_escape_literal($matchString . $nomeValue . $matchString);
     if ($versioneValue)
         $SQL .= ' AND "Versione" = ' . $versioneValue;
     if (!$includeLayerObjects)

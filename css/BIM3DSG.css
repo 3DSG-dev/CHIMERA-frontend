@@ -521,8 +521,12 @@ textarea.k-textbox {
 }
 
 /* Kendo UI - Checkbox */
+.k-checkbox-label {
+    padding-left: 24px;
+}
+
 .k-checkbox-label::before, .k-checkbox-label::after {
-    top: -4px;
+    top: -2px;
     width: 20px;
     height: 20px;
 }
@@ -1049,6 +1053,18 @@ div.k-loading-mask {
     height: 31px;
 }
 
+.threeColumns {
+    float: left;
+    width: calc(33.3% - 2 * (var(--padding-objectsearchfields)));
+    padding: 10px var(--padding-objectsearchfields) 0 var(--padding-objectsearchfields);
+    text-align: center;
+}
+
+.selectOptionContainer {
+    display: inline-flex;
+    padding-top: 8px;
+}
+
 .selectObjectButtonsContainer {
     overflow: hidden;
     width: 100%;
@@ -1066,9 +1082,9 @@ div.k-loading-mask {
     background-color: #d4e8f9;
 }
 
-.searchButton {
+.twoColumns {
     float: left;
-    width: calc(33% - 32px);
+    width: calc(50% - 32px);
     padding: 0 16px;
 }
 
@@ -1655,6 +1671,14 @@ span.k-widget.k-tooltip-validation.inputMultiline {
         width: calc(50% - 2 * (var(--padding-objectsearchfields)));
         padding: 0 var(--padding-objectsearchfields);
     }
+
+    .threeColumns {
+        float: left;
+        width: calc(33.3% - 2 * (var(--padding-objectsearchfields)));
+        padding: 10px var(--padding-objectsearchfields) 0 var(--padding-objectsearchfields);
+        text-align: center;
+    }
+
 }
 
 @media screen and (max-width: 992px) {
@@ -1690,6 +1714,27 @@ span.k-widget.k-tooltip-validation.inputMultiline {
     .selectObjectComboContainer {
         width: calc(96% - 2 * (var(--padding-objectsearchfields)));
         padding: 0 var(--padding-objectsearchfields);
+    }
+
+    .selectObjectSearchFieldsContainer {
+        padding-bottom: 0;
+    }
+
+    #searchObjectBtnContainer {
+        padding-top: 0;
+    }
+
+    .threeColumns {
+        float: left;
+        width: calc(96% - 2 * (var(--padding-objectsearchfields)));
+        padding: 10px var(--padding-objectsearchfields) 0 var(--padding-objectsearchfields);
+        text-align: center;
+    }
+
+    .twoColumns {
+        float: left;
+        width: calc(96% - 32px);
+        padding: 10px 16px 0 16px;
     }
 }
 

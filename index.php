@@ -123,25 +123,39 @@
                             <label for="selectVersione"><?php echo $_SESSION["versionLabel"]; ?> filter</label>
                             <input id="selectVersione" type="text">
                         </div>
+                        <div class="threeColumns">
+                            <div class="selectOptionContainer">
+                                <input id="includeLayerObjects" data-role="checkboxinfo" type="checkbox"
+                                       checked="checked" class="k-checkbox"/>
+                                <label for="includeLayerObjects" class="k-checkbox-label">Include layer objects ( - )</label>
+                            </div>
+                        </div>
+                        <div class="threeColumns">
+                            <div class="selectOptionContainer">
+                                <input id="matchWholeWorld" data-role="checkboxinfo" type="checkbox"
+                                       checked="checked" class="k-checkbox"/>
+                                <label for="matchWholeWorld" class="k-checkbox-label">Match whole word</label>
+                            </div>
+                        </div>
+                        <div class="threeColumns">
+                            <button onclick="SearchObjects()" class="buttonBordered">SEARCH</button>
+                        </div>
                     </div>
                     <div class="selectObjectButtonsContainer">
                         <div id="searchObjectBtnContainer" class="buttonContainer">
-                            <div class="searchCheckBox">
-                                <input id="includeLayerObjects" data-role="checkboxinfo" type="checkbox"
-                                       checked="checked" class="k-checkbox"/>
-                                <label for="includeLayerObjects" class="k-checkbox-label">Include layer objects ( -
-                                    )</label>
+                            <div class="twoColumns">
+                                <div class="selectOptionContainer">
+                                    <input id="addReadOnly" data-role="checkboxinfo" type="checkbox"
+                                           checked="checked" class="k-checkbox"/>
+                                    <label for="addReadOnly" class="k-checkbox-label">Read-only</label>
+                                </div>
                             </div>
-                            <div class="searchButton">
-                                <button onclick="SearchObjects()" class="buttonBordered">SEARCH</button>
-                            </div>
-                            <div class="searchButton">
-                                <button onclick="SearchAndAddToTourList()" class="buttonBordered">ADD TO YOUR LIST
-                                </button>
+                            <div class="twoColumns">
+                                <button onclick="SearchAndAddToYourList()" class="buttonBordered">ADD TO YOUR 3D LIST</button>
                             </div>
                         </div>
                         <div id="loadUserListBtnContainer" class="buttonContainer">
-                            <button onclick="LoadUserListObjectGrid()" class="buttonBordered">USE YOUR LIST</button>
+                            <button onclick="LoadUserListObjectGrid()" class="buttonBordered">USE YOUR 3D LIST</button>
                         </div>
                     </div>
                 </div>
