@@ -373,7 +373,9 @@ function GetSearchFormComboValues() {
         layer3: $("#selectLayer3").data("kendoComboBox").value(),
         nome: $("#selectName").data("kendoComboBox").value(),
         versione: $("#selectVersione").data("kendoComboBox").value(),
-        includeLayerObjects: $("#includeLayerObjects").prop("checked")
+        includeLayerObjects: $("#includeLayerObjects").prop("checked"),
+        matchWholeWorld: $("#matchWholeWorld").prop("checked"),
+        addReadOnly: $("#addReadOnly").prop("checked")
     };
 }
 
@@ -394,12 +396,12 @@ function SearchObjects() {
     });
 }
 
-function SearchAndAddToTourList() {
+function SearchAndAddToYourList() {
     $.ajax({
         url: 'php/addObjectsToYourList.php',
         dataType: "json",
         data: GetSearchFormComboValues(),
-        success: SearchObjects,
+        success: LoadUserListObjectGrid,
         error: function (jqXHR, textStatus, errorThrown) {
             AlertMessage("Unexpected error while adding objects to your list!", textStatus + "; " + errorThrown);
         }
@@ -1618,7 +1620,8 @@ function InitializeComponents() {
                     layer2: $("#selectLayer2").data("kendoComboBox").value(),
                     layer3: $("#selectLayer3").data("kendoComboBox").value(),
                     nome: $("#selectName").data("kendoComboBox").value(),
-                    versione: $("#selectVersione").data("kendoComboBox").value()
+                    versione: $("#selectVersione").data("kendoComboBox").value(),
+                    matchWholeWorld: $("#matchWholeWorld").prop("checked")
                 },
                 success: function (resultData) {
                     for (var field in resultData) {
@@ -1632,6 +1635,10 @@ function InitializeComponents() {
         }
 
         CreateSearchFormCombobox();
+
+        $("#matchWholeWorld").bind("change", function () {
+            UpdateSearchFormCombobox();
+        });
 
         UpdateSearchFormCombobox();
     }
