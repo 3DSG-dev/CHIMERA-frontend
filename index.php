@@ -155,7 +155,7 @@
                             </div>
                         </div>
                         <div id="loadUserListBtnContainer" class="buttonContainer">
-                            <button onclick="LoadUserListObjectGrid()" class="buttonBordered">USE YOUR 3D LIST</button>
+                            <button onclick="LoadUserListObjectGrid()" class="buttonBordered">SHOW YOUR 3D LIST</button>
                         </div>
                     </div>
                 </div>
