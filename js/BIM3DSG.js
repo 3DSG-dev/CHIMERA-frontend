@@ -401,7 +401,10 @@ function SearchAndAddToYourList() {
         url: 'php/addObjectsToYourList.php',
         dataType: "json",
         data: GetSearchFormComboValues(),
-        success: LoadUserListObjectGrid,
+        success: function () {
+            SetObjectGridDataSource(null);
+            kendo.alert("Object added to your 3D list!");
+        },
         error: function (jqXHR, textStatus, errorThrown) {
             AlertMessage("Unexpected error while adding objects to your list!", textStatus + "; " + errorThrown);
         }
@@ -2116,6 +2119,8 @@ function InitializeComponents() {
                 success: function (resultData) {
                     if (resultData === "success") {
                         SetAllObjectsReadonly();
+
+                        kendo.alert("Your 3D list is now empty!");
                     }
                 },
                 error: function (jqXHR, textStatus, errorThrown) {
