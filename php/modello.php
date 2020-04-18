@@ -179,6 +179,15 @@
                 {
                     "type":"canvas/capture",
                     "id":"canvasCapture"
+                },
+                {
+                    "type":"enable",
+                    "enabled":false,
+                    "nodes": [
+                        {
+                            "type": "environments/modelView"
+                        }
+                    ]
                 }
             ]
 	    }
