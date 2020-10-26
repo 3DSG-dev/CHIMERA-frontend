@@ -1,0 +1,2 @@
+You need KendoUI for JQuery to use CHIMERA
+You can get it from https://www.telerik.com/kendo-jquery-ui
