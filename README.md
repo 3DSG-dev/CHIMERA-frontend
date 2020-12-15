@@ -1,8 +1,8 @@
 CHIMERA frontend
 
-Presentation at ISPRS virtual event 2020: https://youtu.be/jarw02QZOwk
+Presentation at ISPRS virtual event 2020: https://youtu.be/mgVe8-OIR74
 
-Presentation: https://youtu.be/DCgc8RNkenQ
+Presentation: https://youtu.be/FGjVzwNgoO8
 
 <br>
 
