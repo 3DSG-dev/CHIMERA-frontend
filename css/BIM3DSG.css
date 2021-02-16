@@ -1141,6 +1141,10 @@ div.k-loading-mask {
     width: 80%;
 }
 
+.dialogFormField input:focus {
+    outline: none;
+}
+
 /* Rename Combo dialog when edit dropdown icon is clicked on information window */
 .renameComboDialogIcon .k-window-title::before {
     background: url("../img/icons/windowsTitle/edit.png") no-repeat;
