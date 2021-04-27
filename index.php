@@ -28,7 +28,9 @@
     <script src="./libs/dexie.js"></script>
 
     <!--suppress SpellCheckingInspection, JSUnresolvedLibraryURL -->
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/openlayers/openlayers.github.io@master/en/v6.1.1/css/ol.css" type="text/css">
+    <link rel="stylesheet"
+          href="https://cdn.jsdelivr.net/gh/openlayers/openlayers.github.io@master/en/v6.1.1/css/ol.css"
+          type="text/css">
     <!--suppress SpellCheckingInspection, JSUnresolvedLibraryURL -->
     <script src="https://cdn.jsdelivr.net/gh/openlayers/openlayers.github.io@master/en/v6.1.1/build/ol.js"></script>
 
@@ -50,6 +52,7 @@
     <script type="text/javascript" src="./js/MeshCacheManager.js"></script>
     <script type="text/javascript" src="./js/PointCloudCacheManager.js"></script>
     <script type="text/javascript" src="./js/TextureCacheManager.js"></script>
+    <script type="text/javascript" src="./js/ImageCacheManager.js"></script>
     <script type="text/javascript" src="./js/BIM3DSG.js" charset="iso-8859-15"></script>
 
     <link rel="stylesheet" type="text/css" href="./css/BIM3DSG.css"/>
@@ -127,7 +130,8 @@
                             <div class="selectOptionContainer">
                                 <input id="includeLayerObjects" data-role="checkboxinfo" type="checkbox"
                                        checked="checked" class="k-checkbox"/>
-                                <label for="includeLayerObjects" class="k-checkbox-label">Include layer objects ( - )</label>
+                                <label for="includeLayerObjects" class="k-checkbox-label">Include layer objects ( -
+                                    )</label>
                             </div>
                         </div>
                         <div class="threeColumns">
@@ -151,7 +155,8 @@
                                 </div>
                             </div>
                             <div class="twoColumns">
-                                <button onclick="SearchAndAddToYourList()" class="buttonBordered">ADD TO YOUR 3D LIST</button>
+                                <button onclick="SearchAndAddToYourList()" class="buttonBordered">ADD TO YOUR 3D LIST
+                                </button>
                             </div>
                         </div>
                         <div id="loadUserListBtnContainer" class="buttonContainer">
@@ -184,6 +189,11 @@
                     <img src="img/icons/toolbar/information.png" alt="Information">
                 </span>
             </div>
+            <div class="sideToolbarItem">
+                <span id="imageButton" class="sideToolbarButton" title="Images">
+                    <img src="img/icons/toolbar/image.png" alt="Images">
+                </span>
+            </div>
             <div class="sideToolbarSeparator"></div>
             <div class="sideToolbarItem">
                 <span id="cleanYourListButton" class="sideToolbarButton" title="Clean your list">
@@ -207,7 +217,7 @@
 ?>
 
 <div class="hidden">
-    <div id="informationWindow" class="fixedPosition">
+    <div id="informationWindow" class="windowTabControl fixedPosition">
         <div id="informationWindowTabControl">
             <ul>
                 <li class="k-state-active">Object information</li>
@@ -284,7 +294,7 @@
                         <input id="infoCategory" type="text">
                     </div>
                     <div class="buttonContainer">
-                        <button id="saveInfoCategory" class="buttonBordered">SAVE</button>
+                        <button id="saveInfoCategory" class="buttonBordered" disabled="true">SAVE</button>
                     </div>
                 </div>
             </div>
@@ -390,10 +400,55 @@
         </div>
     </div>
 
+    <div id="imageWindow" class="windowTabControl fixedPosition">
+        <div id="imageWindowTabControl">
+            <ul>
+                <li class="k-state-active">Object information</li>
+                <li>Version information</li>
+                <li>Subversion information</li>
+            </ul>
+            <div id="imageObjectTab" class="imageWindowTabItem">
+                <div id="imageObjectGallery" data-ref="Oggetti" class="imageListView"></div>
+                <div class="galleryImageElement">
+                    <div class="buttonGalleryContainer">
+                        <div class="sideToolbarItem">
+                            <span id="addObjectImageButton" data-ref="Oggetti"
+                                  class="sideToolbarButton greenButton disabledButton" title="Add Object Image">
+                                <img src="img/icons/windowsContent/add.png" alt="Add Object Image">
+                            </span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div id="imageVersionTab" class="imageWindowTabItem">
+                <div id="imageVersionGallery" data-ref="Versioni" class="imageListView"></div>
+                <div class="galleryImageElement">
+                    <div class="buttonGalleryContainer">
+                        <div class="sideToolbarItem">
+                            <span id="addVersionImageButton" data-ref="Versioni"
+                                  class="sideToolbarButton greenButton disabledButton"
+                                  title="Add Version Image">
+                                <img src="img/icons/windowsContent/add.png" alt="Add Version Image">
+                            </span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div id="imageSubVersionTab" class="imageWindowTabItem">
+            </div>
+        </div>
+    </div>
+
+    <div id="imageViewerWindow" class="fixedPosition">
+        <div id="imageViewerContainer" class="imageViewerContainer">
+            <img id="imageViewerImg" class="maxSize" src="" alt="">
+        </div>
+    </div>
+
     <div id="modelWindow" class="fixedPosition">
         <div class="centeredAbsolute">
             <span id="play3DButton" class="playButton" title="Go to 3D mode">
-                <img src="img/icons/playButton.png" alt="3D Mode">
+                <img src="img/icons/windowsContent/playButton.png" alt="3D Mode">
             </span>
         </div>
         <div id="settings3dFrame">
@@ -486,7 +541,7 @@
         </div>
         <div class="centeredAbsolute">
             <span id="playGisButton" class="playButton" title="Go to GIS mode">
-                <img src="img/icons/playButton.png" alt="GIS Mode">
+                <img src="img/icons/windowsContent/playButton.png" alt="GIS Mode">
             </span>
         </div>
         <div id="mapContainer"></div>
@@ -572,6 +627,12 @@
                 <input id="newHotspotWorldTranslationZ" type="number">
             </div>
         </form>
+    </div>
+
+    <div id="addImageDialog" class="fixedPosition">
+        <div>
+            <input name="addImagesInput" id="addImagesInput" type="file" accept=".jpg,.jpeg,.png"/>
+        </div>
     </div>
 </div>
 </body>

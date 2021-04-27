@@ -11335,6 +11335,28 @@ html .k-upload {
     position: relative;
 }
 
+.k-upload .k-button {
+    background-color: rgba(255, 255, 255, 0.2);
+    background-image: none;
+}
+
+.k-upload .k-clear-selected:hover {
+    color: #333;
+    border-color: rgba(0, 0, 0, 0.15);
+    background-color: #eaeaea;
+    background-image: linear-gradient(#eaeaea, #e5e5e5);
+}
+
+.k-upload .k-upload-selected:hover {
+    color: white;
+    background-color: #547ab0;
+    background-image: none;
+}
+
+.k-upload .k-upload-selected {
+    color: rgb(84, 122, 176);
+}
+
 .k-upload .k-upload-button {
     min-width: 7em;
     margin: 8px;
@@ -11345,22 +11367,27 @@ html .k-upload {
     display: flex;
     align-items: center;
     border-width: 0;
-    background-color: transparent;
+    background-color: rgb(212, 232, 249);
 }
 
 .k-upload .k-dropzone em,
 .k-upload .k-dropzone .k-dropzone-hint {
     font-style: italic;
     position: relative;
-    display: none;
-    visibility: hidden;
+    display: block;
+    visibility: visible;
+    opacity: 1;
+    text-align: center;
+    color: rgb(84, 122, 176);
+    /*    display: none;
+        opacity: 0;
+        visibility: hidden;*/
     overflow: hidden;
     flex: 1;
     margin-left: 1em;
     vertical-align: middle;
     white-space: nowrap;
     text-overflow: ellipsis;
-    opacity: 0;
 }
 
 .k-upload .k-dropzone .k-upload-status {

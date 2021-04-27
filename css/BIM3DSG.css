@@ -13,6 +13,7 @@
     --greenButtonBackgroundHover: #75e67d;
     --redBackground: #ec5154;
     --redBackgroundHover: #ef7376;
+    --disabledBackgroud: #A0A0A0;
     --grigioscuroforte-testo: #333;
     --grigioscuro: #9c9d9e;
     --grigiomedio: #ccc;
@@ -786,6 +787,24 @@ div.k-loading-mask {
     padding: 0 35px 0 35px;
 }
 
+/* Window */
+.windowTabControl {
+    overflow: hidden;
+    padding: 0;
+}
+
+.windowTabControl .k-tabstrip-wrapper {
+    height: inherit;
+}
+
+.windowTabControl .k-tabstrip {
+    height: inherit;
+}
+
+.windowTabControl .k-tabstrip .k-content {
+    padding: 8px 0;
+}
+
 /* Window and Dialog: Icon + Title - Tema BIM3DSG */
 .windowIcon .k-window-title::before {
     display: inline-block;
@@ -940,6 +959,16 @@ div.k-loading-mask {
     background-color: var(--main-color);
 }
 
+.uploadButtonBordered {
+    background-image: none;
+    background-clip: unset;
+}
+
+.uploadButtonBordered:hover {
+    background-image: none;
+    border: 2px solid var(--main-color);
+}
+
 /* Sidebar */
 #sideToolbarContainer {
     position: fixed;
@@ -966,6 +995,7 @@ div.k-loading-mask {
 .sideToolbarButton {
     display: block;
     height: 40px;
+    width: 40px;
     margin: auto;
     padding: 0 2px;
     text-align: center;
@@ -1004,6 +1034,22 @@ div.k-loading-mask {
 
 .greenButton:hover, .greenButton:focus {
     background-color: var(--greenButtonBackgroundHover) !important;
+}
+
+.redButton {
+    background-color: var(--redBackground) !important;
+}
+
+.redButton:hover, .redButton:focus {
+    background-color: var(--redBackgroundHover) !important;
+}
+
+.disabledButton {
+    background-color: var(--disabledBackgroud) !important;
+}
+
+.disabledButton:hover, .disabledButton:focus {
+    background-color: var(--disabledBackgroud) !important;
 }
 
 /* Main page - Select object section */
@@ -1163,7 +1209,7 @@ div.k-loading-mask {
     width: 230px;
 }
 
-/* add a new hotspot dialog */
+/* Add a new hotspot dialog */
 .addNewHotspotDialogIcon .k-window-title::before {
     background: url("../img/icons/windowsTitle/addHotspot.png") no-repeat;
 }
@@ -1172,21 +1218,102 @@ div.k-loading-mask {
     width: 230px;
 }
 
-/* Information window */
-#informationWindow {
+/* Image window */
+.imageWindowIcon .k-window-title::before {
+    background: url("../img/icons/windowsTitle/image.png") no-repeat;
+}
+
+.imageWindowTitle .k-window-titlebar {
+    width: 140px;
+}
+
+/* Image Gallery */
+.imageListView {
+    margin: 5px 0 15px 0;
+    border: 0;
+}
+
+.galleryImageElement {
+    float: left;
+    position: relative;
+    height: 192px;
+    /*    margin: 0 5px;*/
     padding: 0;
 }
 
+.galleryImage {
+    height: 192px;
+}
+
+.galleryImageHover {
+    visibility: hidden;
+    position: absolute;
+    height: 100%;
+    width: 100%;
+    top: 0;
+    text-align: center;
+    color: white;
+    margin: auto;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.galleryImageElement:hover div.galleryImageHover {
+    visibility: visible;
+    color: #fff;
+    background-color: rgba(0, 0, 0, 0.75);
+    transition: background .2s linear, color .3s linear;
+    -moz-transition: background .2s linear, color .3s linear;
+    -webkit-transition: background .2s linear, color .3s linear;
+    -o-transition: background .2s linear, color .3s linear;
+}
+
+.galleryImageToolbar div.buttonWindowsToolbarContainer {
+    padding: 10px;
+}
+
+.buttonGalleryContainer {
+    height: 176px;
+    width: 192px;
+    display: table-cell;
+    text-align: center;
+    vertical-align: middle;
+}
+
+/* ImageViewer window */
+.imageViewerWindowTitle .k-window-titlebar {
+    width: 200px;
+}
+
+.imageViewerContainer {
+    position: absolute;
+    bottom: 10px;
+    left: 10px;
+    height: calc(100% - 10px);
+    width: calc(100% - 20px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.maxSize {
+    max-height: 100%;
+    max-width: 100%;
+}
+
+/* Add image Dialog */
+.addImageWindowTitle .k-window-titlebar {
+    width: 240px;
+}
+
+/* Information window */
 .informationWindowIcon .k-window-title::before {
     background: url("../img/icons/windowsTitle/information.png") no-repeat;
 }
 
 .informationWindowTitle .k-window-titlebar {
     width: 190px;
-}
-
-.k-tabstrip > .informationWindowTabItem.k-content {
-    padding: 8px 0;
 }
 
 /* Information Window - Columns */
@@ -1642,13 +1769,13 @@ span.k-widget.k-tooltip-validation.inputMultiline {
 }
 
 /* Read only - write Switch */
-.readOnlySwitchContainer {
+.writeSwitchContainer {
     position: absolute;
     top: 6px;
     right: 20px;
 }
 
-.readOnlySwitchLabel {
+.writeSwitchLabel {
     line-height: 25px;
     display: inline-block;
     vertical-align: middle;

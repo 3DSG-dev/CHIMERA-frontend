@@ -70,17 +70,13 @@ function ResizeHeaderLoghi() {
 
     if (spazioPerLoghi <= 130) {
         ShowHideLoghi("none", "none", "none", "none");
-    }
-    else if (spazioPerLoghi <= 192) {
+    } else if (spazioPerLoghi <= 192) {
         ShowHideLoghi("none", "block", "none", "none");
-    }
-    else if (spazioPerLoghi <= 515) {
+    } else if (spazioPerLoghi <= 515) {
         ShowHideLoghi("none", "block", "none", "block");
-    }
-    else if (spazioPerLoghi <= 655) {
+    } else if (spazioPerLoghi <= 655) {
         ShowHideLoghi("block", "none", "none", "block");
-    }
-    else if (spazioPerLoghi > 655) {
+    } else if (spazioPerLoghi > 655) {
         ShowHideLoghi("block", "none", "block", "none");
     }
 }
@@ -99,6 +95,8 @@ function ResizeComponents() {
 
     ResizeObjectsGridContainer();
     ResizeInformationWindow();
+    ResizeImageWindow();
+    ResizeImageViewerWindow();
     ResizeModelWindow();
     ResizeGisWindow();
 }
@@ -116,8 +114,7 @@ function ResizeObjectsGrid() {
 
     if (width < objectsGrid.parent().width()) {
         objectsGrid.width(width);
-    }
-    else {
+    } else {
         objectsGrid.css('width', 'auto');
     }
 }
@@ -156,6 +153,18 @@ function SetCssLeftWindow(id) {
     });
 }
 
+function SetCssRightWindow(id) {
+    var {width, maxWidth, height, portingHeight} = GetAvailableWindowSize(760, 500, 120, 90);
+
+    $(id).data("kendoWindow").wrapper.css({
+        width: width,
+        height: height,
+        top: (portingHeight - height) * 3 / 4,
+        right: maxWidth ? "auto" : 55,
+        left: "auto"
+    });
+}
+
 function ResizeModelWindow() {
     SetCssLeftWindow("#modelWindow");
 }
@@ -165,17 +174,23 @@ function ResizeGisWindow() {
 }
 
 function ResizeInformationWindow() {
-    var {width, maxWidth, height, portingHeight} = GetAvailableWindowSize(760, 500, 120, 90);
-
-    $("#informationWindow").data("kendoWindow").wrapper.css({
-        width: width,
-        height: height,
-        top: (portingHeight - height) * 3 / 4,
-        right: maxWidth ? "auto" : 55,
-        left: "auto"
-    });
+    SetCssRightWindow("#informationWindow");
 
     ChangeInformationFieldsStyle();
+}
+
+function ResizeImageWindow() {
+    SetCssRightWindow("#imageWindow");
+}
+
+function ResizeImageViewerWindow() {
+    $("#imageViewerWindow").data("kendoWindow").wrapper.css({
+        width: $(window).width() - 65,
+        height: $(window).height() - 30,
+        top: 20,
+        left: 10,
+        right: 45
+    });
 }
 
 function ChangeInformationFieldsStyle(recompute) {
@@ -200,8 +215,7 @@ function ChangeInformationFieldsStyle(recompute) {
 
         if ($("#informationWindow").width() > 730) {
             return SwitchFieldStyleClass("labelInline", "labelMultiline", "inputInline", "inputMultiline", recompute);
-        }
-        else {
+        } else {
             return SwitchFieldStyleClass("labelMultiline", "labelInline", "inputMultiline", "inputInline", recompute);
         }
     }
@@ -217,8 +231,7 @@ function ChangeInformationFieldsStyle(recompute) {
                 if (rightHeight < leftHeight) {
                     rightHeight += sheetHeight;
                     addClass = "informationColumnRight";
-                }
-                else {
+                } else {
                     rightHeight -= leftHeight;
                     leftHeight = sheetHeight;
                 }
@@ -234,8 +247,7 @@ function ChangeInformationFieldsStyle(recompute) {
                     SetTwoColumnsBoxedStyle(panelItem);
                 });
             }
-        }
-        else if ($("#infoCategoryContainer").hasClass("informationColumnRight")) {
+        } else if ($("#infoCategoryContainer").hasClass("informationColumnRight")) {
             $(".informationWindowTabItem .boxedContainer").removeClass("informationColumnLeft informationColumnRight");
         }
     }
@@ -256,8 +268,7 @@ function ChangeInformationFieldsStyleFromElement(isMouseUp) {
 function ChangeObjectsGridAlignment() {
     if (_openedWindows > 0) {
         $("#objectsGrid").css("margin", "0");
-    }
-    else {
+    } else {
         $("#objectsGrid").css("margin", "0 auto");
     }
 }
@@ -346,7 +357,7 @@ function SetObjectGridDataSource(objectList) {
 
     ProgressBar(false);
 
-    SetDynamicInformationFields();
+    SetDynamicFields();
 }
 
 function LoadUserListObjectGrid() {
@@ -448,14 +459,13 @@ function AddToYourList(codiceVersione, rw) {
             var dataItem = GetDataItemFromVersione(codiceVersione);
             if (resultData["addimportcodice"] === "ok") {
                 dataItem.set("readonly", rw ? "f" : "t");
-            }
-            else {
+            } else {
                 if (resultData["addimportcodice"].substr(0, 10) === "ATTENZIONE") {
                     dataItem.set("readonly", "t");
                 }
                 kendo.alert(resultData["addimportcodice"]);
             }
-            UpdateInformation(dataItem["CodiceVersione"], dataItem["readonly"] !== "f");
+            UpdateData(dataItem["CodiceVersione"], dataItem["readonly"] !== "f");
         },
         error: function (jqXHR, textStatus, errorThrown) {
             AlertMessage("Unexpected error while adding object to your list!", textStatus + "; " + errorThrown);
@@ -480,20 +490,25 @@ function ChangeWriteMode(codiceVersione, rw) {
                         rw: rw
                     },
                     success: function (resultData2) {
-                        var dataItem = GetDataItemFromVersione(codiceVersione);
+                        var readonly;
                         if (resultData2["addimportcodice"] === "ok") {
-                            dataItem.set("readonly", rw ? "f" : "t");
-                        }
-                        else {
+                            readonly = rw ? "f" : "t";
+                        } else {
                             if (resultData2["addimportcodice"].substr(0, 10) === "ATTENZIONE") {
-                                dataItem.set("readonly", "t");
-                            }
-                            else {
-                                dataItem.set("readonly", null);
+                                readonly = "t";
+                            } else {
+                                readonly = null;
                             }
                             kendo.alert(resultData2["addimportcodice"]);
                         }
-                        UpdateInformation(dataItem["CodiceVersione"], dataItem["readonly"] !== "f");
+
+                        var dataItem = GetDataItemFromVersione(codiceVersione);
+                        if (dataItem) {
+                            dataItem.set("readonly", readonly);
+                            $('#objectsGrid').data('kendoGrid').select("tr[data-uid='" + dataItem["uid"] + "']");
+                        } else {
+                            UpdateData(codiceVersione, readonly !== "f");
+                        }
                     },
                     error: function (jqXHR, textStatus, errorThrown) {
                         dataItem.set("readonly", null);
@@ -519,7 +534,7 @@ function RemoveFromYourList(codiceVersione) {
             if (resultData === "ok") {
                 var dataItem = GetDataItemFromVersione(codiceVersione);
                 dataItem.set("readonly", null);
-                UpdateInformation(dataItem["CodiceVersione"], dataItem["readonly"] !== "f");
+                UpdateData(dataItem["CodiceVersione"], dataItem["readonly"] !== "f");
             }
         },
         error: function (jqXHR, textStatus, errorThrown) {
@@ -541,365 +556,23 @@ function GetWriteMode(codiceVersione) {
     });
 }
 
-// Information
-function SetDynamicInformationFields() {
-    function UpdateCategoryList() {
-        $.ajax({
-            url: './php/getCategoryList.php',
-            dataType: "json",
-            success: function (resultData) {
-                var categoryCombo = $("#infoCategory").data("kendoDropDownList");
-                categoryCombo.setDataSource(resultData);
-                categoryCombo.dataSource.group({field: "GruppoCategoria"});
-            },
-            error: function (jqXHR, textStatus, errorThrown) {
-                AlertMessage("Unexpected error during the update of the category list!", textStatus + "; " + errorThrown);
-            }
-        });
+// Data access
+function ResetData() {
+    if ($("#infoCodiceVersione").val() !== "") {
+        WriteSwitchSetReadOnly(true);
+        ResetInformation();
+        ResetImage();
     }
-
-    function CreateDynamicInformationFields() {
-        function DeleteDynamicInformationFields() {
-            $("#informationSubVersionTab").empty();
-            $("#informationWindowTabControl").find("div.boxedContainer").each(function (i, sheet) {
-                if (sheet.dataset["codice"] > 0 || sheet.dataset["table"]) {
-                    $(sheet).remove();
-                }
-            });
-        }
-
-        function CreateInformationFieldSingleTab(fieldsList, destinationTab) {
-            /**
-             * @return {string}
-             */
-            function GenerateControlsHtml(fieldsList, destinationTab) {
-                /**
-                 * @return {string}
-                 */
-                function StartSheet(codiceTitolo, titolo) {
-                    var html = '                    <div data-codice="' + codiceTitolo + '" class="boxedContainer hidden">\n';
-                    html += '                        <h3>' + titolo + '</h3>\n';
-                    return html;
-                }
-
-                /**
-                 * @return {string}
-                 */
-                function CloseSheet(currentSheet) {
-                    var html = "";
-                    if (currentSheet !== -1) {
-                        html += '                        <div class="buttonContainer">\n';
-                        html += '                            <button id="saveInfoObject-' + currentSheet + '" data-codice="' + currentSheet + '" class="buttonBordered" disabled>SAVE</button>\n';
-                        html += '                        </div>\n';
-                        html += "                    </div>\n";
-                    }
-                    return html;
-                }
-
-                /**
-                 * @return {string}
-                 */
-                function AddField(destinationTab, field) {
-                    var html = "";
-                    var height;
-                    if (field["IsTitle"] === "t") {
-                        html += '                        <h4>' + field["Campo"] + '</h4>\n';
-                    }
-                    else if (field["IsSeparator"] === "t") {
-                        html += '                        <hr class="k-separator">\n';
-                    }
-                    else if (field["IsBool"] === "t") {
-                        html += '                        <div class="informationFieldContainer">\n';
-                        html += '                            <div class="labelContainer labelCheckboxContainer">' + field["Campo"] + '</div>\n';
-                        html += '                            <div class="inputCheckboxContainer">\n';
-                        html += '                               <input data-tipo="bool" data-codice="' + field["Codice"] + '" data-destination="' + destinationTab + '" id="' + destinationTab + '_' + field["Codice"] + '" data-role="checkboxinfo" type="checkbox" class="k-checkbox" />\n';
-                        html += '                               <label class="k-checkbox-label" for="' + destinationTab + '_' + field["Codice"] + '"></label>\n';
-                        html += '                            </div>\n';
-                        html += '                        </div>\n';
-                    }
-                    else {
-                        html += '                        <div class="informationFieldContainer">\n';
-                        html += '                            <div class="labelContainer"><label for="' + destinationTab + '_' + field["Codice"] + '">' + field["Campo"] + '</label></div>\n';
-                        if (field["IsTimestamp"] === "t") {
-                            html += '                            <input data-tipo="timestamp" data-codice="' + field["Codice"] + '" data-destination="' + destinationTab + '" id="' + destinationTab + '_' + field["Codice"] + '" name="' + destinationTab + '_' + field["Codice"] + '">\n';
-                            html += '                            <span class="k-invalid-msg" data-for="' + destinationTab + '_' + field["Codice"] + '"></span>\n';
-                        }
-                        else if (field["IsInt"] === "t") {
-                            html += '                            <input data-tipo="int" data-codice="' + field["Codice"] + '" data-destination="' + destinationTab + '" id="' + destinationTab + '_' + field["Codice"] + '" type="number">\n';
-                        }
-                        else if (field["IsReal"] === "t") {
-                            html += '                            <input data-tipo="real" data-codice="' + field["Codice"] + '" data-destination="' + destinationTab + '" id="' + destinationTab + '_' + field["Codice"] + '" type="number">\n';
-                        }
-                        else if (field["IsCombo"] === "t") {
-                            html += '                            <select data-tipo="combo" data-codice="' + field["Codice"] + '" data-destination="' + destinationTab + '" id="' + destinationTab + '_' + field["Codice"] + '"></select>\n';
-                        }
-                        else if (field["IsMultiCombo"] === "t") {
-                            html += '                            <select data-tipo="multicombo" data-codice="' + field["Codice"] + '" data-destination="' + destinationTab + '" id="' + destinationTab + '_' + field["Codice"] + '"></select>\n';
-                        }
-                        else {
-                            height = field["Height"] / 22;
-                            if (height > 1) {
-                                html += '                            <textarea data-tipo="text" data-codice="' + field["Codice"] + '" data-role="textinfo" data-destination="' + destinationTab + '" id="' + destinationTab + '_' + field["Codice"] + '" style="height: ' + height * 31 + 'px" type="text" class="k-textbox" onmousedown="_isMouseDown = true;" onmousemove="ChangeInformationFieldsStyleFromElement(false)" onmouseup="ChangeInformationFieldsStyleFromElement(true)" readonly></textarea>\n';
-                            }
-                            else {
-                                html += '                            <input data-tipo="text" data-codice="' + field["Codice"] + '" data-role="textinfo" data-destination="' + destinationTab + '" id="' + destinationTab + '_' + field["Codice"] + '" type="text" class="k-textbox" readonly/>\n';
-                            }
-                        }
-                        html += '                        </div>\n';
-                    }
-                    return html;
-                }
-
-                var html = "";
-                var currentSheet = -1;
-                fieldsList.forEach(function (field) {
-                    if (currentSheet !== field["CodiceTitolo"]) {
-                        html += CloseSheet(currentSheet);
-                        currentSheet = field["CodiceTitolo"];
-                        html += StartSheet(field["CodiceTitolo"], field["Titolo"]);
-                    }
-                    html += AddField(destinationTab, field);
-                });
-                html += CloseSheet(currentSheet);
-                return html;
-            }
-
-            function InitializeFieldKendoComponents(destinationTabSel) {
-                function SortKendoMultiSelectValue() {
-                    this.value(this.value().sort());
-                }
-
-                /**
-                 * @return {string}
-                 */
-                function AddComboValueHtml(event) {
-                    var value = event.instance.input[0].value;
-                    var html = "";
-                    if (value) {
-                        html += '                            <button class="buttonBordered" onclick="AddNewComboValue(\'' + event.instance.element[0].id + '\', \'' + value + '\')">Add new value<br><b>' + value + '</b></button>\n';
-                    }
-                    return html;
-                }
-
-                /**
-                 * @return {string}
-                 */
-                function GetComboTemplate(inputField) {
-                    // noinspection JSDeprecatedSymbols
-                    return '#:Value#<span class="k-icon k-i-edit buttonDropdownItemEdit" data-codice="#:Codice#" data-value="#:Value#" data-ref="' + inputField.id + '" onclick="ChangeComboValueDialogOpen(event)"></span><span class="k-icon k-i-delete buttonDropdownItemErase" data-codice="#:Codice#" data-value="#:Value#" data-ref="' + inputField.id + '" onclick="RemoveComboValue(event)"></span>';
-                }
-
-                destinationTabSel.find("input, select").each(function (i, inputField) {
-                    var inputFieldSel = $(inputField);
-                    switch (inputField.dataset["tipo"]) {
-                        case "timestamp":
-                            inputFieldSel.kendoDateTimePicker({
-                                timeFormat: "HH:mm",
-                                format: "dd/MM/yy HH:mm",
-                                parseFormats: ["dd/MM/yyyy HH:mm:ss", "dd/MM/yy HH:mm:ss", "dd/MM/yyyy HH:mm", "dd/MM/yy HH:mm", "dd/MM/yyyy", "dd/MM/yy", "HH:mm"]
-                            });
-                            inputFieldSel.data("kendoDateTimePicker").readonly();
-                            inputFieldSel.parents("div.informationFieldContainer").kendoValidator({
-                                rules: {
-                                    datepicker: function (input) {
-                                        return !(input[0].dataset["role"] === "datetimepicker") || input[0].value === "" || input.data("kendoDateTimePicker").value();
-                                    }
-                                },
-                                messages: {
-                                    datepicker: "Please enter a valid date!"
-                                }
-                            });
-                            break;
-                        case "int":
-                            inputFieldSel.kendoNumericTextBox({
-                                decimals: 0,
-                                restrictDecimals: true,
-                                step: 1,
-                                format: "0"
-                            });
-                            inputFieldSel.data("kendoNumericTextBox").readonly();
-                            break;
-                        case "real":
-                            inputFieldSel.kendoNumericTextBox({
-                                decimals: 13,
-                                step: 0.001,
-                                format: "0.#########"
-                            });
-                            inputFieldSel.data("kendoNumericTextBox").readonly();
-                            break;
-                        case "combo":
-                            inputFieldSel.kendoComboBox({
-                                dataTextField: "Value",
-                                dataValueField: "Codice",
-                                filter: "contains",
-                                template: GetComboTemplate(inputField),
-                                footerTemplate: AddComboValueHtml
-                            });
-                            inputFieldSel.data("kendoComboBox").readonly();
-                            break;
-                        case "multicombo":
-                            inputFieldSel.kendoMultiSelect({
-                                dataTextField: "Value",
-                                dataValueField: "Codice",
-                                filter: "contains",
-                                template: GetComboTemplate(inputField),
-                                footerTemplate: AddComboValueHtml,
-                                change: SortKendoMultiSelectValue,
-                                autoClose: false
-                            });
-                            inputFieldSel.data("kendoMultiSelect").readonly();
-                            break;
-                    }
-                });
-            }
-
-            var destinationTabSel = $("#" + destinationTab);
-            destinationTabSel.append(GenerateControlsHtml(fieldsList, destinationTab));
-            InitializeFieldKendoComponents(destinationTabSel);
-        }
-
-        function CreateSubVersionInformationField(schedeSubVersion, schedeInterventiSubVersion, maxSubVersion) {
-            /**
-             * @return {string}
-             */
-            function GenerateExpanderHtml(maxSubVersion) {
-                /**
-                 * @return {string}
-                 */
-                function GenerateSubVersionExpanderHtml(subVersion) {
-                    var html = '   <li id="informationSubVersionPanel' + subVersion + '" data-subversion="' + subVersion + '" class="hidden"> SubVersion ' + subVersion + '\n';
-                    html += '       <div id="informationSubVersionContent' + subVersion + '" data-ref="OggettiSubVersion" data-subversion="' + subVersion + '" class="subVersionPanelItem">\n';
-                    html += '       </div>\n';
-                    html += '   </li>\n';
-                    return html;
-                }
-
-                /**
-                 * @return {string}
-                 */
-                function GenerateInterventionExpanderHtml(subVersion) {
-                    var html = '   <li id="infoInterventiSubVersionPanel' + subVersion + '" data-subversion="' + subVersion + '" class="hidden"> Intervention ' + subVersion + '\n';
-                    html += '       <div id="infoInterventiSubVersionContent' + subVersion + '" data-ref="InterventiSubVersion" data-subversion="' + subVersion + '" class="subVersionPanelItem">\n';
-                    html += '       </div>\n';
-                    html += '   </li>\n';
-                    return html;
-                }
-
-                var html = '<ul id="informationSubVersionExpanderControl">\n';
-                html += GenerateSubVersionExpanderHtml(0);
-                for (var i = 1; i < maxSubVersion + 5; i++) {
-                    html += GenerateInterventionExpanderHtml(i);
-                    html += GenerateSubVersionExpanderHtml(i);
-                }
-                html += '</ul>\n';
-                return html;
-            }
-
-            var informationSubVersionTab = $('#informationSubVersionTab');
-            informationSubVersionTab.append(GenerateExpanderHtml(maxSubVersion));
-            $("#informationSubVersionExpanderControl").kendoPanelBar({});
-            informationSubVersionTab.find("div.subVersionPanelItem").each(function (i, expander) {
-                switch (expander.dataset["ref"]) {
-                    case "OggettiSubVersion":
-                        CreateInformationFieldSingleTab(schedeSubVersion, expander.id);
-                        break;
-                    case "InterventiSubVersion":
-                        CreateInformationFieldSingleTab(schedeInterventiSubVersion, expander.id);
-                        break;
-                }
-            });
-        }
-
-        function AddGisInformationFields() {
-            return $.ajax({
-                url: './php/getGisInformationFields.php',
-                dataType: "json",
-                success: function (resultData) {
-                    var html = "";
-                    for (var id in resultData) {
-                        var [database, table] = id.split("||");
-                        var destinationId = id.replace("||", "_");
-                        html += '                    <div id="' + database + "_" + table + '" data-db="' + database + '" data-table="' + table + '" class="boxedContainer hidden">\n';
-                        html += '                        <h3>' + table + '</h3>\n';
-
-                        resultData[id].forEach(function (field) {
-                            var colId = field["column_name"].replace(" ", "___");
-                            if (field["data_type"] === "boolean") {
-                                html += '                        <div class="informationFieldContainer">\n';
-                                html += '                            <div class="labelContainer labelCheckboxContainer">' + field["column_name"] + '</div>\n';
-                                html += '                            <div class="inputCheckboxContainer">\n';
-                                html += '                               <input data-tipo="bool" data-destination="' + destinationId + '" id="' + destinationId + '_' + colId + '" data-role="checkboxinfo" type="checkbox" class="k-checkbox" />\n';
-                                html += '                               <label class="k-checkbox-label" for="' + destinationId + '_' + field["column_name"] + '"></label>\n';
-                                html += '                            </div>\n';
-                                html += '                        </div>\n';
-                            }
-                            else {
-                                html += '                        <div class="informationFieldContainer">\n';
-                                html += '                            <div class="labelContainer"><label for="' + destinationId + '_' + field["column_name"] + '">' + field["column_name"] + '</label></div>\n';
-                                switch (field["data_type"]) {
-                                    case "integer" :
-                                        html += '                            <input data-tipo="int" data-destination="' + destinationId + '" id="' + destinationId + '_' + colId + '" type="number">\n';
-                                        break;
-                                    case "numeric" :
-                                    case "double precision":
-                                        html += '                            <input data-tipo="real" data-destination="' + destinationId + '" id="' + destinationId + '_' + colId + '" type="number">\n';
-                                        break;
-                                    case "character varying":
-                                    case "character":
-                                        html += '                            <textarea data-tipo="text" data-role="textinfo" data-destination="' + destinationId + '" id="' + destinationId + '_' + colId + '" style="height: 31px" type="text" class="k-textbox" onmousedown="_isMouseDown = true;" onmousemove="ChangeInformationFieldsStyleFromElement(false)" onmouseup="ChangeInformationFieldsStyleFromElement(true)" readonly></textarea>\n';
-                                        break;
-                                }
-                                html += '                        </div>\n';
-                            }
-                        });
-
-                        html += "                    </div>\n";
-                    }
-
-                    $("#informationVersionTab").append(html);
-                },
-                error: function (jqXHR, textStatus, errorThrown) {
-                    AlertMessage("Unexpected error while creating GIS information fields!", textStatus + "; " + errorThrown);
-                }
-            });
-        }
-
-        function AddDynamicInformationField() {
-            $.ajax({
-                url: './php/getInformationFields.php',
-                dataType: "json",
-                success: function (resultData) {
-                    CreateInformationFieldSingleTab(resultData["SchedeOggetto"], "informationObjectTab");
-                    CreateInformationFieldSingleTab(resultData["SchedeVersione"], "informationVersionTab");
-                    CreateSubVersionInformationField(resultData["SchedeSubVersion"], resultData["SchedeInterventiSubVersion"], parseInt(resultData["MaxSubVersion"]));
-
-                    ChangeInformationFieldsStyle(true);
-                    FillAllComboValues();
-
-                    ProgressBar(false);
-                },
-                error: function (jqXHR, textStatus, errorThrown) {
-                    ProgressBar(false);
-                    AlertMessage("Unexpected error while creating dynamic object information fields!", textStatus + "; " + errorThrown);
-                }
-            });
-        }
-
-        ProgressBar(true);
-
-        DeleteDynamicInformationFields();
-
-        AddGisInformationFields()
-            .then(AddDynamicInformationField);
-    }
-
-    ResetInformation();
-
-    UpdateCategoryList();
-
-    CreateDynamicInformationFields();
 }
 
+function UpdateData(codiceVersione, readonly) {
+    ResetData();
+    WriteSwitchSetReadOnly(false);
+    UpdateInformation(codiceVersione, readonly);
+    UpdateImage(codiceVersione, readonly);
+}
+
+// Information
 function ResetInformation() {
     function ResetInputField(inputFieldContainer) {
         function ResetKendoInputField(inputFieldKendo) {
@@ -932,6 +605,8 @@ function ResetInformation() {
                     inputField.value = null;
                     inputField.setAttribute("readonly", true);
                     break;
+                default:
+                    inputField.value = null;
             }
         });
     }
@@ -943,7 +618,9 @@ function ResetInformation() {
                 $(button).unbind("click", SaveSheetInformation);
             }
         });
-        $("#saveInfoCategory").unbind("click", ChangeCategory);
+        var saveInfoCategory = $("#saveInfoCategory");
+        saveInfoCategory[0].setAttribute("disabled", true);
+        saveInfoCategory.unbind("click", ChangeCategory);
     }
 
     function HideAllInformationSheet(informationWindowTabControl) {
@@ -1244,7 +921,7 @@ function UpdateInformation(codiceVersione, readonly) {
             $("#saveInfoCategory").bind("click", ChangeCategory);
         }
 
-        $("#informationReadOnlySwitch").data("kendoSwitch").check(writeMode);
+        $("#informationWriteSwitch").data("kendoSwitch").check(writeMode);
         if (writeMode) {
             var informationWindowTabControl = $("#informationWindowTabControl");
             SetWriteInputFields(informationWindowTabControl);
@@ -1252,7 +929,6 @@ function UpdateInformation(codiceVersione, readonly) {
         }
     }
 
-    ResetInformation();
     UpdateBaseInformation(codiceVersione);
     UpdateGisInformation();
     UpdateDynamicInformation(codiceVersione);
@@ -1308,10 +984,9 @@ function SaveSheetInformation() {
                 break;
             default:
                 var destination = inputField.dataset["destination"];
-                if (destination.startsWith("informationSubVersionContent") || destination.startsWith("infoInterventiSubVersionContent")) {
+                if (destination.startsWith("informationSubVersionContent") || destination.startsWith("informationInterventiSubVersionContent")) {
                     codice = destinationControl[0].dataset["codice"];
-                }
-                else {
+                } else {
                     return;
                 }
         }
@@ -1337,21 +1012,20 @@ function SaveSheetInformation() {
         });
     }
 
-    if ($("#informationReadOnlySwitch").data("kendoSwitch").check()) {
+    if ($("#informationWriteSwitch").data("kendoSwitch").check()) {
         var sheet = $(this).parents(".boxedContainer");
         // noinspection JSCheckFunctionSignatures
         sheet.find("input, textarea, select").each(function (i, inputField) {
             SaveInformation(inputField);
         });
         kendo.alert("Save completed!");
-    }
-    else {
+    } else {
         kendo.alert("Can't save information in read only mode!");
     }
 }
 
 function ChangeCategory() {
-    if ($("#informationReadOnlySwitch").data("kendoSwitch").check()) {
+    if ($("#informationWriteSwitch").data("kendoSwitch").check()) {
         var categoryCombo = $("#infoCategory").data("kendoDropDownList");
         $.ajax({
             url: './php/setCategory.php',
@@ -1362,14 +1036,13 @@ function ChangeCategory() {
             },
             success: function () {
                 kendo.alert("Category changed");
-                UpdateInformation($("#infoCodiceVersione").val(), false);
+                UpdateData($("#infoCodiceVersione").val(), false);
             },
             error: function (jqXHR, textStatus, errorThrown) {
                 AlertMessage("Unexpected error while change object category!", textStatus + "; " + errorThrown);
             }
         });
-    }
-    else {
+    } else {
         kendo.alert("Can't change category in read only mode!");
     }
 }
@@ -1447,7 +1120,7 @@ function UpdateComboValue(inputSel, dbReference, codiceCampo) {
             UpdateSubVersionComboValue(dbReference, codiceCampo, "informationSubVersionContent");
             break;
         case "InterventiSubVersion":
-            UpdateSubVersionComboValue(dbReference, codiceCampo, "infoInterventiSubVersionContent");
+            UpdateSubVersionComboValue(dbReference, codiceCampo, "informationInterventiSubVersionContent");
             break;
         default:
             var inputFieldKendo = inputSel[0].dataset["tipo"] === "combo" ? inputSel.data("kendoComboBox") : inputSel.data("kendoMultiSelect");
@@ -1531,8 +1204,7 @@ function ChangeComboValueDialogOpen(event) {
     var renameComboDialogKendo = renameComboDialog.data("kendoDialog");
     if (renameComboDialogKendo) {
         renameComboDialogKendo.open();
-    }
-    else {
+    } else {
         // noinspection JSPotentiallyInvalidConstructorUsage
         InitializeRenameComboDialog(renameComboDialog);
     }
@@ -1568,6 +1240,221 @@ function RemoveComboValue(event) {
                 }
             });
         });
+}
+
+//Image
+function ResetImage() {
+    $("#imageWindowTabControl").find("div.imageListView").each(function (i, imageListView) {
+        $(imageListView).data("kendoListView").setDataSource(new kendo.data.DataSource({data: []}));
+    });
+    $("#imageSubVersionExpanderControl").children("li").each(function (i, expander) {
+        $(expander).addClass("hidden");
+    });
+    DisableImageAddButtons();
+}
+
+function UpdateImage(codiceVersione, readonly) {
+    function UpdateGallery() {
+        function EnableImageAddButtons(codice, buttonGalleryId) {
+            function AddImage(event) {
+                var sender = event.currentTarget;
+                var addImagesInput = $("#addImagesInput");
+                addImagesInput[0].dataset["ref"] = sender.dataset["ref"];
+                addImagesInput[0].dataset["refid"] = sender.dataset["refid"];
+                addImagesInput[0].dataset["codice"] = sender.dataset["codice"];
+                $("#addImageDialog").data("kendoDialog").open();
+            }
+
+            var buttonGallery = $("#" + buttonGalleryId);
+            buttonGallery[0].dataset["codice"] = codice;
+            buttonGallery.removeClass("disabledButton");
+            buttonGallery.bind("click", AddImage);
+        }
+
+        function AddImageGallery(valueList, destinationTab) {
+            $.each(valueList, function (key, value) {
+                $("#" + destinationTab).data("kendoListView").dataSource.insert({
+                    src: "",
+                    url: value["URL"],
+                    codice: value["Codice"]
+                });
+            });
+        }
+
+        function LoadPreviewImages() {
+            $("#imageWindowTabControl").find("div.imageListView").each(function (i, imageListView) {
+                $(imageListView).data("kendoListView").dataSource.data().forEach(function (dataItem) {
+                    var imageCacheManager = new ImageCacheManager();
+                    imageCacheManager.FileReceived = function (imageSrc) {
+                        dataItem.set("src", imageSrc);
+                    }
+                    imageCacheManager.GetFile(imageListView.dataset["ref"] + "|" + dataItem["codice"] + "|" + "low" + "|" + dataItem["url"]);
+                });
+            });
+        }
+
+        $.ajax({
+            url: './php/getImageList.php',
+            dataType: "json",
+            data: {
+                codiceVersione: codiceVersione
+            },
+            success: function (resultData) {
+                if (!readonly) {
+                    EnableImageAddButtons(resultData["CodiceOggetto"], "addObjectImageButton");
+                    EnableImageAddButtons(codiceVersione, "addVersionImageButton");
+                }
+
+                AddImageGallery(resultData["ImmaginiOggetto"], "imageObjectGallery");
+                AddImageGallery(resultData["ImmaginiVersione"], "imageVersionGallery");
+                $('#imageSubVersionTab').find("div.subVersionPanelItem").each(function (i, expander) {
+                    var codice = 0;
+                    switch (expander.dataset["ref"]) {
+                        case "OggettiSubVersion":
+                            codice = resultData["CodiceSubVersion" + expander.dataset["subversion"]];
+                            break;
+                        case "InterventiSubVersion":
+                            codice = resultData["CodiceInterventoSubVersion" + expander.dataset["subversion"]];
+                            break;
+                    }
+                    if (codice > 0) {
+                        $(expander).parent().removeClass("hidden");
+                        switch (expander.dataset["ref"]) {
+                            case "OggettiSubVersion":
+                                expander.dataset["codice"] = codice;
+                                AddImageGallery(resultData["ImmaginiSubVersion" + expander.dataset["subversion"]], "image" + expander.dataset["ref"] + expander.dataset["subversion"] + "Gallery");
+                                break;
+                            case "InterventiSubVersion":
+                                expander.dataset["codice"] = codice;
+                                AddImageGallery(resultData["ImmaginiInterventiSubVersion" + expander.dataset["subversion"]], "image" + expander.dataset["ref"] + expander.dataset["subversion"] + "Gallery");
+                                break;
+                        }
+                        if (!readonly) {
+                            EnableImageAddButtons(codice, "Add" + expander.dataset["ref"] + expander.dataset["subversion"] + "ImageButton");
+                        }
+                    }
+                });
+
+                LoadPreviewImages();
+            },
+            error: function (jqXHR, textStatus, errorThrown) {
+                AlertMessage("Unexpected error while updating image gallery!", textStatus + "; " + errorThrown);
+            }
+        });
+    }
+
+    UpdateGallery();
+
+    $("#imageWriteSwitch").data("kendoSwitch").check(!readonly);
+}
+
+function ViewLargeImage(event) {
+    function LoadImage() {
+        function GetImage() {
+            imageCacheManager.GetFile(imageListView[0].dataset["ref"] + "|" + dataItem["codice"] + "|" + "high" + "|" + dataItem["url"]);
+        }
+
+        function PreviousImage() {
+            if (position === 0) {
+                position = datasource.total();
+            }
+            position = position - 1;
+
+            dataItem = datasource.at(position);
+            GetImage();
+        }
+
+        function NextImage() {
+            position = position + 1;
+            if (position === datasource.total()) {
+                position = 0;
+            }
+
+            dataItem = datasource.at(position);
+            GetImage();
+        }
+
+        function imageViewerWindow_OnKeyDown(event) {
+            switch (event.key) {
+                case "ArrowLeft":
+                    event.preventDefault();
+                    PreviousImage();
+                    break;
+                case "ArrowRight":
+                    event.preventDefault();
+                    NextImage();
+                    break;
+            }
+        }
+
+        function AddButtonEventListener() {
+            $("#previousImageViewerButton").unbind().bind('click', PreviousImage);
+            $("#nextImageViewerButton").unbind().bind('click', NextImage);
+            imageViewerWindow.unbind().bind("keyup", imageViewerWindow_OnKeyDown);
+        }
+
+        var galleryImageContainer = $(event.target).parents(".galleryImageElement");
+        var imageListView = galleryImageContainer.parent(".imageListView");
+        var datasource = imageListView.data("kendoListView").dataSource;
+        var dataItem = datasource.getByUid(galleryImageContainer[0].dataset["uid"]);
+        var position = datasource.indexOf(dataItem);
+
+        AddButtonEventListener();
+
+        var imageCacheManager = new ImageCacheManager();
+        imageCacheManager.FileReceived = function (imageSrc) {
+            imageViewerImg.attr("src", imageSrc);
+            SetImageFitSize(imageViewerImg);
+        }
+
+        GetImage();
+    }
+
+    var imageViewerImg = $("#imageViewerImg");
+    imageViewerImg.attr("src", "");
+
+    var imageViewerWindow = $("#imageViewerWindow");
+    imageViewerWindow.data("kendoWindow").open();
+
+    LoadImage();
+}
+
+function DeleteImage(event) {
+    function DeleteDbImage() {
+        $.ajax({
+            url: './php/deleteImage.php',
+            dataType: "json",
+            data: {
+                ref: imageListView[0].dataset["ref"],
+                codice: dataItem["codice"],
+                url: dataItem["url"]
+            },
+            success: function (resultData) {
+                if (resultData === "ok") {
+                    datasource.remove(dataItem);
+                }
+            },
+            error: function (jqXHR, textStatus, errorThrown) {
+                AlertMessage("Unexpected error while deleting image!", textStatus + "; " + errorThrown);
+            }
+        });
+    }
+
+    var galleryImageContainer = $(event.target).parents(".galleryImageElement");
+    var imageListView = galleryImageContainer.parent(".imageListView");
+    var datasource = imageListView.data("kendoListView").dataSource;
+    var dataItem = datasource.getByUid(galleryImageContainer[0].dataset["uid"]);
+
+    kendo.confirm("Are you sure to delete <i>" + dataItem["url"] + "</i> image?<br><br>This image will be permantly deleted and the operation can't be undone!")
+        .done(DeleteDbImage);
+}
+
+function DisableImageAddButtons() {
+    $("#imageWindowTabControl").find("span.sideToolbarButton").each(function (i, buttonGalleryId) {
+        var buttonGallery = $(buttonGalleryId);
+        buttonGallery.addClass("disabledButton");
+        buttonGallery.unbind("click");
+    });
 }
 
 // Components
@@ -1708,7 +1595,7 @@ function InitializeComponents() {
             var selectedObject = this.dataItem(this.select());
             if (selectedObject) {
                 Select3dObject(Get3dObjectFromName(GetModelTypeStringCode(selectedObject["Type"]) + selectedObject["CodiceVersione"]), false);
-                UpdateInformation(selectedObject["CodiceVersione"], selectedObject["readonly"] !== "f");
+                UpdateData(selectedObject["CodiceVersione"], selectedObject["readonly"] !== "f");
             }
         }
 
@@ -1804,7 +1691,7 @@ function InitializeComponents() {
 
             $(".modelWindowTitle").prepend(html);
 
-            $("#settings3dButton").click(Toggle3dSettings);
+            $("#settings3dButton").bind("click", Toggle3dSettings);
         }
 
         function Initialize3d() {
@@ -1849,15 +1736,15 @@ function InitializeComponents() {
                     _addHotSpotMode = !_addHotSpotMode;
                 }
 
-                $("#zoomAll3dSceneButton").click(ResetEye);
+                $("#zoomAll3dSceneButton").bind("click", ResetEye);
 
-                $("#sync3dSceneButton").click(Sync3dScene);
+                $("#sync3dSceneButton").bind("click", Sync3dScene);
 
-                $("#clear3dSceneButton").click(ResetView);
+                $("#clear3dSceneButton").bind("click", ResetView);
 
-                $("#addNewHotspotButton").click(ToggleAddNewHotspot);
+                $("#addNewHotspotButton").bind("click", ToggleAddNewHotspot);
 
-                $("#reload3dSceneButton").click(function () {
+                $("#reload3dSceneButton").bind("click", function () {
                     ResetView();
                     Load3dScene()
                         .then(setTimeout(ResetEye, 200));
@@ -1876,7 +1763,7 @@ function InitializeComponents() {
 
         Add3dToolbar();
 
-        $("#play3DButton").click(Initialize3d);
+        $("#play3DButton").bind("click", Initialize3d);
     }
 
     function SetGisWindow() {
@@ -1945,8 +1832,7 @@ function InitializeComponents() {
                             item.items.forEach(function (innerItem) {
                                 SetLayerVisibility(map, innerItem);
                             });
-                        }
-                        else {
+                        } else {
                             SetLayerVisibility(map, item);
                         }
                     }
@@ -1967,8 +1853,7 @@ function InitializeComponents() {
                             dataBound: InitializeTransparencySlide,
                             check: ChangeLayerVisibility
                         });
-                    }
-                    else {
+                    } else {
                         layersGisTreeView.unbind("dataBound");
                         layersGisTreeView.setDataSource([]);
                     }
@@ -1978,12 +1863,12 @@ function InitializeComponents() {
                     $("#layersGisContainer").toggleClass("hidden");
                 }
 
-                $("#reloadGisButton").click(function () {
+                $("#reloadGisButton").bind("click", function () {
                     LoadGis();
                 });
 
                 InitializeGisLayersSettings();
-                $("#layersGisButton").click(ToggleGisLayersSettings);
+                $("#layersGisButton").bind("click", ToggleGisLayersSettings);
             }
 
             $(this.parentElement).fadeOut(1500);
@@ -2015,7 +1900,28 @@ function InitializeComponents() {
 
         AddGisToolbar();
 
-        $("#playGisButton").click(InitializeGis);
+        $("#playGisButton").bind("click", InitializeGis);
+    }
+
+    function AddReadWriteControl(window) {
+        var html;
+        html = '<div class="writeSwitchContainer">';
+        html += '    <span class="writeSwitchLabel">Read</span>';
+        html += '            <input type="checkbox" id="' + window + 'WriteSwitch">';
+        html += '    <span class="writeSwitchLabel">Write</span>';
+        html += '</div>';
+
+        $("." + window + "WindowTitle").prepend(html);
+        $("#" + window + "WriteSwitch").kendoSwitch({
+            checked: false,
+            readonly: true,
+            change: function (event) {
+                var codiceVersione = $("#infoCodiceVersione").val();
+                if (codiceVersione != null && codiceVersione !== "") {
+                    ChangeWriteMode(codiceVersione, event.checked);
+                }
+            }
+        });
     }
 
     function SetInformationWindow() {
@@ -2047,26 +1953,6 @@ function InitializeComponents() {
             informationWindow.parents(".k-widget").addClass("windowTitle windowIcon informationWindowTitle informationWindowIcon");
         }
 
-        function AddReadWriteControl() {
-            var html;
-            html = '<div class="readOnlySwitchContainer">';
-            html += '    <span class="readOnlySwitchLabel">Read</span>';
-            html += '            <input type="checkbox" id="informationReadOnlySwitch">';
-            html += '    <span class="readOnlySwitchLabel">Write</span>';
-            html += '</div>';
-
-            $(".informationWindowTitle").prepend(html);
-            $("#informationReadOnlySwitch").kendoSwitch({
-                checked: false,
-                change: function (event) {
-                    var codiceVersione = $("#infoCodiceVersione").val();
-                    if (codiceVersione != null && codiceVersione !== "") {
-                        ChangeWriteMode(codiceVersione, event.checked);
-                    }
-                }
-            });
-        }
-
         function SetInformationTabControl() {
             function InformationWindowTabControl_OnShow() {
                 ChangeInformationFieldsStyle(true);
@@ -2095,9 +1981,243 @@ function InitializeComponents() {
 
         InitializeInformationWindow();
 
-        AddReadWriteControl();
+        AddReadWriteControl("information");
         SetInformationTabControl();
         SetInformationDefaultSheets();
+    }
+
+    function SetImageWindows() {
+        function InitializeImageWindow() {
+            function ImageWindow_OnActivate() {
+                ResizeImageWindow();
+            }
+
+            var imageWindow = $("#imageWindow");
+            imageWindow.removeClass("fixedPosition");
+
+            imageWindow.kendoWindow({
+                title: "Image",
+                minWidth: 350,
+                minHeight: 200,
+                visible: false,
+                resizable: true,
+                open: Windows_OnOpen,
+                activate: ImageWindow_OnActivate,
+                close: Windows_OnClose,
+            }).data("kendoWindow");
+
+            imageWindow.parents(".k-widget").addClass("windowTitle windowIcon imageWindowTitle imageWindowIcon");
+        }
+
+        function SetImageTabControl() {
+            $("#imageWindowTabControl").kendoTabStrip({
+                animation: {
+                    open: {effects: "fadeIn"}
+                },
+            });
+        }
+
+        function SetDefaultGalleryListView() {
+            SetGalleryListView("#imageObjectGallery");
+            SetGalleryListView("#imageVersionGallery");
+        }
+
+        InitializeImageWindow();
+
+        AddReadWriteControl("image");
+        SetImageTabControl();
+        SetDefaultGalleryListView();
+    }
+
+    function SetImageViewerWindow() {
+        function SetImageViewerWindow() {
+            function ImageViewerWindow_OnActivate() {
+                ResizeImageWindow();
+            }
+
+            var imageViewerWindow = $("#imageViewerWindow");
+            imageViewerWindow.removeClass("fixedPosition");
+
+            imageViewerWindow.kendoWindow({
+                title: "Image Viewer",
+                minWidth: 400,
+                minHeight: 200,
+                visible: false,
+                resizable: true,
+                activate: ImageViewerWindow_OnActivate,
+            }).data("kendoWindow");
+
+            imageViewerWindow.parents(".k-widget").addClass("windowTitle windowIcon imageViewerWindowTitle imageWindowIcon");
+        }
+
+        function AddImageViewerToolbar() {
+            function ScaleImageViewerSize(scaleFactor) {
+                var imageViewerImg = $("#imageViewerImg");
+                var width = imageViewerImg[0].clientWidth * scaleFactor;
+                var height = imageViewerImg[0].clientHeight * scaleFactor;
+
+                imageViewerImg.removeClass("maxSize");
+                imageViewerImg.attr("width", width);
+                imageViewerImg.attr("height", height);
+            }
+
+            function ImageViewerZoomIn() {
+                ScaleImageViewerSize(1.25);
+            }
+
+            function ImageViewerZoomOut() {
+                ScaleImageViewerSize(0.8);
+            }
+
+            function ImageZoomAll() {
+                SetImageFitSize($("#imageViewerImg"));
+            }
+
+            function imageViewerContainer_OnWheel(event) {
+                event.preventDefault();
+                if (event.deltaY < 0) {
+                    ImageViewerZoomIn();
+                } else {
+                    ImageViewerZoomOut();
+                }
+            }
+
+            var html;
+            html = '<div class="windowsToolbarContainer">';
+            html += '    <div class="buttonWindowsToolbarContainer">';
+            html += '       <span id="previousImageViewerButton" title="Previous Image">';
+            html += '           <img src="../img/icons/windowsToolbar/arrowLeft.png" alt="Previous Image">';
+            html += '       </span>';
+            html += '    </div>';
+            html += '    <div class="buttonWindowsToolbarContainer">';
+            html += '       <span id="nextImageViewerButton" title="Next Image">';
+            html += '           <img src="../img/icons/windowsToolbar/arrowRight.png" alt="Next Image">';
+            html += '       </span>';
+            html += '    </div>';
+            html += '    <div class="buttonWindowsToolbarContainer">';
+            html += '    </div>';
+            html += '    <div class="buttonWindowsToolbarContainer">';
+            html += '       <span id="zoomInImageButton" title="Zoom In">';
+            html += '           <img src="../img/icons/windowsToolbar/zoom.png" alt="Zoom In">';
+            html += '       </span>';
+            html += '    </div>';
+            html += '    <div class="buttonWindowsToolbarContainer">';
+            html += '       <span id="zoomOutImageButton" title="Zoom Out">';
+            html += '           <img src="../img/icons/windowsToolbar/zoomOut.png" alt="Zoom Out">';
+            html += '       </span>';
+            html += '    </div>';
+            html += '    <div class="buttonWindowsToolbarContainer">';
+            html += '       <span id="zoomAllImageButton" title="Zoom All">';
+            html += '           <img src="../img/icons/windowsToolbar/zoomAll.png" alt="Zoom All">';
+            html += '       </span>';
+            html += '    </div>';
+            html += '</div>';
+
+            $(".imageViewerWindowTitle").prepend(html);
+
+            $("#zoomInImageButton").bind("click", ImageViewerZoomIn);
+            $("#zoomOutImageButton").bind("click", ImageViewerZoomOut);
+            $("#zoomAllImageButton").bind("click", ImageZoomAll)
+
+            $("#imageViewerContainer")[0].addEventListener("wheel", imageViewerContainer_OnWheel);
+        }
+
+        SetImageViewerWindow();
+        AddImageViewerToolbar();
+    }
+
+    function SetAddImageDialog() {
+        function SetAddImageDialog() {
+            function AddImageDialog_OnClose() {
+                $("#addImagesInput").data("kendoUpload").clearAllFiles();
+            }
+
+            var addImageDialog = $("#addImageDialog");
+            addImageDialog.removeClass("fixedPosition");
+
+            addImageDialog.kendoDialog({
+                width: "400px",
+                title: "Add a new image",
+                closable: true,
+                modal: true,
+                actions: [
+                    {
+                        text: 'CLOSE',
+                        primary: true,
+                    }
+                ],
+                close: AddImageDialog_OnClose
+            });
+            addImageDialog.parents(".k-widget").addClass("windowTitle windowIcon addImageWindowTitle imageWindowIcon");
+
+            addImageDialog.on("keyup", function (event) {
+                if (event.key === "Enter") {
+                    addImageDialog.data("kendoDialog").close();
+                }
+            });
+        }
+
+        function SetAddImageUpload() {
+            function AddImagesInput_OnUpload(event) {
+                event.data = {
+                    codice: addImagesInput[0].dataset["codice"],
+                    ref: addImagesInput[0].dataset["ref"],
+                    url: event.files[0].name
+                };
+            }
+
+            function AddImagesInput_OnSuccess(event) {
+                var imageListView;
+                switch (addImagesInput[0].dataset["ref"]) {
+                    case "Oggetti":
+                        imageListView = $("#imageObjectGallery");
+                        break;
+                    case "Versioni":
+                        imageListView = $("#imageVersionGallery");
+                        break;
+                    case "SubVersion":
+                    case "InterventiSubVersion":
+                        imageListView = $("#image" + addImagesInput[0].dataset["refid"] + "Gallery");
+                        break;
+                }
+                var dataItem = imageListView.data("kendoListView").dataSource.add({
+                    src: "",
+                    codice: addImagesInput[0].dataset["codice"],
+                    url: event.files[0].name
+                });
+                var imageCacheManager = new ImageCacheManager();
+                imageCacheManager.FileReceived = function (imageSrc) {
+                    dataItem.set("src", imageSrc);
+                }
+                imageCacheManager.GetFile(addImagesInput[0].dataset["ref"] + "|" + dataItem["codice"] + "|" + "low" + "|" + dataItem["url"]);
+            }
+
+            var addImagesInput = $("#addImagesInput");
+            addImagesInput.kendoUpload({
+                async: {
+                    saveUrl: "./php/addImage.php",
+                    removeUrl: "",
+                    autoUpload: false
+                },
+                validation: {
+                    allowedExtensions: [".jpg", ".jpeg", ".png"],
+                    maxFileSize: 33554432,
+                    minFileSize: 1
+                },
+                upload: AddImagesInput_OnUpload,
+                success: AddImagesInput_OnSuccess,
+                select: function () {
+                    setTimeout(function () {
+                        $("#addImageDialog").data("kendoDialog").center();
+                    }, 10);
+                }
+            });
+
+            addImagesInput.parent("div.k-upload-button").addClass("buttonBordered uploadButtonBordered");
+        }
+
+        SetAddImageDialog();
+        SetAddImageUpload();
     }
 
     function SetToolbarButtons() {
@@ -2109,7 +2229,7 @@ function InitializeComponents() {
                 }
                 var codiceVersione = $("#infoCodiceVersione").val();
                 if (codiceVersione) {
-                    UpdateInformation(codiceVersione, true);
+                    UpdateData(codiceVersione, true);
                 }
             }
 
@@ -2228,29 +2348,32 @@ function InitializeComponents() {
             if (!addNewObjectDialogKendo) {
                 InitializeAddNewObjectDialog(addNewObjectDialog);
                 addNewObjectDialogKendo = addNewObjectDialog.data("kendoDialog");
-            }
-            else {
+            } else {
                 UpdateCombobox();
             }
 
             addNewObjectDialogKendo.open();
         }
 
-        $("#mode3DButton").click("click", function () {
+        $("#mode3DButton").bind("click", function () {
             ToggleKendoWindow("modelWindow");
         });
 
-        $("#modeGisButton").click("click", function () {
+        $("#modeGisButton").bind("click", function () {
             ToggleKendoWindow("gisWindow");
         });
 
-        $("#informationButton").click("click", function () {
+        $("#informationButton").bind("click", function () {
             ToggleKendoWindow("informationWindow");
         });
 
-        $("#cleanYourListButton").click(CleanYourList);
+        $("#imageButton").bind("click", function () {
+            ToggleKendoWindow("imageWindow");
+        });
 
-        $("#addNewObjectButton").click(AddNewObject);
+        $("#cleanYourListButton").bind("click", CleanYourList);
+
+        $("#addNewObjectButton").bind("click", AddNewObject);
     }
 
     SetSearchForm();
@@ -2258,7 +2381,445 @@ function InitializeComponents() {
     SetModelWindow();
     SetGisWindow();
     SetInformationWindow();
+    SetImageWindows();
+    SetImageViewerWindow();
+    SetAddImageDialog();
     SetToolbarButtons();
+}
+
+function WriteSwitchSetReadOnly(readonly) {
+    var writeSwitch = $("#informationWriteSwitch").data("kendoSwitch");
+    writeSwitch.readonly(readonly);
+    writeSwitch.check(false);
+    writeSwitch = $("#imageWriteSwitch").data("kendoSwitch");
+    writeSwitch.readonly(readonly);
+    writeSwitch.check(false);
+}
+
+function SetDynamicFields() {
+    function UpdateCategoryList() {
+        $.ajax({
+            url: './php/getCategoryList.php',
+            dataType: "json",
+            success: function (resultData) {
+                var categoryCombo = $("#infoCategory").data("kendoDropDownList");
+                categoryCombo.setDataSource(resultData);
+                categoryCombo.dataSource.group({field: "GruppoCategoria"});
+            },
+            error: function (jqXHR, textStatus, errorThrown) {
+                AlertMessage("Unexpected error during the update of the category list!", textStatus + "; " + errorThrown);
+            }
+        });
+    }
+
+    function CreateDynamicFields() {
+        function DeleteDynamicFields() {
+            function DeleteDynamicInformationFields() {
+                $("#informationSubVersionTab").empty();
+                $("#informationWindowTabControl").find("div.boxedContainer").each(function (i, sheet) {
+                    if (sheet.dataset["codice"] > 0 || sheet.dataset["table"]) {
+                        $(sheet).remove();
+                    }
+                });
+            }
+
+            DeleteDynamicInformationFields();
+
+            $("#imageSubVersionTab").empty();
+        }
+
+        function AddGisInformationFields() {
+            return $.ajax({
+                url: './php/getGisInformationFields.php',
+                dataType: "json",
+                success: function (resultData) {
+                    var html = "";
+                    for (var id in resultData) {
+                        var [database, table] = id.split("||");
+                        var destinationId = id.replace("||", "_");
+                        html += '                    <div id="' + database + "_" + table + '" data-db="' + database + '" data-table="' + table + '" class="boxedContainer hidden">\n';
+                        html += '                        <h3>' + table + '</h3>\n';
+
+                        resultData[id].forEach(function (field) {
+                            var colId = field["column_name"].replace(" ", "___");
+                            if (field["data_type"] === "boolean") {
+                                html += '                        <div class="informationFieldContainer">\n';
+                                html += '                            <div class="labelContainer labelCheckboxContainer">' + field["column_name"] + '</div>\n';
+                                html += '                            <div class="inputCheckboxContainer">\n';
+                                html += '                               <input data-tipo="bool" data-destination="' + destinationId + '" id="' + destinationId + '_' + colId + '" data-role="checkboxinfo" type="checkbox" class="k-checkbox" />\n';
+                                html += '                               <label class="k-checkbox-label" for="' + destinationId + '_' + field["column_name"] + '"></label>\n';
+                                html += '                            </div>\n';
+                                html += '                        </div>\n';
+                            } else {
+                                html += '                        <div class="informationFieldContainer">\n';
+                                html += '                            <div class="labelContainer"><label for="' + destinationId + '_' + field["column_name"] + '">' + field["column_name"] + '</label></div>\n';
+                                switch (field["data_type"]) {
+                                    case "integer" :
+                                        html += '                            <input data-tipo="int" data-destination="' + destinationId + '" id="' + destinationId + '_' + colId + '" type="number">\n';
+                                        break;
+                                    case "numeric" :
+                                    case "double precision":
+                                        html += '                            <input data-tipo="real" data-destination="' + destinationId + '" id="' + destinationId + '_' + colId + '" type="number">\n';
+                                        break;
+                                    case "character varying":
+                                    case "character":
+                                        html += '                            <textarea data-tipo="text" data-role="textinfo" data-destination="' + destinationId + '" id="' + destinationId + '_' + colId + '" style="height: 31px" type="text" class="k-textbox" onmousedown="_isMouseDown = true;" onmousemove="ChangeInformationFieldsStyleFromElement(false)" onmouseup="ChangeInformationFieldsStyleFromElement(true)" readonly></textarea>\n';
+                                        break;
+                                }
+                                html += '                        </div>\n';
+                            }
+                        });
+
+                        html += "                    </div>\n";
+                    }
+
+                    $("#informationVersionTab").append(html);
+                },
+                error: function (jqXHR, textStatus, errorThrown) {
+                    AlertMessage("Unexpected error while creating GIS information fields!", textStatus + "; " + errorThrown);
+                }
+            });
+        }
+
+        function AddDynamicFields() {
+            function CreateInformationFieldSingleTab(fieldsList, destinationTab) {
+                /**
+                 * @return {string}
+                 */
+                function GenerateControlsHtml(fieldsList, destinationTab) {
+                    /**
+                     * @return {string}
+                     */
+                    function StartSheet(codiceTitolo, titolo) {
+                        var html = '                    <div data-codice="' + codiceTitolo + '" class="boxedContainer hidden">\n';
+                        html += '                        <h3>' + titolo + '</h3>\n';
+                        return html;
+                    }
+
+                    /**
+                     * @return {string}
+                     */
+                    function CloseSheet(currentSheet) {
+                        var html = "";
+                        if (currentSheet !== -1) {
+                            html += '                        <div class="buttonContainer">\n';
+                            html += '                            <button id="saveInfoObject-' + currentSheet + '" data-codice="' + currentSheet + '" class="buttonBordered" disabled>SAVE</button>\n';
+                            html += '                        </div>\n';
+                            html += "                    </div>\n";
+                        }
+                        return html;
+                    }
+
+                    /**
+                     * @return {string}
+                     */
+                    function AddField(destinationTab, field) {
+                        var html = "";
+                        var height;
+                        if (field["IsTitle"] === "t") {
+                            html += '                        <h4>' + field["Campo"] + '</h4>\n';
+                        } else if (field["IsSeparator"] === "t") {
+                            html += '                        <hr class="k-separator">\n';
+                        } else if (field["IsBool"] === "t") {
+                            html += '                        <div class="informationFieldContainer">\n';
+                            html += '                            <div class="labelContainer labelCheckboxContainer">' + field["Campo"] + '</div>\n';
+                            html += '                            <div class="inputCheckboxContainer">\n';
+                            html += '                               <input data-tipo="bool" data-codice="' + field["Codice"] + '" data-destination="' + destinationTab + '" id="' + destinationTab + '_' + field["Codice"] + '" data-role="checkboxinfo" type="checkbox" class="k-checkbox" />\n';
+                            html += '                               <label class="k-checkbox-label" for="' + destinationTab + '_' + field["Codice"] + '"></label>\n';
+                            html += '                            </div>\n';
+                            html += '                        </div>\n';
+                        } else {
+                            html += '                        <div class="informationFieldContainer">\n';
+                            html += '                            <div class="labelContainer"><label for="' + destinationTab + '_' + field["Codice"] + '">' + field["Campo"] + '</label></div>\n';
+                            if (field["IsTimestamp"] === "t") {
+                                html += '                            <input data-tipo="timestamp" data-codice="' + field["Codice"] + '" data-destination="' + destinationTab + '" id="' + destinationTab + '_' + field["Codice"] + '" name="' + destinationTab + '_' + field["Codice"] + '">\n';
+                                html += '                            <span class="k-invalid-msg" data-for="' + destinationTab + '_' + field["Codice"] + '"></span>\n';
+                            } else if (field["IsInt"] === "t") {
+                                html += '                            <input data-tipo="int" data-codice="' + field["Codice"] + '" data-destination="' + destinationTab + '" id="' + destinationTab + '_' + field["Codice"] + '" type="number">\n';
+                            } else if (field["IsReal"] === "t") {
+                                html += '                            <input data-tipo="real" data-codice="' + field["Codice"] + '" data-destination="' + destinationTab + '" id="' + destinationTab + '_' + field["Codice"] + '" type="number">\n';
+                            } else if (field["IsCombo"] === "t") {
+                                html += '                            <select data-tipo="combo" data-codice="' + field["Codice"] + '" data-destination="' + destinationTab + '" id="' + destinationTab + '_' + field["Codice"] + '"></select>\n';
+                            } else if (field["IsMultiCombo"] === "t") {
+                                html += '                            <select data-tipo="multicombo" data-codice="' + field["Codice"] + '" data-destination="' + destinationTab + '" id="' + destinationTab + '_' + field["Codice"] + '"></select>\n';
+                            } else {
+                                height = field["Height"] / 22;
+                                if (height > 1) {
+                                    html += '                            <textarea data-tipo="text" data-codice="' + field["Codice"] + '" data-role="textinfo" data-destination="' + destinationTab + '" id="' + destinationTab + '_' + field["Codice"] + '" style="height: ' + height * 31 + 'px" type="text" class="k-textbox" onmousedown="_isMouseDown = true;" onmousemove="ChangeInformationFieldsStyleFromElement(false)" onmouseup="ChangeInformationFieldsStyleFromElement(true)" readonly></textarea>\n';
+                                } else {
+                                    html += '                            <input data-tipo="text" data-codice="' + field["Codice"] + '" data-role="textinfo" data-destination="' + destinationTab + '" id="' + destinationTab + '_' + field["Codice"] + '" type="text" class="k-textbox" readonly/>\n';
+                                }
+                            }
+                            html += '                        </div>\n';
+                        }
+                        return html;
+                    }
+
+                    var html = "";
+                    var currentSheet = -1;
+                    fieldsList.forEach(function (field) {
+                        if (currentSheet !== field["CodiceTitolo"]) {
+                            html += CloseSheet(currentSheet);
+                            currentSheet = field["CodiceTitolo"];
+                            html += StartSheet(field["CodiceTitolo"], field["Titolo"]);
+                        }
+                        html += AddField(destinationTab, field);
+                    });
+                    html += CloseSheet(currentSheet);
+                    return html;
+                }
+
+                function InitializeFieldKendoComponents(destinationTabSel) {
+                    function SortKendoMultiSelectValue() {
+                        this.value(this.value().sort());
+                    }
+
+                    /**
+                     * @return {string}
+                     */
+                    function AddComboValueHtml(event) {
+                        var value = event.instance.input[0].value;
+                        var html = "";
+                        if (value) {
+                            html += '                            <button class="buttonBordered" onclick="AddNewComboValue(\'' + event.instance.element[0].id + '\', \'' + value + '\')">Add new value<br><b>' + value + '</b></button>\n';
+                        }
+                        return html;
+                    }
+
+                    /**
+                     * @return {string}
+                     */
+                    function GetComboTemplate(inputField) {
+                        // noinspection JSDeprecatedSymbols
+                        return '#:Value#<span class="k-icon k-i-edit buttonDropdownItemEdit" data-codice="#:Codice#" data-value="#:Value#" data-ref="' + inputField.id + '" onclick="ChangeComboValueDialogOpen(event)"></span><span class="k-icon k-i-delete buttonDropdownItemErase" data-codice="#:Codice#" data-value="#:Value#" data-ref="' + inputField.id + '" onclick="RemoveComboValue(event)"></span>';
+                    }
+
+                    destinationTabSel.find("input, select").each(function (i, inputField) {
+                        var inputFieldSel = $(inputField);
+                        switch (inputField.dataset["tipo"]) {
+                            case "timestamp":
+                                inputFieldSel.kendoDateTimePicker({
+                                    timeFormat: "HH:mm",
+                                    format: "dd/MM/yy HH:mm",
+                                    parseFormats: ["dd/MM/yyyy HH:mm:ss", "dd/MM/yy HH:mm:ss", "dd/MM/yyyy HH:mm", "dd/MM/yy HH:mm", "dd/MM/yyyy", "dd/MM/yy", "HH:mm"]
+                                });
+                                inputFieldSel.data("kendoDateTimePicker").readonly();
+                                inputFieldSel.parents("div.informationFieldContainer").kendoValidator({
+                                    rules: {
+                                        datepicker: function (input) {
+                                            return !(input[0].dataset["role"] === "datetimepicker") || input[0].value === "" || input.data("kendoDateTimePicker").value();
+                                        }
+                                    },
+                                    messages: {
+                                        datepicker: "Please enter a valid date!"
+                                    }
+                                });
+                                break;
+                            case "int":
+                                inputFieldSel.kendoNumericTextBox({
+                                    decimals: 0,
+                                    restrictDecimals: true,
+                                    step: 1,
+                                    format: "0"
+                                });
+                                inputFieldSel.data("kendoNumericTextBox").readonly();
+                                break;
+                            case "real":
+                                inputFieldSel.kendoNumericTextBox({
+                                    decimals: 13,
+                                    step: 0.001,
+                                    format: "0.#########"
+                                });
+                                inputFieldSel.data("kendoNumericTextBox").readonly();
+                                break;
+                            case "combo":
+                                inputFieldSel.kendoComboBox({
+                                    dataTextField: "Value",
+                                    dataValueField: "Codice",
+                                    filter: "contains",
+                                    template: GetComboTemplate(inputField),
+                                    footerTemplate: AddComboValueHtml
+                                });
+                                inputFieldSel.data("kendoComboBox").readonly();
+                                break;
+                            case "multicombo":
+                                inputFieldSel.kendoMultiSelect({
+                                    dataTextField: "Value",
+                                    dataValueField: "Codice",
+                                    filter: "contains",
+                                    template: GetComboTemplate(inputField),
+                                    footerTemplate: AddComboValueHtml,
+                                    change: SortKendoMultiSelectValue,
+                                    autoClose: false
+                                });
+                                inputFieldSel.data("kendoMultiSelect").readonly();
+                                break;
+                        }
+                    });
+                }
+
+                var destinationTabSel = $("#" + destinationTab);
+                destinationTabSel.append(GenerateControlsHtml(fieldsList, destinationTab));
+                InitializeFieldKendoComponents(destinationTabSel);
+            }
+
+            function CreateSubVersionInformationField(schedeSubVersion, schedeInterventiSubVersion, maxSubVersion) {
+                var informationSubVersionTab = $('#informationSubVersionTab');
+                informationSubVersionTab.append(GenerateExpanderHtml("information", maxSubVersion));
+                $("#informationSubVersionExpanderControl").kendoPanelBar({});
+                informationSubVersionTab.find("div.subVersionPanelItem").each(function (i, expander) {
+                    switch (expander.dataset["ref"]) {
+                        case "OggettiSubVersion":
+                            CreateInformationFieldSingleTab(schedeSubVersion, expander.id);
+                            break;
+                        case "InterventiSubVersion":
+                            CreateInformationFieldSingleTab(schedeInterventiSubVersion, expander.id);
+                            break;
+                    }
+                });
+            }
+
+            function CreateSubVersionImageField(maxSubVersion) {
+                function CreateSubVersionImageExpander(expander) {
+                    function GenerateHtmlAddImageButton(id, ref, text) {
+                        return '                <div class="galleryImageElement">' +
+                            '                    <div class="buttonGalleryContainer">' +
+                            '                        <div class="sideToolbarItem">' +
+                            '                            <span id="Add' + id + 'ImageButton" data-ref="' + ref + '" data-refid="' + id + '" class="sideToolbarButton greenButton disabledButton"' +
+                            '                                  title="Add ' + text + ' Image">' +
+                            '                                <img src="img/icons/windowsContent/add.png" alt="Add ' + text + ' Image">' +
+                            '                            </span>' +
+                            '                        </div>' +
+                            '                    </div>' +
+                            '                </div>';
+                    }
+
+                    var id = expander.dataset["ref"] + expander.dataset["subversion"];
+                    var html;
+                    switch (expander.dataset["ref"]) {
+                        case "OggettiSubVersion":
+                            html = '<div id="image' + id + 'Gallery" data-ref="SubVersion" class="imageListView"></div>';
+                            html += GenerateHtmlAddImageButton(id, "SubVersion", "SubVersion");
+                            break;
+                        case "InterventiSubVersion":
+                            html = '<div id="image' + id + 'Gallery" data-ref="InterventiSubVersion" class="imageListView"></div>';
+                            html += GenerateHtmlAddImageButton(id, "InterventiSubVersion", "SubVersion Intervention");
+                            break;
+                    }
+                    $("#" + expander.id).append(html);
+
+                    SetGalleryListView("#image" + id + "Gallery");
+                }
+
+                var imageSubVersionTab = $('#imageSubVersionTab');
+                imageSubVersionTab.append(GenerateExpanderHtml("image", maxSubVersion));
+                $("#imageSubVersionExpanderControl").kendoPanelBar({});
+
+                imageSubVersionTab.find("div.subVersionPanelItem").each(function (i, expander) {
+                    CreateSubVersionImageExpander(expander);
+                });
+            }
+
+            /**
+             * @return {string}
+             */
+            function GenerateExpanderHtml(typeRef, maxSubVersion) {
+                /**
+                 * @return {string}
+                 */
+                function GenerateSubVersionExpanderHtml(subVersion) {
+                    var html = '   <li id="' + typeRef + 'SubVersionPanel' + subVersion + '" data-subversion="' + subVersion + '" class="hidden"> SubVersion ' + subVersion + '\n';
+                    html += '       <div id="' + typeRef + 'SubVersionContent' + subVersion + '" data-ref="OggettiSubVersion" data-subversion="' + subVersion + '" class="subVersionPanelItem">\n';
+                    html += '       </div>\n';
+                    html += '   </li>\n';
+                    return html;
+                }
+
+                /**
+                 * @return {string}
+                 */
+                function GenerateInterventionExpanderHtml(subVersion) {
+                    var html = '   <li id="' + typeRef + 'InterventiSubVersionPanel' + subVersion + '" data-subversion="' + subVersion + '" class="hidden"> Intervention ' + subVersion + '\n';
+                    html += '       <div id="' + typeRef + 'InterventiSubVersionContent' + subVersion + '" data-ref="InterventiSubVersion" data-subversion="' + subVersion + '" class="subVersionPanelItem">\n';
+                    html += '       </div>\n';
+                    html += '   </li>\n';
+                    return html;
+                }
+
+                var html = '<ul id="' + typeRef + 'SubVersionExpanderControl">\n';
+                html += GenerateSubVersionExpanderHtml(0);
+                for (var i = 1; i < maxSubVersion + 1; i++) {
+                    html += GenerateInterventionExpanderHtml(i);
+                    html += GenerateSubVersionExpanderHtml(i);
+                }
+                html += '</ul>\n';
+                return html;
+            }
+
+            $.ajax({
+                url: './php/getInformationFields.php',
+                dataType: "json",
+                success: function (resultData) {
+                    var maxSubVersion = parseInt(resultData["MaxSubVersion"]);
+                    CreateInformationFieldSingleTab(resultData["SchedeOggetto"], "informationObjectTab");
+                    CreateInformationFieldSingleTab(resultData["SchedeVersione"], "informationVersionTab");
+                    CreateSubVersionInformationField(resultData["SchedeSubVersion"], resultData["SchedeInterventiSubVersion"], maxSubVersion);
+
+                    CreateSubVersionImageField(maxSubVersion);
+
+                    ChangeInformationFieldsStyle(true);
+                    FillAllComboValues();
+
+                    ProgressBar(false);
+                },
+                error: function (jqXHR, textStatus, errorThrown) {
+                    ProgressBar(false);
+                    AlertMessage("Unexpected error while creating dynamic object information fields!", textStatus + "; " + errorThrown);
+                }
+            });
+        }
+
+        ProgressBar(true);
+
+        DeleteDynamicFields();
+
+        AddGisInformationFields()
+            .then(AddDynamicFields);
+    }
+
+    UnselectAll3dObjects();
+
+    UpdateCategoryList();
+
+    CreateDynamicFields();
+}
+
+function SetGalleryListView(imageListView) {
+    // noinspection JSDeprecatedSymbols
+    $(imageListView).kendoListView({
+        template: kendo.template(
+            "<div class='galleryImageElement'>" +
+            "   <img src='#: src#' data-rifurl='#: url#' alt='#: url#' class='galleryImage'>" +
+            "   <div class='galleryImageHover'>" +
+            "       <div>" +
+            "           <div class='galleryImageToolbar'>" +
+            "               <div class='buttonWindowsToolbarContainer'>" +
+            "                   <span onclick='ViewLargeImage(event)' title='View Image'>" +
+            "                       <img src='../img/icons/windowsToolbar/zoom.png' alt='View Image'>" +
+            "                   </span>" +
+            "               </div>" +
+            "               <div class='buttonWindowsToolbarContainer'>" +
+            "                   <span onclick='DeleteImage(event)' class='redButton' title='View Image'>" +
+            "                       <img src='../img/icons/windowsToolbar/trash.png' alt='View Image'>" +
+            "                   </span>" +
+            "               </div>" +
+            "           </div>" +
+            "           #: url#" +
+            "       </div>" +
+            "   </div>" +
+            "</div>"
+        )
+    });
 }
 
 //3DScene
@@ -2303,8 +2864,7 @@ function Load3dScene() {
             if (_myScene.findNode(node.id) == null) {
                 try {
                     texturedMeshNode.addNode(node);
-                }
-                catch (error) {
+                } catch (error) {
                     AlertMessage("Unexpected error while loading textured mesh!", "Error loading textured mesh: " + error);
                 }
             }
@@ -2318,8 +2878,7 @@ function Load3dScene() {
             if (_myScene.findNode(node.id) == null) {
                 try {
                     pointCloudNode.addNode(node);
-                }
-                catch (error) {
+                } catch (error) {
                     AlertMessage("Unexpected error while loading point cloud!", "Error loading textured mesh: " + error);
                 }
             }
@@ -2333,8 +2892,7 @@ function Load3dScene() {
             if (_myScene.findNode(node.id) == null) {
                 try {
                     hotSpotNode.addNode(node);
-                }
-                catch (error) {
+                } catch (error) {
                     AlertMessage("Unexpected error while loading hotspot!", "Error loading hotspot: " + error);
                 }
             }
@@ -2534,8 +3092,7 @@ function Load3dScene() {
                                 success: function (resultData2) {
                                     if (resultData2 === "success") {
                                         Load3dScene();
-                                    }
-                                    else {
+                                    } else {
                                         AlertMessage("Unexpected error during adding a new hotspot!", resultData2);
                                     }
                                 },
@@ -2656,8 +3213,7 @@ function Load3dScene() {
                 var addNewHotspotDialogKendo = addNewHotspotDialog.data("kendoDialog");
                 if (!addNewHotspotDialogKendo) {
                     InitializeAddNewHotspotDialog(addNewHotspotDialog);
-                }
-                else {
+                } else {
                     UpdateCombobox(addNewHotspotDialogKendo);
                 }
 
@@ -2696,23 +3252,19 @@ function Load3dScene() {
                 _pickedObject = _myScene.pick({canvasPos: [coords.x, coords.y], rayPick: true});
                 if (_pickedObject) {
                     AddNewHotSpot();
-                }
-                else {
+                } else {
                     kendo.alert("You must click on a mesh to add an hotspot!");
                 }
-            }
-            else {
+            } else {
                 _pickedObject = _myScene.pick({canvasPos: [coords.x, coords.y]});
                 if (_pickedObject) {
                     var pickedObject = Get3dObjectFromName(_pickedObject["name"]);
                     if (_selected3dObjectList.indexOf(pickedObject) === -1) {
                         Select3dObject(pickedObject);
-                    }
-                    else {
+                    } else {
                         Unselect3dObject(pickedObject);
                     }
-                }
-                else {
+                } else {
                     UnselectAll3dObjects();
                 }
             }
@@ -2747,17 +3299,14 @@ function Load3dScene() {
                     _dragged = true;
                     if (_rightMouseDown && _leftMouseDown) {
                         Pan3dY((event.clientY - _mouseStartY) / 100);
-                    }
-                    else if (_leftMouseDown) {
+                    } else if (_leftMouseDown) {
                         Pan3dXZ((event.clientX - _mouseStartX) / 2000, (event.clientY - _mouseStartY) / 2000);
-                    }
-                    else {
+                    } else {
                         var angleX = ToRad * (event.clientY - _mouseStartY) / 2;
                         var angleZ = ToRad * (event.clientX - _mouseStartX) / 2;
                         if (_rightMouseDown) {
                             Rotate3dXZ(angleX, angleZ);
-                        }
-                        else if (_centerMouseDown) {
+                        } else if (_centerMouseDown) {
                             LookRotate3dXZ(angleX, angleZ);
                         }
                     }
@@ -2849,8 +3398,7 @@ function Load3dScene() {
 
                     if (!_isTouchPinch && !_isTouchRotate && _touchEventCache.length === 1) {
                         Pan3dXZ((changedTouch.pageX - _touchEventCache[0].pageX) / 900, (changedTouch.pageY - _touchEventCache[0].pageY) / 900);
-                    }
-                    else if (!_isTouchRotate && _touchEventCache.length === 2) {
+                    } else if (!_isTouchRotate && _touchEventCache.length === 2) {
                         _isTouchPinch = true;
                         ReplaceTouchEvent(changedTouch);
 
@@ -2858,15 +3406,13 @@ function Load3dScene() {
                         var zoom = (currentTouchDiff - _startTouchDiff) / (_startTouchDiff * 3 * (Math.abs(_canvasDiagonal - _startTouchDiff) / _canvasDiagonal));
                         if (zoom < 0) {
                             zoom = zoom * 10;
-                        }
-                        else {
+                        } else {
                             if (zoom >= 0.98) {
                                 zoom = 0.98;
                             }
                         }
                         Zoom3d(zoom);
-                    }
-                    else if (_touchEventCache.length === 3) {
+                    } else if (_touchEventCache.length === 3) {
                         _isTouchPinch = false;
                         _isTouchRotate = true;
                         if (_touchEventCache[0].identifier === changedTouch.identifier) {
@@ -2941,7 +3487,7 @@ function Load3dScene() {
 
             Set3DEventHandler(modelCanvas[0]);
 
-            SetDynamicInformationFields();
+            SetDynamicFields();
         },
         error: function (jqXHR, textStatus, errorThrown) {
             AlertMessage("Unexpected error while loading the models!", textStatus + "; " + errorThrown);
@@ -2977,8 +3523,7 @@ function Get3dObjectFromName(name) {
             pickedObject = pickedObject.parent.parent.parent.parent;
         }
         return pickedObject;
-    }
-    else {
+    } else {
         return null;
     }
 }
@@ -3199,7 +3744,14 @@ function LoadGis() {
             return {centerLongitude, centerLatitude, zoom, coordinatesFractionDigits, projection, urlGetCapabilities};
         }
 
-        var {centerLongitude, centerLatitude, zoom, coordinatesFractionDigits, projection, urlGetCapabilities} = ParseBaseGisSettings(gisSettings);
+        var {
+            centerLongitude,
+            centerLatitude,
+            zoom,
+            coordinatesFractionDigits,
+            projection,
+            urlGetCapabilities
+        } = ParseBaseGisSettings(gisSettings);
 
         var map = new ol.Map({
             target: document.getElementById('mapContainer'),
@@ -3262,21 +3814,18 @@ function LoadGis() {
                                                 var object3d = Get3dObjectFromName(GetModelTypeStringCode(resultData["Type"]) + resultData["CodiceVersione"]);
                                                 if (object3d) {
                                                     Select3dObject(object3d, false);
-                                                }
-                                                else {
+                                                } else {
                                                     UnselectAll3dObjects(false);
                                                     GetWriteMode(resultData["CodiceVersione"])
                                                         .then(function (data) {
                                                             var readonly = data["rw"] !== "t";
-                                                            ResetInformation();
-                                                            UpdateInformation(resultData["CodiceVersione"], readonly);
+                                                            UpdateData(resultData["CodiceVersione"], readonly);
                                                             /*UpdateImagePanel(codice);
 
                                                             UpdateFilePanel(codice);*/
                                                         });
                                                 }
-                                            }
-                                            else {
+                                            } else {
                                                 objectsGrid.select("tr[data-uid='" + dataItem["uid"] + "']");
                                             }
                                         },
@@ -3285,8 +3834,7 @@ function LoadGis() {
                                         }
                                     });
                                 }
-                            }
-                            else {
+                            } else {
                                 return null;
                             }
                         },
@@ -3303,15 +3851,13 @@ function LoadGis() {
             if (feature) {
                 var props = feature.getProperties();
                 console.log(props);
-            }
-            else {
+            } else {
                 layers.forEach(function (layer) {
                     if (layer instanceof ol.layer.Group) {
                         layer.getLayers().forEach(function (subLayer) {
                             GetFeatures(subLayer);
                         });
-                    }
-                    else {
+                    } else {
                         GetFeatures(layer);
                     }
                 });
@@ -3352,8 +3898,7 @@ function LoadGis() {
                         layer.getLayers().forEach(function (subLayer) {
                             SetLayerExtent(subLayer, layersWMS, projection);
                         });
-                    }
-                    else {
+                    } else {
                         SetLayerExtent(layer, layersWMS, projection);
                     }
                 });
@@ -3387,8 +3932,7 @@ function LoadGis() {
                         expanded: true,
                         items: GetSubLayers(layer)
                     });
-                }
-                else {
+                } else {
                     layerData.push({
                         text: layer.get('title'),
                         id: layer.get('name')
@@ -3427,7 +3971,7 @@ function LoadGis() {
 
             ProgressBar(false);
 
-            SetDynamicInformationFields();
+            SetDynamicFields();
         },
         error: function (jqXHR, textStatus, errorThrown) {
             ProgressBar(false);
@@ -3517,14 +4061,9 @@ function Select3dObject(object, from3dScene = true) {
             GetWriteMode(codiceVersione)
                 .then(function (data) {
                     var readonly = data["rw"] !== "t";
-                    ResetInformation();
-                    UpdateInformation(codiceVersione, readonly);
-                    /*UpdateImagePanel(codice);
-
-                    UpdateFilePanel(codice);*/
+                    UpdateData(codiceVersione, readonly);
                 });
-        }
-        else if (dataItem !== objectsGrid.dataItem(objectsGrid.select())) {
+        } else if (dataItem !== objectsGrid.dataItem(objectsGrid.select())) {
             ObjectGridClearSelection();
             objectsGrid.select("tr[data-uid='" + dataItem["uid"] + "']");
         }
@@ -3551,7 +4090,7 @@ function Unselect3dObject(object) {
     Highlight3dObject(object, false);
     _selected3dObjectList.splice(_selected3dObjectList.indexOf(object), 1);
 
-    ResetInformation();
+    ResetData();
     ObjectGridClearSelection();
 }
 
@@ -3561,8 +4100,8 @@ function UnselectAll3dObjects(from3dScene = true) {
     }
     _selected3dObjectList = [];
 
-    ResetInformation();
     if (from3dScene) {
+        ResetData();
         ObjectGridClearSelection();
     }
 }
@@ -3644,8 +4183,7 @@ function KendoDropDownList_EnableClearButton(controlKendo) {
 
         if (sender.selectedIndex === -1 || isReadonly) {
             clearButton.addClass("k-hidden");
-        }
-        else {
+        } else {
             clearButton.removeClass("k-hidden");
         }
     }
@@ -3669,8 +4207,7 @@ function ToggleKendoWindow(windowId) {
     var kendoWindow = $("#" + windowId).data("kendoWindow");
     if (!kendoWindow.options.visible) {
         kendoWindow.open();
-    }
-    else {
+    } else {
         kendoWindow.close();
     }
 }
@@ -3687,8 +4224,7 @@ function GetLayerByName(map, name) {
                     result = subLayer;
                 }
             });
-        }
-        else {
+        } else {
             if (layer.get('name') === name) {
                 result = layer;
             }
@@ -3713,4 +4249,10 @@ function GetModelTypeStringCode(type) {
         default:
             return "u";
     }
+}
+
+function SetImageFitSize(image) {
+    image.addClass("maxSize");
+    image.removeAttr("width");
+    image.removeAttr("height");
 }
