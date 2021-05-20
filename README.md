@@ -12,6 +12,8 @@ For information:
 
 ICT development manager: Fabrizio Rechichi - fabrizio.rechichi@itinnovations.it
 
+<br>
+
 Scientific supervisor: Francesco Fassi - francesco.fassi@polimi.it
 
 <br>
