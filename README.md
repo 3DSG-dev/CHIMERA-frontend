@@ -1,4 +1,4 @@
-CHIMERA frontend
+<b>CHIMERA frontend</b>
 
 Presentation at ISPRS virtual event 2020: https://youtu.be/mgVe8-OIR74
 
@@ -6,7 +6,7 @@ Presentation: https://youtu.be/FGjVzwNgoO8
 
 <br>
 
-For information:
+<b>For information:</b>
 
 ICT development manager: Fabrizio Rechichi - fabrizio.rechichi@itinnovations.it
 
