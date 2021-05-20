@@ -6,8 +6,6 @@ Presentation: https://youtu.be/FGjVzwNgoO8
 
 <br>
 
-Page Under construction
-
 For information:
 
 ICT development manager: Fabrizio Rechichi - fabrizio.rechichi@itinnovations.it
